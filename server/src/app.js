@@ -1,9 +1,10 @@
 const express = require('express');
-const logger = require('morgan');
+const morgan = require('morgan');
+const logger = require('./config/logger');
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(morgan('combined', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
