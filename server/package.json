@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=server:* node ./bin/www",
+    "start": "DEBUG=server:* nodemon ./bin/www",
     "lint": "eslint .",
     "format": "prettier --single-quote --write src/**/*.js"
   },
@@ -22,6 +22,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "husky": ">=4",
     "lint-staged": ">=10",
+    "nodemon": "^2.0.2",
     "prettier": "1.19.1"
   },
   "husky": {
