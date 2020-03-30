@@ -1,0 +1,24 @@
+<div class="header">
+  <h4 nz-title>Bienvenido a Marketplace</h4>
+  <span nz-text>Regístrate o inicia sesión</span>
+</div>
+
+<div class="main-content">
+  <button nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
+    Entrar con Google
+  </button>
+</div>
+
+<div class="footer">
+  <p nz-text>O continúa con tu email</p>
+
+  <button nz-button nzType="link" (click)="onLogin()">
+    Iniciar sesión
+  </button>
+
+  <nz-divider nzType="vertical"></nz-divider>
+
+  <button nz-button nzType="link" (click)="onSignUp()">
+    Regístrate
+  </button>
+</div>

@@ -1,0 +1,48 @@
+<div class="header">
+  <h4 nz-title>¡Bienvenido de nuevo!</h4>
+  <span nz-text>Escribe tus detalles abajo</span>
+</div>
+
+<div class="main-content">
+  <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control [nzErrorTip]="emailErrorTpl">
+        <nz-input-group nzPrefixIcon="user">
+          <input type="text" nz-input formControlName="email" placeholder="Dirección de email" />
+          <ng-template #emailErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu email
+            </ng-container>
+            <ng-container *ngIf="control.hasError('email')">
+              Introduce un email válido
+            </ng-container>
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzErrorTip="¡Introduce tu contraseña!">
+        <nz-input-group nzPrefixIcon="lock">
+          <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <button nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
+      Iniciar sesión
+    </button>
+  </form>
+</div>
+
+<div class="footer">
+  <button nz-button nzType="link" (click)="onResetPassword()">
+    Recuperar contraseña
+  </button>
+
+  <nz-divider nzType="vertical"></nz-divider>
+
+  <button nz-button nzType="link" (click)="onSignUp()">
+    Regístrate
+  </button>
+</div>

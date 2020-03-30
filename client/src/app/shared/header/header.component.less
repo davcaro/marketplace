@@ -1,0 +1,119 @@
+@import '../../../custom-styles.less';
+
+nz-header {
+  background-color: @color-white;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+nz-header button {
+  margin: 0 4px;
+}
+
+.header-collapse {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.header-right {
+  display: flex;
+  margin-left: 1.2rem;
+}
+
+.collapsed-menu a {
+  display: none;
+}
+
+[nz-menu-item] {
+  padding-left: 16px;
+  padding-right: 24px;
+}
+
+.search-box {
+  display: flex;
+  width: 85%;
+  margin-left: 2.5rem;
+}
+
+.search-box nz-select {
+  max-width: 30%;
+}
+
+:host ::ng-deep .search-box nz-select [nz-select-top-control] {
+  background-color: @color-light-gray;
+  border: 0;
+  border-radius: @border-radius 0 0 @border-radius;
+}
+
+:host ::ng-deep .search-box nz-select [nz-select-top-control]:focus {
+  background-color: #fff;
+  border: 1px solid @color-primary;
+}
+
+.search-box input {
+  background-color: @color-light-gray;
+  border: 0;
+  border-radius: 0 @border-radius @border-radius 0;
+}
+
+:host ::ng-deep .search-box input:focus + .ant-input-suffix {
+  color: @color-primary;
+}
+
+.search-box input:focus {
+  background-color: @color-white;
+  border: 1px solid @color-primary;
+}
+
+.auth-modal-body {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.modal-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.modal-back-arrow {
+  width: 56px;
+  height: 56px;
+  border: 0;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+nz-form-item {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 767.98px) {
+  .collapsed-menu a {
+    display: block;
+  }
+
+  .header-right {
+    display: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  nz-header {
+    padding: 0 10px;
+  }
+
+  .search-box {
+    margin-left: 0.5rem;
+  }
+
+  .search-box input {
+    margin-left: 1.1rem;
+    border-radius: @border-radius;
+  }
+
+  .search-box nz-select {
+    display: none;
+  }
+}

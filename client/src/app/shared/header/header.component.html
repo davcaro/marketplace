@@ -1,0 +1,58 @@
+<nz-header>
+  <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="'assets/brand-logo.png'"></nz-avatar>
+  <div class="header-collapse">
+    <nz-input-group nzCompact class="search-box">
+      <nz-select [ngModel]="'all'">
+        <nz-option [nzLabel]="'Todas las categorías'" [nzValue]="'all'"></nz-option>
+        <nz-option [nzLabel]="'Coches'" [nzValue]="'cars'"></nz-option>
+        <nz-option [nzLabel]="'Hogar y Jardín'" [nzValue]="'home'"></nz-option>
+      </nz-select>
+
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input type="text" nz-input [ngModel]="null" placeholder="Buscar artículo..." />
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </nz-input-group>
+    <div class="header-right">
+      <button nz-button nzType="default" nzShape="round" (click)="showAuthModal()">
+        Iniciar sesión
+      </button>
+
+      <nz-modal class="auth-modal" [(nzVisible)]="authModalIsVisible" [nzFooter]="null" (nzOnCancel)="closeAuthModal()">
+        <div class="auth-modal-body">
+          <div class="modal-back" *ngIf="authModalView !== 'oauth'">
+            <button nz-button nzType="link" [nzSize]="'large'" class="modal-back-arrow" (click)="onAuthModalBack()">
+              <i nz-icon nzType="arrow-left"></i>
+            </button>
+          </div>
+
+          <div [ngSwitch]="authModalView">
+            <app-oauth *ngSwitchCase="'oauth'"></app-oauth>
+            <app-login *ngSwitchCase="'login'"></app-login>
+            <app-signup *ngSwitchCase="'signup'"></app-signup>
+            <app-reset-password *ngSwitchCase="'reset'"></app-reset-password>
+          </div>
+        </div>
+      </nz-modal>
+
+      <button nz-button nzType="primary" nzShape="round">
+        <i nz-icon nzType="plus"></i>
+        Subir producto
+      </button>
+    </div>
+  </div>
+
+  <div class="collapsed-menu">
+    <a nz-dropdown [nzDropdownMenu]="collapsedMenu" [nzPlacement]="'bottomRight'">
+      <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+    </a>
+    <nz-dropdown-menu #collapsedMenu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
+        <li nz-menu-item>Subir producto</li>
+      </ul>
+    </nz-dropdown-menu>
+  </div>
+</nz-header>

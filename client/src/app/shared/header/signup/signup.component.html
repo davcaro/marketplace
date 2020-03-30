@@ -1,0 +1,73 @@
+<div class="header">
+  <h4 nz-title>Regístrate en Marketplace</h4>
+  <span nz-text>Escribe tus datos</span>
+</div>
+
+<div class="main-content">
+  <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control nzHasFeedback nzErrorTip="Introduce tu nombre">
+        <nz-input-group nzPrefixIcon="smile">
+          <input type="text" nz-input formControlName="name" placeholder="Nombre y apellidos" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+        <nz-input-group nzPrefixIcon="user">
+          <input type="text" nz-input formControlName="email" placeholder="Dirección de email" />
+          <ng-template #emailErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu email
+            </ng-container>
+            <ng-container *ngIf="control.hasError('email')">
+              Introduce un email válido
+            </ng-container>
+            <ng-container *ngIf="control.hasError('duplicated')">
+              El email ya está en uso
+            </ng-container>
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzHasFeedback [nzErrorTip]="passwordErrorTpl">
+        <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixIconTpl">
+          <input
+            [type]="passwordVisible ? 'text' : 'password'"
+            nz-input
+            formControlName="password"
+            placeholder="Contraseña"
+          />
+        </nz-input-group>
+         <ng-template #passwordErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu contraseña
+            </ng-container>
+            <ng-container *ngIf="control.hasError('minlength') || control.hasError('maxlength')">
+              La contraseña debe tener entre 6 y 20 caracteres
+            </ng-container>
+          </ng-template>
+        <ng-template #suffixIconTpl>
+          <i
+            nz-icon
+            [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+            (click)="passwordVisible = !passwordVisible"
+          ></i>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    
+      <button nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
+        Crear una cuenta
+      </button>
+  </form>
+</div>
+
+<div class="footer">
+  <button nz-button nzType="link" (click)="onLogin()">
+    Inicia sesión
+  </button>
+</div>

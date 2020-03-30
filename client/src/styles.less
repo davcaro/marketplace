@@ -1,4 +1,5 @@
-@import "../node_modules/ng-zorro-antd/ng-zorro-antd.less";
+@import '../node_modules/ng-zorro-antd/ng-zorro-antd.less';
+@import './custom-styles.less';
 // The prefix to use on all css classes from ant.
 @ant-prefix: ant;
 
@@ -6,7 +7,7 @@
 @html-selector: html;
 
 // -------- Colors -----------
-@primary-color: @blue-6;
+@primary-color: @color-primary;
 @info-color: @blue-6;
 @success-color: @green-6;
 @processing-color: @blue-6;
@@ -14,7 +15,7 @@
 @highlight-color: @red-6;
 @warning-color: @gold-6;
 @normal-color: #d9d9d9;
-@white: #fff;
+@white: @color-white;
 @black: #000;
 
 // Color used by default to control hover and active backgrounds and for
@@ -39,9 +40,9 @@
 @body-background: #fff;
 // Base background color for most components
 @component-background: #fff;
-@font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
-'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-'Segoe UI Emoji', 'Segoe UI Symbol';
+@font-family: @main-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol';
 @code-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 @text-color: fade(@black, 65%);
 @text-color-secondary: fade(@black, 45%);
