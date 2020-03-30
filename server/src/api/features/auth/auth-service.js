@@ -3,9 +3,7 @@ const AppError = require('../../utils/app-error');
 
 const createUser = async body => {
   try {
-    const { email, password, name, picture } = body;
-
-    return await authDAL.create({ email, password, name, picture });
+    return await authDAL.create(body);
   } catch (e) {
     throw new AppError(500, e.message);
   }

@@ -2,12 +2,21 @@
 
 const Boom = require('@hapi/boom');
 const { isCelebrate } = require('celebrate');
+const { ForbiddenError } = require('@casl/ability');
 const { handleError, parseCelebrateError } = require('../utils/errorHandler');
 
 const validationError = (err, req, res, next) => {
   if (isCelebrate(err)) {
     const result = parseCelebrateError(err);
     return res.status(result.statusCode).json(result);
+  }
+
+  return next(err);
+};
+
+const forbiddenErrorHandler = (err, req, res, next) => {
+  if (err instanceof ForbiddenError) {
+    return next(Boom.forbidden());
   }
 
   return next(err);
@@ -41,6 +50,7 @@ const notFoundHandler = (req, res, next) => {
 
 module.exports = {
   validationError,
+  forbiddenErrorHandler,
   appErrorHandler,
   notDefinedErrors,
   errorHandler,

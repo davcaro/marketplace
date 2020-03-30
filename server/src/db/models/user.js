@@ -52,5 +52,11 @@ module.exports = (sequelize, DataTypes) => {
     return bcrypt.compare(password, user.password);
   };
 
+  User.prototype.isAdmin = function() {
+    const user = this;
+
+    return !!user.admin;
+  };
+
   return User;
 };
