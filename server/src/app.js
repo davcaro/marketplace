@@ -1,9 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
-const logger = require('./config/logger');
+const logger = require('./api/loaders/logger');
 const config = require('./config');
 const routes = require('./api');
+const errors = require('./api/middleware/errors');
 
 const app = express();
 
@@ -16,5 +17,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 app.use(config.API.prefix, routes());
+
+app.use(errors.appErrorHandler);
+app.use(errors.notDefinedErrors);
+app.use(errors.errorHandler);
+app.use(errors.notFoundHandler);
 
 module.exports = app;

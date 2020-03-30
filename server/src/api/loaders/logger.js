@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const winston = require('winston');
-const config = require('./index');
+const config = require('../../config');
 
 const logDir = 'logs';
 
