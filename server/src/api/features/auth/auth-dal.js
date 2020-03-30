@@ -1,7 +1,7 @@
 const { User } = require('../../../db/models');
 
-const findAll = () => User.scope('public').findAll();
+const create = payload => User.create(payload);
 
 module.exports = {
-  findAll
+  create
 };
