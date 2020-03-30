@@ -18,6 +18,7 @@ app.use(passport.initialize());
 
 app.use(config.API.prefix, routes());
 
+app.use(errors.validationError);
 app.use(errors.appErrorHandler);
 app.use(errors.notDefinedErrors);
 app.use(errors.errorHandler);

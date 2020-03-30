@@ -1,7 +1,17 @@
 /* eslint-disable no-unused-vars */
 
 const Boom = require('@hapi/boom');
-const { handleError } = require('../utils/errorHandler');
+const { isCelebrate } = require('celebrate');
+const { handleError, parseCelebrateError } = require('../utils/errorHandler');
+
+const validationError = (err, req, res, next) => {
+  if (isCelebrate(err)) {
+    const result = parseCelebrateError(err);
+    return res.status(result.statusCode).json(result);
+  }
+
+  return next(err);
+};
 
 const appErrorHandler = (err, req, res, next) => {
   if (err.isAppError) {
@@ -30,6 +40,7 @@ const notFoundHandler = (req, res, next) => {
 };
 
 module.exports = {
+  validationError,
   appErrorHandler,
   notDefinedErrors,
   errorHandler,
