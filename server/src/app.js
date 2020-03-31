@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const passport = require('passport');
 const logger = require('./api/loaders/logger');
 const config = require('./config');
@@ -14,6 +15,7 @@ require('./api/loaders/passport');
 app.use(morgan('combined', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 app.use(passport.initialize());
 
 app.use(config.API.prefix, routes());
