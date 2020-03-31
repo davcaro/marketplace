@@ -9,6 +9,81 @@ const readUsers = async () => {
   }
 };
 
+const readUser = async id => {
+  let user;
+
+  try {
+    user = await userDAL.findById(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!user) {
+    throw new AppError(404, 'User not found');
+  }
+
+  return user;
+};
+
+const createUser = async body => {
+  const { email } = body;
+  const userExists = (await userDAL.count(email)) > 0;
+
+  if (userExists) {
+    throw new AppError(409, 'User already registered');
+  }
+
+  try {
+    const user = await userDAL.create(body);
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      picture: user.picture
+    };
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
+const updateUser = async (id, body) => {
+  let updatedRows;
+
+  try {
+    updatedRows = await userDAL.updateById(id, body);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (updatedRows[0] === 0) {
+    throw new AppError(404, 'User not found');
+  }
+
+  return updatedRows;
+};
+
+const deleteUser = async id => {
+  let deletedRows;
+
+  try {
+    deletedRows = await userDAL.deleteById(id);
+    console.log(deletedRows);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (deletedRows === 0) {
+    throw new AppError(404, 'User not found');
+  }
+
+  return deletedRows;
+};
+
 module.exports = {
-  readUsers
+  readUsers,
+  readUser,
+  createUser,
+  updateUser,
+  deleteUser
 };

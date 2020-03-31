@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       admin: DataTypes.BOOLEAN
     },
     {
+      paranoid: true,
       scopes: {
         public: {
           attributes: ['id', 'name', 'email', 'picture']

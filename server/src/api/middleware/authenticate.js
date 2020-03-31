@@ -21,8 +21,6 @@ const SUBJECTS = {
 function defineAbilitiesFor(user) {
   const { rules, can: allow, cannot: forbid } = AbilityBuilder.extract();
 
-  allow(ACTIONS.CREATE, SUBJECTS.USER);
-
   if (user) {
     if (user.isAdmin()) {
       allow(ACTIONS.MANAGE, SUBJECTS.ALL);
