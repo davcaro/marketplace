@@ -1,13 +1,5 @@
-const userDAL = require('./user-dal');
+const userDAL = require('./me-dal');
 const AppError = require('../../utils/app-error');
-
-const readUsers = async () => {
-  try {
-    return await userDAL.findAll();
-  } catch (e) {
-    throw new AppError(500, e.message);
-  }
-};
 
 const readUser = async id => {
   let user;
@@ -23,28 +15,6 @@ const readUser = async id => {
   }
 
   return user;
-};
-
-const createUser = async body => {
-  const { email } = body;
-  const userExists = (await userDAL.count(email)) > 0;
-
-  if (userExists) {
-    throw new AppError(409, 'User already registered');
-  }
-
-  try {
-    const user = await userDAL.create(body);
-
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      picture: user.picture
-    };
-  } catch (e) {
-    throw new AppError(500, e.message);
-  }
 };
 
 const updateUser = async (id, body) => {
@@ -80,9 +50,7 @@ const deleteUser = async id => {
 };
 
 module.exports = {
-  readUsers,
   readUser,
-  createUser,
   updateUser,
   deleteUser
 };

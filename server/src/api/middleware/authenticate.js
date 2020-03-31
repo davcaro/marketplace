@@ -15,6 +15,7 @@ const ACTIONS = {
 
 const SUBJECTS = {
   ALL: 'all',
+  SELF_USER: 'self_user',
   USER: 'User'
 };
 
@@ -26,6 +27,10 @@ function defineAbilitiesFor(user) {
       allow(ACTIONS.MANAGE, SUBJECTS.ALL);
     } else {
       allow(ACTIONS.READ, SUBJECTS.USER);
+
+      allow(ACTIONS.READ, SUBJECTS.SELF_USER);
+      allow(ACTIONS.UPDATE, SUBJECTS.SELF_USER);
+      allow(ACTIONS.DELETE, SUBJECTS.SELF_USER);
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);
