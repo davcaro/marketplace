@@ -23,6 +23,17 @@ const createUser = async body => {
   }
 };
 
+const checkUserExists = async email => {
+  const userExists = (await authDAL.count(email)) > 0;
+
+  if (userExists) {
+    throw new AppError(409, 'User already registered');
+  }
+
+  return userExists;
+};
+
 module.exports = {
-  createUser
+  createUser,
+  checkUserExists
 };

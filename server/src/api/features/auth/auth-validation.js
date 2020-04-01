@@ -23,7 +23,16 @@ const signUp = {
   })
 };
 
+const checkAvailable = {
+  [Segments.BODY]: Joi.object().keys({
+    email: Joi.string()
+      .email()
+      .required()
+  })
+};
+
 module.exports = {
   login,
-  signUp
+  signUp,
+  checkAvailable
 };

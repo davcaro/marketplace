@@ -86,7 +86,20 @@ const signUp = async (req, res, next) => {
   })(req, res, next);
 };
 
+const checkAvailable = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    await authService.checkUserExists(email);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 module.exports = {
   login,
-  signUp
+  signUp,
+  checkAvailable
 };

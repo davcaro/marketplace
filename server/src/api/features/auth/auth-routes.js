@@ -20,4 +20,10 @@ module.exports = app => {
     celebrate(authValidation.signUp),
     authController.signUp
   );
+  route.post(
+    '/check',
+    hasPermission(ACTIONS.CREATE, SUBJECTS.USER),
+    celebrate(authValidation.checkAvailable),
+    authController.checkAvailable
+  );
 };
