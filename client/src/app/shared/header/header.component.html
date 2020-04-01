@@ -16,7 +16,23 @@
       </ng-template>
     </nz-input-group>
     <div class="header-right">
-      <button nz-button nzType="default" nzShape="round" (click)="showAuthModal()">
+      <a class="userDropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
+        <nz-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+        {{ user.name }}
+        <i nz-icon nzType="down"></i>
+      </a>
+      <nz-dropdown-menu #userMenu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>Mi perfil</li>
+          <li nz-menu-item>Productos</li>
+          <li nz-menu-item>Mensajes</li>
+          <li nz-menu-item>Favoritos</li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item>Cerrar sesión</li>
+        </ul>
+      </nz-dropdown-menu>
+
+      <button nz-button nzType="default" nzShape="round" (click)="showAuthModal()" *ngIf="!user">
         Iniciar sesión
       </button>
 
