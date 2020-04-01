@@ -57,4 +57,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   closeAuthModal(): void {
     this.authModalService.closeModal();
   }
+
+  onLogout(): void {
+    this.authService.logout();
+  }
 }
