@@ -5,35 +5,47 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthModalService implements OnInit {
-  private authModalView: string;
+  public isVisible: boolean;
+  public view: string;
 
-  public authModalViewChange: Subject<string>;
+  public visibilityChange: Subject<boolean>;
+  public viewChange: Subject<string>;
 
   constructor() {
-    this.authModalView = null;
+    this.isVisible = false;
+    this.view = null;
 
-    this.authModalViewChange = new Subject<string>();
+    this.visibilityChange = new Subject<boolean>();
+    this.viewChange = new Subject<string>();
   }
 
   ngOnInit() {
-    this.authModalViewChange.subscribe(value => {
-      this.authModalView = value;
+    this.viewChange.subscribe(value => {
+      this.view = value;
+    });
+
+    this.visibilityChange.subscribe(value => {
+      this.isVisible = value;
     });
   }
 
+  closeModal(): void {
+    this.visibilityChange.next(false);
+  }
+
   oauth(): void {
-    this.authModalViewChange.next('oauth');
+    this.viewChange.next('oauth');
   }
 
   login(): void {
-    this.authModalViewChange.next('login');
+    this.viewChange.next('login');
   }
 
   signUp(): void {
-    this.authModalViewChange.next('signup');
+    this.viewChange.next('signup');
   }
 
   resetPassword(): void {
-    this.authModalViewChange.next('reset');
+    this.viewChange.next('reset');
   }
 }

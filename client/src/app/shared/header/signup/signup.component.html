@@ -6,6 +6,14 @@
 <div class="main-content">
   <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
+      <nz-alert
+        nzType="error"
+        nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+        nzShowIcon
+        *ngIf="unknownError"
+      >
+      </nz-alert>
+
       <nz-form-control nzHasFeedback nzErrorTip="Introduce tu nombre">
         <nz-input-group nzPrefixIcon="smile">
           <input type="text" nz-input formControlName="name" placeholder="Nombre y apellidos" />
@@ -42,14 +50,14 @@
             placeholder="Contraseña"
           />
         </nz-input-group>
-         <ng-template #passwordErrorTpl let-control>
-            <ng-container *ngIf="control.hasError('required')">
-              Introduce tu contraseña
-            </ng-container>
-            <ng-container *ngIf="control.hasError('minlength') || control.hasError('maxlength')">
-              La contraseña debe tener entre 6 y 20 caracteres
-            </ng-container>
-          </ng-template>
+        <ng-template #passwordErrorTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Introduce tu contraseña
+          </ng-container>
+          <ng-container *ngIf="control.hasError('minlength') || control.hasError('maxlength')">
+            La contraseña debe tener entre 6 y 20 caracteres
+          </ng-container>
+        </ng-template>
         <ng-template #suffixIconTpl>
           <i
             nz-icon
@@ -59,10 +67,10 @@
         </ng-template>
       </nz-form-control>
     </nz-form-item>
-    
-      <button nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
-        Crear una cuenta
-      </button>
+
+    <button nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
+      Crear una cuenta
+    </button>
   </form>
 </div>
 

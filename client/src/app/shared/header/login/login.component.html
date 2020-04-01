@@ -6,6 +6,14 @@
 <div class="main-content">
   <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
+      <nz-alert
+        nzType="error"
+        nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+        nzShowIcon
+        *ngIf="unknownError"
+      >
+      </nz-alert>
+
       <nz-form-control [nzErrorTip]="emailErrorTpl">
         <nz-input-group nzPrefixIcon="user">
           <input type="text" nz-input formControlName="email" placeholder="Dirección de email" />
@@ -16,15 +24,26 @@
             <ng-container *ngIf="control.hasError('email')">
               Introduce un email válido
             </ng-container>
+            <ng-container *ngIf="control.hasError('wrong')">
+              No existe ninguna cuenta con ese email
+            </ng-container>
           </ng-template>
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-control nzErrorTip="¡Introduce tu contraseña!">
+      <nz-form-control [nzErrorTip]="passwordErrorTpl">
         <nz-input-group nzPrefixIcon="lock">
           <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+          <ng-template #passwordErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu contraseña
+            </ng-container>
+            <ng-container *ngIf="control.hasError('wrong')">
+              La contraseña es incorrecta
+            </ng-container>
+          </ng-template>
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>

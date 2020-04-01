@@ -12,12 +12,18 @@ export class HeaderComponent implements OnDestroy {
   authModalIsVisible: boolean;
   authModalView: string;
 
+  authModalVisibilitySubscription: Subscription;
   authModalViewSubscription: Subscription;
 
   constructor(private authModalService: AuthModalService) {
-    this.authModalIsVisible = false;
+    this.authModalIsVisible = authModalService.isVisible;
+    this.authModalView = authModalService.view;
 
-    this.authModalViewSubscription = this.authModalService.authModalViewChange.subscribe(value => {
+    this.authModalVisibilitySubscription = this.authModalService.visibilityChange.subscribe(value => {
+      this.authModalIsVisible = value;
+    });
+
+    this.authModalViewSubscription = this.authModalService.viewChange.subscribe(value => {
       this.authModalView = value;
     });
   }
@@ -27,7 +33,7 @@ export class HeaderComponent implements OnDestroy {
   }
 
   showAuthModal(): void {
-    this.authModalIsVisible = true;
+    this.authModalService.visibilityChange.next(true);
     this.authModalService.oauth();
   }
 
@@ -36,7 +42,6 @@ export class HeaderComponent implements OnDestroy {
   }
 
   closeAuthModal(): void {
-    this.authModalIsVisible = false;
-    this.authModalService.oauth();
+    this.authModalService.closeModal();
   }
 }
