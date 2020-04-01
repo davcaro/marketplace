@@ -92,9 +92,7 @@ export class AuthService {
   }
 
   reloadUser() {
-    return this.http.get<AuthResponseData>('//127.0.0.1:3000/api/me', {
-      headers: { Authorization: `Bearer ${this.user.value.token}` }
-    });
+    return this.http.get<AuthResponseData>('//127.0.0.1:3000/api/me');
   }
 
   logout(): void {

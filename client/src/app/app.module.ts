@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -14,6 +14,7 @@ import { OauthComponent } from './shared/header/oauth/oauth.component';
 import { LoginComponent } from './shared/header/login/login.component';
 import { SignupComponent } from './shared/header/signup/signup.component';
 import { ResetPasswordComponent } from './shared/header/reset-password/reset-password.component';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 registerLocaleData(en);
 
@@ -35,7 +36,14 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [
+    { provide: NZ_I18N, useValue: en_US },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
