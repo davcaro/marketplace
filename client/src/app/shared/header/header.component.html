@@ -23,11 +23,15 @@
       </a>
       <nz-dropdown-menu #userMenu="nzDropdownMenu">
         <ul nz-menu nzSelectable>
-          <li nz-menu-item>Mi perfil</li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
+          </li>
           <li nz-menu-item>Productos</li>
           <li nz-menu-item>Mensajes</li>
           <li nz-menu-item>Favoritos</li>
+
           <li nz-menu-divider></li>
+
           <li nz-menu-item (click)="onLogout()">Cerrar sesión</li>
         </ul>
       </nz-dropdown-menu>
@@ -66,8 +70,27 @@
     </a>
     <nz-dropdown-menu #collapsedMenu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
-        <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
-        <li nz-menu-item>Subir producto</li>
+        <ng-container *ngIf="user">
+          <li nz-menu-item>Subir producto</li>
+
+          <li nz-menu-divider></li>
+
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
+          </li>
+          <li nz-menu-item>Productos</li>
+          <li nz-menu-item>Mensajes</li>
+          <li nz-menu-item>Favoritos</li>
+
+          <li nz-menu-divider></li>
+
+          <li nz-menu-item (click)="onLogout()">Cerrar sesión</li>
+        </ng-container>
+
+        <ng-container *ngIf="!user">
+          <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
+          <li nz-menu-item>Subir producto</li>
+        </ng-container>
       </ul>
     </nz-dropdown-menu>
   </div>

@@ -14,9 +14,17 @@
       >
       </nz-alert>
 
-      <nz-form-control nzHasFeedback nzErrorTip="Introduce tu nombre">
+      <nz-form-control nzHasFeedback [nzErrorTip]="nameErrorTpl">
         <nz-input-group nzPrefixIcon="smile">
           <input type="text" nz-input formControlName="name" placeholder="Nombre y apellidos" />
+          <ng-template #nameErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu nombre
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+              El máximo son 255 caracteres
+            </ng-container>
+          </ng-template>
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
