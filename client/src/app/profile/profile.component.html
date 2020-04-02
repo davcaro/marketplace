@@ -1,0 +1,64 @@
+<nz-layout class="left-layout">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" nzWidth="200px" [nzBreakpoint]="'lg'">
+    <ul class="sider-list" nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-submenu nzTitle="Perfil" nzIcon="user">
+        <ul>
+          <li nz-menu-item>Mi Perfil</li>
+          <li nz-menu-item>Cuenta</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="Productos" nzIcon="unordered-list">
+        <ul>
+          <li nz-menu-item>En venta</li>
+          <li nz-menu-item>Vendidos</li>
+        </ul>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="message"></i>
+        <span>Mensajes</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="heart"></i>
+        <span>Favoritos</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="star"></i>
+        <span>Opiniones</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="bar-chart"></i>
+        <span>Estadísticas</span>
+      </li>
+    </ul>
+  </nz-sider>
+
+  <nz-layout>
+    <nz-content>
+      <div class="main-content">
+        <h3 nz-title>Tu perfil</h3>
+        <span nz-text>Aquí podrás ver y editar los datos de tu perfil</span>
+
+        <nz-tabset nzLinkRouter [nzTabBarExtraContent]="extraTpl">
+          <nz-tab>
+            <a nz-tab-link [routerLink]="['/profile/info']">
+              Perfil
+            </a>
+          </nz-tab>
+          <nz-tab>
+            <a nz-tab-link [routerLink]="['/profile/account']">
+              Cuenta
+            </a>
+          </nz-tab>
+        </nz-tabset>
+        <ng-template #extraTpl>
+          <div class="user-rate">
+            <nz-rate [ngModel]="4" nzDisabled></nz-rate>
+            <span class="rate-reviews">(50 opiniones)</span>
+          </div>
+        </ng-template>
+
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

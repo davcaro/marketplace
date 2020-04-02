@@ -1,0 +1,128 @@
+<nz-card>
+  <div class="user-info">
+    <h4 nz-title>Información de la cuenta</h4>
+
+    <form nz-form>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8">Email</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input [value]="user.email" type="text" readonly />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8">Contraseña</nz-form-label>
+        <nz-input-group [nzSuffix]="suffixIconArrow">
+          <nz-form-control>
+            <input
+              nz-input
+              value="password"
+              type="password"
+              (click)="showPasswordModal()"
+              style="cursor: pointer;"
+              readonly
+            />
+          </nz-form-control>
+        </nz-input-group>
+        <ng-template #suffixIconArrow>
+          <i nz-icon nzType="right"></i>
+        </ng-template>
+      </nz-form-item>
+    </form>
+
+    <nz-divider style="margin: 8px 0;"></nz-divider>
+
+    <div class="footer">
+      <button class="btn-delAccount" nz-button nzType="link" (click)="showDelAccModal()">
+        Darme de baja
+      </button>
+    </div>
+
+    <nz-modal [(nzVisible)]="passwordModalIsVisible" [nzFooter]="null" (nzOnCancel)="passwordHandleCancel()">
+      <div class="modal-body">
+        <h4 nz-title>Actualiza tu contraseña</h4>
+        <span nz-text>Aquí puedes cambiarla</span>
+
+        <div class="main-content">
+          <form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
+            <nz-form-item>
+              <nz-form-label>Contraseña actual</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="currentPassErrorTpl">
+                <input nz-input formControlName="currentPassword" placeholder="Contraseña actual" type="password" />
+                <ng-template #currentPassErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Introduce tu contraseña actual
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label>Nueva contraseña</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="newPassErrorTpl">
+                <input nz-input formControlName="newPassword" placeholder="Nueva contraseña" type="password" />
+                <ng-template #newPassErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Introduce tu nueva contraseña
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('minlength') || control.hasError('maxlength')">
+                    La contraseña debe tener entre 6 y 20 caracteres
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label>Confirmar nueva contraseña</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="confirmPassErrorTpl">
+                <input
+                  nz-input
+                  formControlName="confirmPassword"
+                  placeholder="Confirmar nueva contraseña"
+                  type="password"
+                />
+                <ng-template #confirmPassErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Repite tu nueva contraseña
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('dontMatch')">
+                    La contraseña no coincide
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+
+          <button
+            class="btn-modal"
+            nz-button
+            nzBlock
+            nzType="primary"
+            [disabled]="!form.valid"
+            [nzSize]="'large'"
+            [nzShape]="'round'"
+            (click)="submitForm()"
+          >
+            Actualizar contraseña
+          </button>
+        </div>
+      </div>
+    </nz-modal>
+
+    <nz-modal [(nzVisible)]="delAccModalIsVisible" [nzFooter]="null" (nzOnCancel)="delAccHandleCancel()">
+      <div class="modal-body">
+        <h4 nz-title>¿Seguro que quieres darte de baja?</h4>
+        <span nz-text>Nunca es tarde para cambiar de opinión.</span>
+
+        <div class="main-content">
+          <button class="btn-modal" nz-button nzBlock nzType="default" [nzSize]="'large'" [nzShape]="'round'">
+            Sí, quiero darme de baja
+          </button>
+          <button class="btn-modal" nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
+            No, va, quiero seguir con vosotros
+          </button>
+        </div>
+      </div>
+    </nz-modal>
+  </div>
+</nz-card>

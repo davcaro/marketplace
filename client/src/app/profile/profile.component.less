@@ -1,0 +1,56 @@
+nz-content {
+  margin: 0 16px;
+  padding: 30px;
+}
+
+.left-layout {
+  height: 100vh;
+}
+
+:host ::ng-deep nz-sider .ant-layout-sider-children,
+.sider-list {
+  background-color: #182b41;
+}
+
+:host ::ng-deep nz-sider .ant-layout-sider-trigger {
+  background-color: rgb(29, 63, 98);
+}
+
+.main-content {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.user-rate {
+  display: flex;
+  align-items: center;
+  line-height: normal;
+}
+
+.rate-reviews {
+  margin-left: 0.7rem;
+}
+
+@media (max-width: 767.98px) {
+  .user-rate {
+    flex-direction: column;
+  }
+
+  .rate-reviews {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 575.98px) {
+  nz-content {
+    padding: 15px;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .user-rate {
+    display: none;
+  }
+}

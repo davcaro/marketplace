@@ -1,0 +1,88 @@
+<nz-card>
+  <div class="profile-avatar">
+    <h4 nz-title>Foto de perfil</h4>
+
+    <div class="avatar-uploaders">
+      <nz-upload
+        class="avatar-uploader-card"
+        nzAction="https://jsonplaceholder.typicode.com/posts/"
+        nzName="avatar"
+        nzListType="picture-card"
+        [nzShowUploadList]="false"
+        [nzBeforeUpload]="beforeUpload"
+        (nzChange)="handleChange($event)"
+      >
+        <ng-container *ngIf="!avatarUrl">
+          <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+          <div class="ant-upload-text">Subir</div>
+        </ng-container>
+        <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" />
+      </nz-upload>
+
+      <div>
+        <nz-upload
+          nzAction="https://jsonplaceholder.typicode.com/posts/"
+          nzName="avatar"
+          [nzShowUploadList]="false"
+          [nzBeforeUpload]="beforeUpload"
+          (nzChange)="handleChange($event)"
+        >
+          <button nz-button>
+            <i nz-icon nzType="upload"></i>
+            <span>Subir foto</span>
+          </button>
+        </nz-upload>
+        <p nz-text style="margin: 8px 8px 0 8px;">
+          Aceptamos formatos .jpg y .png.
+        </p>
+        <p nz-text style="margin: 0 8px 8px 8px;">
+          Tamaño mínimo 300x300.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="user-info">
+    <h4 nz-title>Información pública</h4>
+
+    <form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">Nombre</nz-form-label>
+        <nz-form-control [nzSpan]="14" nzHasFeedback [nzErrorTip]="nameErrorTpl">
+          <input nz-input formControlName="name" placeholder="Nombre y apellidos" type="text" />
+          <ng-template #nameErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu nombre
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+              El máximo son 255 caracteres
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">Ubicación</nz-form-label>
+        <nz-form-control [nzSpan]="14" nzHasFeedback [nzErrorTip]="locationErrorTpl">
+          <input nz-input formControlName="location" placeholder="Introduce la localización" type="text" />
+          <ng-template #locationErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Introduce tu ubicación
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+              El máximo son 255 caracteres
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+          <button nz-button nzType="primary" [disabled]="!form.valid" [nzShape]="'round'">
+            Guardar
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</nz-card>

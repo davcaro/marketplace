@@ -15,6 +15,9 @@ import { LoginComponent } from './shared/header/login/login.component';
 import { SignupComponent } from './shared/header/signup/signup.component';
 import { ResetPasswordComponent } from './shared/header/reset-password/reset-password.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { ProfileComponent } from './profile/profile.component';
+import { InfoComponent } from './profile/info/info.component';
+import { AccountComponent } from './profile/account/account.component';
 
 registerLocaleData(en);
 
@@ -25,7 +28,10 @@ registerLocaleData(en);
     OauthComponent,
     LoginComponent,
     SignupComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ProfileComponent,
+    InfoComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
