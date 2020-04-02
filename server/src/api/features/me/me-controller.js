@@ -13,10 +13,8 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { id } = req.user;
-
   try {
-    await meService.updateUser(id, req.body);
+    await meService.updateUser(req.user, req.body);
 
     return res.sendStatus(204);
   } catch (e) {

@@ -17,11 +17,20 @@ const readUser = async id => {
   return user;
 };
 
-const updateUser = async (id, body) => {
+const updateUser = async (user, body) => {
   let updatedRows;
+  const payload = body;
+
+  if (body.newPassword) {
+    if (await user.isValidPassword(body.currentPassword)) {
+      payload.password = body.newPassword;
+    } else {
+      throw new AppError(401, 'Bad Credentials');
+    }
+  }
 
   try {
-    updatedRows = await userDAL.updateById(id, body);
+    updatedRows = await userDAL.updateById(user.id, payload);
   } catch (e) {
     throw new AppError(500, e.message);
   }
