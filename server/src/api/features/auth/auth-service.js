@@ -16,7 +16,7 @@ const createUser = async body => {
       id: user.id,
       email: user.email,
       name: user.name,
-      picture: user.picture
+      avatar: user.avatar
     };
   } catch (e) {
     throw new AppError(500, e.message);

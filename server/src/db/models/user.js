@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       name: DataTypes.STRING,
-      picture: DataTypes.STRING,
+      avatar: DataTypes.STRING,
       admin: DataTypes.BOOLEAN
     },
     {
       paranoid: true,
       scopes: {
         public: {
-          attributes: ['id', 'name', 'email', 'picture']
+          attributes: ['id', 'name', 'email', 'avatar']
         }
       }
     }

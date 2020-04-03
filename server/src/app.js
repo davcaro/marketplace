@@ -19,6 +19,10 @@ app.use(cors());
 app.use(passport.initialize());
 
 app.use(config.API.prefix, routes());
+app.use(
+  '/images/avatars',
+  express.static(__dirname + '/../' + config.API.avatars_path)
+);
 
 app.use(errors.validationError);
 app.use(errors.forbiddenErrorHandler);

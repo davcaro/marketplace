@@ -13,8 +13,14 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
+  const payload = req.body;
+
+  if (req.file) {
+    payload.avatar = req.file.filename;
+  }
+
   try {
-    await meService.updateUser(req.user, req.body);
+    await meService.updateUser(req.user, payload);
 
     return res.sendStatus(204);
   } catch (e) {

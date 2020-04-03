@@ -13,6 +13,7 @@ module.exports = {
     }
   },
   API: {
-    prefix: '/api'
+    prefix: '/api',
+    avatars_path: 'public/uploads/avatars'
   }
 };

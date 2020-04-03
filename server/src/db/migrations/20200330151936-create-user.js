@@ -23,7 +23,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      picture: {
+      avatar: {
         type: Sequelize.STRING
       },
       admin: {
