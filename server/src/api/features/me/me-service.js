@@ -35,10 +35,6 @@ const updateUser = async (user, body) => {
     throw new AppError(500, e.message);
   }
 
-  if (updatedRows[0] === 0) {
-    throw new AppError(404, 'User not found');
-  }
-
   return updatedRows;
 };
 

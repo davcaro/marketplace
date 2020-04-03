@@ -83,16 +83,36 @@ export class AuthService {
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
 
-      this.reloadUser().subscribe(res => {
-        this.user.value._id = res._id;
-        this.user.value.email = res.email;
-        this.user.value.name = res.name;
-      });
+      this.reloadUser();
     }
   }
 
   reloadUser() {
-    return this.http.get<AuthResponseData>('//127.0.0.1:3000/api/me');
+    const userData = this.http
+      .get<AuthResponseData>('//127.0.0.1:3000/api/me')
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          if (err.error) {
+            return throwError(err.error);
+          } else {
+            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+          }
+        })
+      )
+      .subscribe(
+        res => {
+          this.user.value._id = res._id;
+          this.user.value.email = res.email;
+          this.user.value.name = res.name;
+
+          this.saveToLocalStorage();
+        },
+        err => {
+          this.logout();
+        }
+      );
+
+    return userData;
   }
 
   logout(): void {
@@ -108,12 +128,16 @@ export class AuthService {
     }, expirationDuration);
   }
 
+  saveToLocalStorage(): void {
+    localStorage.setItem('userData', JSON.stringify(this.user.value));
+  }
+
   private handleAuthentication(id: number, email: string, name: string, token: string, token_ttl: number) {
     const expirationDate = new Date(new Date().getTime() + token_ttl * 1000);
     const user = new User(id, email, name, token, expirationDate);
     this.user.next(user);
     this.autoLogout(token_ttl * 1000);
-    localStorage.setItem('userData', JSON.stringify(user));
+    this.saveToLocalStorage();
   }
 
   private handleError(errorRes: HttpErrorResponse) {

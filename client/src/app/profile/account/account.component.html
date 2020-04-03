@@ -38,13 +38,21 @@
       </button>
     </div>
 
-    <nz-modal [(nzVisible)]="passwordModalIsVisible" [nzFooter]="null" (nzOnCancel)="passwordHandleCancel()">
+    <nz-modal [(nzVisible)]="passwordModalIsVisible" [nzFooter]="null" (nzOnCancel)="closePasswordModal()">
       <div class="modal-body">
         <h4 nz-title>Actualiza tu contraseña</h4>
         <span nz-text>Aquí puedes cambiarla</span>
 
         <div class="main-content">
           <form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
+            <nz-alert
+              nzType="error"
+              nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+              nzShowIcon
+              *ngIf="passUnknownError"
+            >
+            </nz-alert>
+
             <nz-form-item>
               <nz-form-label>Contraseña actual</nz-form-label>
               <nz-form-control nzHasFeedback [nzErrorTip]="currentPassErrorTpl">
@@ -52,6 +60,9 @@
                 <ng-template #currentPassErrorTpl let-control>
                   <ng-container *ngIf="control.hasError('required')">
                     Introduce tu contraseña actual
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('wrong')">
+                    La contraseña es incorrecta
                   </ng-container>
                 </ng-template>
               </nz-form-control>
@@ -91,34 +102,57 @@
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
-          </form>
 
-          <button
-            class="btn-modal"
-            nz-button
-            nzBlock
-            nzType="primary"
-            [disabled]="!form.valid"
-            [nzSize]="'large'"
-            [nzShape]="'round'"
-            (click)="submitForm()"
-          >
-            Actualizar contraseña
-          </button>
+            <button
+              class="btn-modal"
+              nz-button
+              nzBlock
+              nzType="primary"
+              [disabled]="!form.valid"
+              [nzSize]="'large'"
+              [nzShape]="'round'"
+            >
+              Actualizar contraseña
+            </button>
+          </form>
         </div>
       </div>
     </nz-modal>
 
-    <nz-modal [(nzVisible)]="delAccModalIsVisible" [nzFooter]="null" (nzOnCancel)="delAccHandleCancel()">
+    <nz-modal [(nzVisible)]="delAccModalIsVisible" [nzFooter]="null" (nzOnCancel)="closeDelAccModal()">
       <div class="modal-body">
         <h4 nz-title>¿Seguro que quieres darte de baja?</h4>
         <span nz-text>Nunca es tarde para cambiar de opinión.</span>
 
         <div class="main-content">
-          <button class="btn-modal" nz-button nzBlock nzType="default" [nzSize]="'large'" [nzShape]="'round'">
+          <nz-alert
+            nzType="error"
+            nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+            nzShowIcon
+            *ngIf="delAccUnknownError"
+          >
+          </nz-alert>
+
+          <button
+            class="btn-modal"
+            nz-button
+            nzBlock
+            nzType="default"
+            [nzSize]="'large'"
+            [nzShape]="'round'"
+            (click)="onDelAccount()"
+          >
             Sí, quiero darme de baja
           </button>
-          <button class="btn-modal" nz-button nzBlock nzType="primary" [nzSize]="'large'" [nzShape]="'round'">
+          <button
+            class="btn-modal"
+            nz-button
+            nzBlock
+            nzType="primary"
+            [nzSize]="'large'"
+            [nzShape]="'round'"
+            (click)="closeDelAccModal()"
+          >
             No, va, quiero seguir con vosotros
           </button>
         </div>

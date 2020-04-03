@@ -46,6 +46,14 @@
     <h4 nz-title>Información pública</h4>
 
     <form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
+      <nz-alert
+        nzType="error"
+        nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+        nzShowIcon
+        *ngIf="unknownError"
+      >
+      </nz-alert>
+
       <nz-form-item>
         <nz-form-label [nzSpan]="7">Nombre</nz-form-label>
         <nz-form-control [nzSpan]="14" nzHasFeedback [nzErrorTip]="nameErrorTpl">

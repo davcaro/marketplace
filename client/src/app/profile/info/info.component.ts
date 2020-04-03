@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, throwError } from 'rxjs';
 import { UploadFile, NzMessageService } from 'ng-zorro-antd';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-info',
@@ -11,12 +13,14 @@ import { User } from 'src/app/auth/user.model';
   styleUrls: ['./info.component.less']
 })
 export class InfoComponent implements OnInit {
+  user: User;
   form: FormGroup;
+  unknownError: boolean;
+
   loading: boolean;
   avatarUrl: string;
-  user: User;
 
-  constructor(private msg: NzMessageService, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService, private msg: NzMessageService) {}
 
   ngOnInit() {
     this.user = this.authService.user.value;
@@ -35,9 +39,37 @@ export class InfoComponent implements OnInit {
     }
 
     if (this.form.valid) {
-      // this.unknownError = false;
-      // Send request
+      this.unknownError = false;
+
+      const data = { name: this.form.value.name };
+
+      this.updateUser(data);
     }
+  }
+
+  updateUser(data): void {
+    this.http
+      .patch<any>('//127.0.0.1:3000/api/me', data)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          if (err.error) {
+            return throwError(err.error);
+          } else {
+            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+          }
+        })
+      )
+      .subscribe(
+        res => {
+          this.user.name = data.name;
+          this.authService.saveToLocalStorage();
+
+          this.form.reset({ name: this.user.name });
+        },
+        err => {
+          this.unknownError = true;
+        }
+      );
   }
 
   beforeUpload = (file: File) => {
