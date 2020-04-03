@@ -43,9 +43,11 @@ export class AccountComponent implements OnInit {
 
   submitForm(): void {
     // Force validation
-    for (var i in this.form.controls) {
-      this.form.controls[i].markAsTouched();
-      this.form.controls[i].updateValueAndValidity();
+    for (const i in this.form.controls) {
+      if (this.form.controls[i]) {
+        this.form.controls[i].markAsTouched();
+        this.form.controls[i].updateValueAndValidity();
+      }
     }
 
     if (this.form.valid) {
@@ -79,7 +81,7 @@ export class AccountComponent implements OnInit {
         },
         err => {
           if (err.statusCode === 401) {
-            this.form.controls['currentPassword'].setErrors({ wrong: true });
+            this.form.controls.currentPassword.setErrors({ wrong: true });
           } else {
             this.passUnknownError = true;
           }

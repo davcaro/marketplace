@@ -132,11 +132,11 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(this.user.value));
   }
 
-  private handleAuthentication(id: number, email: string, name: string, token: string, token_ttl: number) {
-    const expirationDate = new Date(new Date().getTime() + token_ttl * 1000);
+  private handleAuthentication(id: number, email: string, name: string, token: string, tokenTTL: number) {
+    const expirationDate = new Date(new Date().getTime() + tokenTTL * 1000);
     const user = new User(id, email, name, token, expirationDate);
     this.user.next(user);
-    this.autoLogout(token_ttl * 1000);
+    this.autoLogout(tokenTTL * 1000);
     this.saveToLocalStorage();
   }
 

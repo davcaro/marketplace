@@ -23,9 +23,11 @@ export class LoginComponent implements OnInit {
 
   submitForm(): void {
     // Force validation
-    for (var i in this.form.controls) {
-      this.form.controls[i].markAsTouched();
-      this.form.controls[i].updateValueAndValidity();
+    for (const i in this.form.controls) {
+      if (this.form.controls[i]) {
+        this.form.controls[i].markAsTouched();
+        this.form.controls[i].updateValueAndValidity();
+      }
     }
 
     if (this.form.valid) {
@@ -44,13 +46,13 @@ export class LoginComponent implements OnInit {
       err => {
         switch (err.statusCode) {
           case 400:
-            this.form.controls['email'].setErrors({ email: true });
+            this.form.controls.email.setErrors({ email: true });
             break;
           case 401:
-            this.form.controls['password'].setErrors({ wrong: true });
+            this.form.controls.password.setErrors({ wrong: true });
             break;
           case 404:
-            this.form.controls['email'].setErrors({ wrong: true });
+            this.form.controls.email.setErrors({ wrong: true });
             break;
           default:
             this.unknownError = true;

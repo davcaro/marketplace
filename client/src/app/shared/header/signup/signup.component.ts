@@ -40,11 +40,13 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     // Force validation
-    for (var i in this.form.controls) {
-      this.form.controls[i].markAsTouched();
+    for (const i in this.form.controls) {
+      if (this.form.controls[i]) {
+        this.form.controls[i].markAsTouched();
 
-      if (!this.form.controls[i].dirty) {
-        this.form.controls[i].updateValueAndValidity();
+        if (!this.form.controls[i].dirty) {
+          this.form.controls[i].updateValueAndValidity();
+        }
       }
     }
 

@@ -1,10 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthModalService implements OnInit {
+export class AuthModalService {
   public isVisible: boolean;
   public view: string;
 
@@ -17,9 +17,7 @@ export class AuthModalService implements OnInit {
 
     this.visibilityChange = new Subject<boolean>();
     this.viewChange = new Subject<string>();
-  }
 
-  ngOnInit() {
     this.viewChange.subscribe(value => {
       this.view = value;
     });

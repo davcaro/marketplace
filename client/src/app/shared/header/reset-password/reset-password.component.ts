@@ -19,9 +19,11 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   submitForm(): void {
-    for (var i in this.form.controls) {
-      this.form.controls[i].markAsTouched();
-      this.form.controls[i].updateValueAndValidity();
+    for (const i in this.form.controls) {
+      if (this.form.controls[i]) {
+        this.form.controls[i].markAsTouched();
+        this.form.controls[i].updateValueAndValidity();
+      }
     }
 
     console.log(this.form);

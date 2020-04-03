@@ -33,9 +33,11 @@ export class InfoComponent implements OnInit {
 
   submitForm(): void {
     // Force validation
-    for (var i in this.form.controls) {
-      this.form.controls[i].markAsTouched();
-      this.form.controls[i].updateValueAndValidity();
+    for (const i in this.form.controls) {
+      if (this.form.controls[i]) {
+        this.form.controls[i].markAsTouched();
+        this.form.controls[i].updateValueAndValidity();
+      }
     }
 
     if (this.form.valid) {
@@ -103,7 +105,7 @@ export class InfoComponent implements OnInit {
 
   private getBase64(img: File, callback: (img: string) => void): void {
     const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result!.toString()));
+    reader.addEventListener('load', () => callback(reader.result.toString()));
     reader.readAsDataURL(img);
   }
 
@@ -114,7 +116,7 @@ export class InfoComponent implements OnInit {
       img.onload = () => {
         const width = img.naturalWidth;
         const height = img.naturalHeight;
-        window.URL.revokeObjectURL(img.src!);
+        window.URL.revokeObjectURL(img.src);
         resolve(width === height && width >= 300);
       };
     });
@@ -127,7 +129,7 @@ export class InfoComponent implements OnInit {
         this.avatarUrl = null;
         break;
       case 'done':
-        this.getBase64(info.file!.originFileObj!, (img: string) => {
+        this.getBase64(info.file.originFileObj, (img: string) => {
           this.loading = false;
           this.avatarUrl = img;
         });
