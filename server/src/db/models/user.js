@@ -19,13 +19,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       avatar: DataTypes.STRING,
+      location: DataTypes.STRING,
       admin: DataTypes.BOOLEAN
     },
     {
       paranoid: true,
       scopes: {
         public: {
-          attributes: ['id', 'name', 'email', 'avatar']
+          attributes: ['id', 'name', 'email', 'avatar', 'location']
         }
       }
     }

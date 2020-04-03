@@ -32,6 +32,7 @@ const login = async (req, res, next) => {
           email: user.email,
           name: user.name,
           avatar: user.avatar,
+          location: user.location,
           token,
           token_ttl: config.ENV.JWT_TTL
         });
@@ -76,6 +77,7 @@ const signUp = async (req, res, next) => {
           email: user.email,
           name: user.name,
           avatar: user.avatar,
+          location: user.location,
           token,
           token_ttl: config.ENV.JWT_TTL
         });

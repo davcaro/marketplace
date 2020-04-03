@@ -26,6 +26,9 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING
       },
+      location: {
+        type: Sequelize.STRING
+      },
       admin: {
         type: Sequelize.BOOLEAN
       },

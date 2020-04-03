@@ -40,7 +40,8 @@ const createUser = async body => {
       id: user.id,
       email: user.email,
       name: user.name,
-      avatar: user.avatar
+      avatar: user.avatar,
+      location: user.location
     };
   } catch (e) {
     throw new AppError(500, e.message);
