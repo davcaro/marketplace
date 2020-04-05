@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
+import { environment } from 'src/environments/environment';
 
 export interface AuthResponseData {
   _id: number;
   email: string;
   name: string;
+  avatar: string;
+  location: string;
   token: string;
   token_ttl: number;
 }
@@ -17,12 +20,15 @@ export interface AuthResponseData {
 export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
+  apiUrl: string;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.apiUrl = environment.apiUrl;
+  }
 
   signup(email: string, password: string, name: string) {
     return this.http
-      .post<AuthResponseData>('//127.0.0.1:3000/api/auth/signup', {
+      .post<AuthResponseData>(`${this.apiUrl}/api/auth/signup`, {
         email,
         password,
         name
@@ -30,28 +36,28 @@ export class AuthService {
       .pipe(
         catchError(this.handleError),
         tap(res => {
-          this.handleAuthentication(res._id, res.email, res.name, res.token, res.token_ttl);
+          this.handleAuthentication(res);
         })
       );
   }
 
   login(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>('//127.0.0.1:3000/api/auth/login', {
+      .post<AuthResponseData>(`${this.apiUrl}/api/auth/login`, {
         email,
         password
       })
       .pipe(
         catchError(this.handleError),
         tap(res => {
-          this.handleAuthentication(res._id, res.email, res.name, res.token, res.token_ttl);
+          this.handleAuthentication(res);
         })
       );
   }
 
   checkAvailable(email: string) {
     return this.http
-      .post<AuthResponseData>('//127.0.0.1:3000/api/auth/check', {
+      .post<AuthResponseData>(`${this.apiUrl}/api/auth/check`, {
         email
       })
       .pipe(catchError(this.handleError));
@@ -62,6 +68,8 @@ export class AuthService {
       _id: number;
       email: string;
       name: string;
+      avatar: string;
+      location: string;
       _token: string;
       _tokenExpirationDate: string;
     } = JSON.parse(localStorage.getItem('userData'));
@@ -74,6 +82,8 @@ export class AuthService {
       userData._id,
       userData.email,
       userData.name,
+      userData.avatar,
+      userData.location,
       userData._token,
       new Date(userData._tokenExpirationDate)
     );
@@ -89,7 +99,7 @@ export class AuthService {
 
   reloadUser() {
     const userData = this.http
-      .get<AuthResponseData>('//127.0.0.1:3000/api/me')
+      .get<AuthResponseData>(`${this.apiUrl}/api/me`)
       .pipe(
         catchError((err: HttpErrorResponse) => {
           if (err.error) {
@@ -104,6 +114,8 @@ export class AuthService {
           this.user.value._id = res._id;
           this.user.value.email = res.email;
           this.user.value.name = res.name;
+          this.user.value.avatar = res.avatar;
+          this.user.value.location = res.location;
 
           this.saveToLocalStorage();
         },
@@ -132,11 +144,11 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(this.user.value));
   }
 
-  private handleAuthentication(id: number, email: string, name: string, token: string, tokenTTL: number) {
-    const expirationDate = new Date(new Date().getTime() + tokenTTL * 1000);
-    const user = new User(id, email, name, token, expirationDate);
+  private handleAuthentication(data: AuthResponseData): void {
+    const expirationDate = new Date(new Date().getTime() + data.token_ttl * 1000);
+    const user = new User(data._id, data.email, data.name, data.avatar, data.location, data.token, expirationDate);
     this.user.next(user);
-    this.autoLogout(tokenTTL * 1000);
+    this.autoLogout(data.token_ttl * 1000);
     this.saveToLocalStorage();
   }
 

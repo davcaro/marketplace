@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Observer, throwError } from 'rxjs';
-import { UploadFile, NzMessageService } from 'ng-zorro-antd';
+import { UploadFile, NzMessageService, UploadXHRArgs } from 'ng-zorro-antd';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-info',
@@ -13,21 +14,26 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./info.component.less']
 })
 export class InfoComponent implements OnInit {
+  apiUrl: string;
   user: User;
   form: FormGroup;
-  unknownError: boolean;
+  infoUnknownError: boolean;
+  avatarUnknownError: boolean;
 
   loading: boolean;
-  avatarUrl: string;
+  avatar: string;
 
-  constructor(private http: HttpClient, private authService: AuthService, private msg: NzMessageService) {}
+  constructor(private http: HttpClient, private authService: AuthService, private msg: NzMessageService) {
+    this.apiUrl = environment.apiUrl;
+  }
 
   ngOnInit() {
     this.user = this.authService.user.value;
+    this.avatar = this.user.avatar;
 
     this.form = new FormGroup({
       name: new FormControl(this.user.name, [Validators.required, Validators.maxLength(255)]),
-      location: new FormControl(null, [Validators.required, Validators.maxLength(255)])
+      location: new FormControl(this.user.location, [Validators.required, Validators.maxLength(255)])
     });
   }
 
@@ -41,9 +47,12 @@ export class InfoComponent implements OnInit {
     }
 
     if (this.form.valid) {
-      this.unknownError = false;
+      this.infoUnknownError = false;
 
-      const data = { name: this.form.value.name };
+      const data = {
+        name: this.form.value.name,
+        location: this.form.value.location
+      };
 
       this.updateUser(data);
     }
@@ -51,7 +60,7 @@ export class InfoComponent implements OnInit {
 
   updateUser(data): void {
     this.http
-      .patch<any>('//127.0.0.1:3000/api/me', data)
+      .patch<any>(`${this.apiUrl}/api/me`, data)
       .pipe(
         catchError((err: HttpErrorResponse) => {
           if (err.error) {
@@ -64,12 +73,17 @@ export class InfoComponent implements OnInit {
       .subscribe(
         res => {
           this.user.name = data.name;
+          this.user.location = data.location;
+
           this.authService.saveToLocalStorage();
 
-          this.form.reset({ name: this.user.name });
+          this.form.reset({
+            name: this.user.name,
+            location: this.user.location
+          });
         },
         err => {
-          this.unknownError = true;
+          this.infoUnknownError = true;
         }
       );
   }
@@ -126,12 +140,12 @@ export class InfoComponent implements OnInit {
     switch (info.file.status) {
       case 'uploading':
         this.loading = true;
-        this.avatarUrl = null;
+        this.avatar = null;
         break;
       case 'done':
         this.getBase64(info.file.originFileObj, (img: string) => {
           this.loading = false;
-          this.avatarUrl = img;
+          this.avatar = img;
         });
         break;
       case 'error':
@@ -140,4 +154,24 @@ export class InfoComponent implements OnInit {
         break;
     }
   }
+
+  customReq = (item: UploadXHRArgs) => {
+    this.avatarUnknownError = false;
+
+    const formData = new FormData();
+    formData.append('avatar', item.file as any);
+
+    return this.http.patch<any>(`${this.apiUrl}/api/me`, formData).subscribe(
+      res => {
+        this.loading = false;
+        this.avatar = res.avatar;
+
+        this.authService.user.value.avatar = res.avatar;
+        this.authService.saveToLocalStorage();
+      },
+      err => {
+        this.avatarUnknownError = true;
+      }
+    );
+  };
 }

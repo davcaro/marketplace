@@ -10,7 +10,8 @@ const create = {
       .required(),
     name: Joi.string()
       .max(255)
-      .required()
+      .required(),
+    location: Joi.string().max(255)
   })
 };
 
@@ -18,6 +19,7 @@ const update = {
   [Segments.BODY]: Joi.object().keys({
     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,20}$')),
     name: Joi.string().max(255),
+    location: Joi.string().max(255),
     admin: Joi.boolean()
   })
 };

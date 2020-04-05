@@ -17,7 +17,7 @@
     </nz-input-group>
     <div class="header-right">
       <a class="userDropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
-        <nz-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+        <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>
         {{ user.name }}
         <i nz-icon nzType="down"></i>
       </a>

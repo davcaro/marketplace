@@ -22,7 +22,14 @@ const updateUser = async (req, res, next) => {
   try {
     await meService.updateUser(req.user, payload);
 
-    return res.sendStatus(204);
+    const user = req.user;
+    return res.send({
+      _id: user.id,
+      email: user.email,
+      name: user.name,
+      avatar: req.file.filename,
+      location: user.location
+    });
   } catch (e) {
     return next(e);
   }

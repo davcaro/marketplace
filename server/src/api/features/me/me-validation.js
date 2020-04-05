@@ -7,7 +7,8 @@ const update = {
       then: Joi.required()
     }),
     newPassword: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,20}$')),
-    name: Joi.string().max(255)
+    name: Joi.string().max(255),
+    location: Joi.string().max(255)
   })
 };
 

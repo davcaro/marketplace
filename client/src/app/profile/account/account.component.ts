@@ -5,6 +5,7 @@ import { User } from 'src/app/auth/user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-account',
@@ -12,6 +13,7 @@ import { throwError } from 'rxjs';
   styleUrls: ['./account.component.less']
 })
 export class AccountComponent implements OnInit {
+  apiUrl: string;
   user: User;
   form: FormGroup;
   passUnknownError: boolean;
@@ -19,7 +21,9 @@ export class AccountComponent implements OnInit {
   passwordModalIsVisible: boolean;
   delAccModalIsVisible: boolean;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.apiUrl = environment.apiUrl;
+  }
 
   ngOnInit() {
     this.user = this.authService.user.value;
@@ -64,7 +68,7 @@ export class AccountComponent implements OnInit {
 
   updateUser(data): void {
     this.http
-      .patch<any>('//127.0.0.1:3000/api/me', data)
+      .patch<any>(`${this.apiUrl}/api/me`, data)
       .pipe(
         catchError((err: HttpErrorResponse) => {
           if (err.error) {
@@ -91,7 +95,7 @@ export class AccountComponent implements OnInit {
 
   deleteUser(): void {
     this.http
-      .delete<any>('//127.0.0.1:3000/api/me')
+      .delete<any>(`${this.apiUrl}/api/me`)
       .pipe(
         catchError((err: HttpErrorResponse) => {
           if (err.error) {

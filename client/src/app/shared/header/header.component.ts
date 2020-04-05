@@ -3,6 +3,7 @@ import { AuthModalService } from './auth-modal.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +11,8 @@ import { User } from 'src/app/auth/user.model';
   styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  apiUrl: string;
+
   user: User;
   authModalIsVisible: boolean;
   authModalView: string;
@@ -19,6 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
 
   constructor(private authModalService: AuthModalService, private authService: AuthService) {
+    this.apiUrl = environment.apiUrl;
     this.user = authService.user.value;
 
     this.authModalIsVisible = authModalService.isVisible;
