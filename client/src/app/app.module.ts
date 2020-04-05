@@ -18,6 +18,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './profile/info/info.component';
 import { AccountComponent } from './profile/account/account.component';
+import { SiderComponent } from './shared/sider/sider.component';
 
 registerLocaleData(en);
 
@@ -25,6 +26,7 @@ registerLocaleData(en);
   declarations: [
     AppComponent,
     HeaderComponent,
+    SiderComponent,
     OauthComponent,
     LoginComponent,
     SignupComponent,

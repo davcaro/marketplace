@@ -1,0 +1,44 @@
+<nz-layout class="main-layout">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" nzWidth="200px" [nzBreakpoint]="'lg'">
+    <ul class="sider-list" nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-submenu nzTitle="Perfil" nzIcon="user">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'profile', 'info']">Mi Perfil</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'profile', 'account']"> Cuenta</a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="Productos" nzIcon="unordered-list">
+        <ul>
+          <li nz-menu-item>En venta</li>
+          <li nz-menu-item>Vendidos</li>
+        </ul>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="message"></i>
+        <span>Mensajes</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="heart"></i>
+        <span>Favoritos</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="star"></i>
+        <span>Opiniones</span>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="bar-chart"></i>
+        <span>Estadísticas</span>
+      </li>
+    </ul>
+  </nz-sider>
+
+  <nz-layout>
+    <nz-content>
+      <ng-content></ng-content>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
