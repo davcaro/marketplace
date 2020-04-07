@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.Article, { as: 'articles' });
   };
 
   User.beforeCreate(async (user, options) => {

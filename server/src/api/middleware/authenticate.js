@@ -17,7 +17,8 @@ const SUBJECTS = {
   ALL: 'all',
   SELF_USER: 'self_user',
   USER: 'User',
-  CATEGORY: 'Category'
+  CATEGORY: 'Category',
+  ARTICLE: 'Article'
 };
 
 function defineAbilitiesFor(user) {
