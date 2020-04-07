@@ -7,20 +7,20 @@ const getUploader = destination => {
   const storage = multer.diskStorage({
     destination,
     fileFilter: (req, file, cb) => {
-      if (file.mimetype != 'image/png' && file.mimetype != 'image/jpeg') {
+      if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
         return cb(Boom.badRequest());
       }
 
       return cb(null, true);
     },
-    filename: function(req, file, cb) {
+    filename: (req, file, cb) => {
       const randomFileName = uid();
       return cb(null, randomFileName + path.extname(file.originalname));
     }
   });
 
   const uploader = multer({
-    storage: storage,
+    storage,
     limits: { fileSize: 2 * 1024 * 1024 } // File Size: 2 MB
   });
 

@@ -16,7 +16,8 @@ const ACTIONS = {
 const SUBJECTS = {
   ALL: 'all',
   SELF_USER: 'self_user',
-  USER: 'User'
+  USER: 'User',
+  CATEGORY: 'Category'
 };
 
 function defineAbilitiesFor(user) {
