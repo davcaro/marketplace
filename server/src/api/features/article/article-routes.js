@@ -28,12 +28,14 @@ module.exports = app => {
     isAuthorized,
     hasPermission(ACTIONS.UPDATE, SUBJECTS.ARTICLE),
     celebrate(articleValidation.update),
+    articleController.hasPermission,
     articleController.updateArticle
   );
   route.delete(
     '/:id',
     isAuthorized,
     hasPermission(ACTIONS.DELETE, SUBJECTS.ARTICLE),
+    articleController.hasPermission,
     articleController.deleteArticle
   );
 };

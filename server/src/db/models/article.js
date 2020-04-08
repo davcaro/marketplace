@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Article.associate = function(models) {
-    Article.belongsTo(models.User, {
+    Article.belongsTo(models.User.scope('public'), {
       as: 'user'
     });
 

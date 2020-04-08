@@ -1,4 +1,5 @@
 const articleService = require('./article-service');
+const AppError = require('../../utils/app-error');
 
 const getArticles = async (req, res, next) => {
   try {
@@ -58,10 +59,29 @@ const deleteArticle = async (req, res, next) => {
   }
 };
 
+const hasPermission = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!req.user.isAdmin()) {
+    try {
+      const article = await articleService.readArticle(id);
+
+      if (article.userId !== req.user.id) {
+        throw new AppError(403, 'Forbidden');
+      }
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  return next();
+};
+
 module.exports = {
   getArticles,
   getArticle,
   createArticle,
   updateArticle,
-  deleteArticle
+  deleteArticle,
+  hasPermission
 };

@@ -33,6 +33,8 @@ function defineAbilitiesFor(user) {
       allow(ACTIONS.READ, SUBJECTS.SELF_USER);
       allow(ACTIONS.UPDATE, SUBJECTS.SELF_USER);
       allow(ACTIONS.DELETE, SUBJECTS.SELF_USER);
+
+      allow(ACTIONS.CRUD, SUBJECTS.ARTICLE);
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);
