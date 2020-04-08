@@ -19,6 +19,9 @@ const create = {
       .required(),
     condition: Joi.string()
       .valid('new', 'like_new', 'good', 'fair', 'poor')
+      .required(),
+    images: Joi.array()
+      .items(Joi.string())
       .required()
   })
 };
@@ -34,7 +37,8 @@ const update = {
       .precision(2),
     location: Joi.string().max(255),
     status: Joi.string().valid('for_sale', 'reserved', 'sold'),
-    condition: Joi.string().valid('new', 'like_new', 'good', 'fair', 'poor')
+    condition: Joi.string().valid('new', 'like_new', 'good', 'fair', 'poor'),
+    images: Joi.array().items(Joi.string())
   })
 };
 

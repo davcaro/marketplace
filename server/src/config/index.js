@@ -14,6 +14,7 @@ module.exports = {
   },
   API: {
     prefix: '/api',
-    avatars_path: 'public/uploads/avatars'
+    avatars_path: 'public/uploads/avatars',
+    articles_path: 'public/uploads/articles'
   }
 };

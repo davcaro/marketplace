@@ -23,6 +23,12 @@ const getArticle = async (req, res, next) => {
   }
 };
 
+const uploadImage = async (req, res, next) => {
+  return res.json({
+    image: req.file.filename
+  });
+};
+
 const createArticle = async (req, res, next) => {
   req.body.userId = req.user.id;
 
@@ -47,11 +53,36 @@ const updateArticle = async (req, res, next) => {
   }
 };
 
+const addImage = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await articleService.addImage(id, req.file.filename);
+
+    return res.json({ image: req.file.filename });
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const deleteArticle = async (req, res, next) => {
   const { id } = req.params;
 
   try {
     await articleService.deleteArticle(id);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const removeImage = async (req, res, next) => {
+  const { imageId } = req.params;
+  const articleId = req.params.id;
+
+  try {
+    await articleService.removeImage(imageId, articleId);
 
     return res.sendStatus(204);
   } catch (e) {
@@ -80,8 +111,11 @@ const hasPermission = async (req, res, next) => {
 module.exports = {
   getArticles,
   getArticle,
+  uploadImage,
   createArticle,
   updateArticle,
+  addImage,
   deleteArticle,
+  removeImage,
   hasPermission
 };

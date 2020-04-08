@@ -23,6 +23,10 @@ app.use(
   '/images/avatars',
   express.static(__dirname + '/../' + config.API.avatars_path)
 );
+app.use(
+  '/images/articles',
+  express.static(__dirname + '/../' + config.API.articles_path)
+);
 
 app.use(errors.validationError);
 app.use(errors.forbiddenErrorHandler);

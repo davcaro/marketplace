@@ -35,7 +35,14 @@ const createArticle = async body => {
   }
 
   try {
-    return await articleDAL.create(body);
+    const article = await articleDAL.create(body);
+
+    const images = body.images.map(image => {
+      return { articleId: article.id, image };
+    });
+    await articleDAL.addImages(images);
+
+    return article;
   } catch (e) {
     throw new AppError(500, e.message);
   }
@@ -51,6 +58,14 @@ const updateArticle = async (id, body) => {
 
   try {
     return await articleDAL.updateById(id, body);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
+const addImage = async (id, image) => {
+  try {
+    return await articleDAL.addImage(id, image);
   } catch (e) {
     throw new AppError(500, e.message);
   }
@@ -72,10 +87,20 @@ const deleteArticle = async id => {
   return deletedRows;
 };
 
+const removeImage = async (id, articleId) => {
+  try {
+    return await articleDAL.removeImage(id, articleId);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 module.exports = {
   readArticles,
   readArticle,
   createArticle,
   updateArticle,
-  deleteArticle
+  addImage,
+  deleteArticle,
+  removeImage
 };
