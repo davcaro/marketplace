@@ -16,8 +16,8 @@ import { SignupComponent } from './shared/header/signup/signup.component';
 import { ResetPasswordComponent } from './shared/header/reset-password/reset-password.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { ProfileComponent } from './profile/profile.component';
-import { InfoComponent } from './profile/info/info.component';
-import { AccountComponent } from './profile/account/account.component';
+import { ProfileInfoComponent } from './profile/profile-info/profile-info.component';
+import { ProfileAccountComponent } from './profile/profile-account/profile-account.component';
 import { SiderComponent } from './shared/sider/sider.component';
 import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
 
@@ -33,8 +33,8 @@ registerLocaleData(en);
     SignupComponent,
     ResetPasswordComponent,
     ProfileComponent,
-    InfoComponent,
-    AccountComponent,
+    ProfileInfoComponent,
+    ProfileAccountComponent,
     UploadArticleComponent
   ],
   imports: [

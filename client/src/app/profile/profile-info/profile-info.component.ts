@@ -10,10 +10,10 @@ import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.less']
+  templateUrl: './profile-info.component.html',
+  styleUrls: ['./profile-info.component.less']
 })
-export class InfoComponent implements OnInit {
+export class ProfileInfoComponent implements OnInit {
   apiUrl: string;
   user: User;
   form: FormGroup;

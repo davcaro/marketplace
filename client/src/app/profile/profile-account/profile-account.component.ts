@@ -9,10 +9,10 @@ import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-account',
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.less']
+  templateUrl: './profile-account.component.html',
+  styleUrls: ['./profile-account.component.less']
 })
-export class AccountComponent implements OnInit {
+export class ProfileAccountComponent implements OnInit {
   apiUrl: string;
   user: User;
   form: FormGroup;
