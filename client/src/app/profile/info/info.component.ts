@@ -49,12 +49,7 @@ export class InfoComponent implements OnInit {
     if (this.form.valid) {
       this.infoUnknownError = false;
 
-      const data = {
-        name: this.form.value.name,
-        location: this.form.value.location
-      };
-
-      this.updateUser(data);
+      this.updateUser(this.form.value);
     }
   }
 
@@ -117,12 +112,6 @@ export class InfoComponent implements OnInit {
     });
   };
 
-  private getBase64(img: File, callback: (img: string) => void): void {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result.toString()));
-    reader.readAsDataURL(img);
-  }
-
   private checkImageDimension(file: File): Promise<boolean> {
     return new Promise(resolve => {
       const img = new Image();
@@ -153,6 +142,12 @@ export class InfoComponent implements OnInit {
         this.loading = false;
         break;
     }
+  }
+
+  private getBase64(img: File, callback: (img: string) => void): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result.toString()));
+    reader.readAsDataURL(img);
   }
 
   customReq = (item: UploadXHRArgs) => {

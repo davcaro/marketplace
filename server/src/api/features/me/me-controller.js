@@ -27,7 +27,7 @@ const updateUser = async (req, res, next) => {
       _id: id,
       email,
       name,
-      avatar: req.file.filename,
+      avatar: req.file ? req.file.filename : req.user.avatar,
       location
     });
   } catch (e) {
