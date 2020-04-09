@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authModalViewSubscription: Subscription;
   userSubscription: Subscription;
 
-  constructor(private authModalService: AuthModalService, private authService: AuthService) {
+  constructor(private authModalService: AuthModalService, private authService: AuthService, private router: Router) {
     this.apiUrl = environment.apiUrl;
     this.user = authService.user.value;
 
@@ -64,5 +65,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.authService.logout();
+  }
+
+  onUploadArticle(): void {
+    if (this.authService.user.value) {
+      this.router.navigate(['catalog', 'upload']);
+    } else {
+      this.showAuthModal();
+    }
   }
 }

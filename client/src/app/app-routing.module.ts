@@ -5,6 +5,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './profile/info/info.component';
 import { AccountComponent } from './profile/account/account.component';
 import { AuthGuard } from './auth/auth.guard';
+import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -17,6 +18,11 @@ const routes: Routes = [
       { path: 'info', component: InfoComponent },
       { path: 'account', component: AccountComponent }
     ]
+  },
+  {
+    path: 'catalog',
+    canActivate: [AuthGuard],
+    children: [{ path: 'upload', component: UploadArticleComponent }]
   }
 ];
 

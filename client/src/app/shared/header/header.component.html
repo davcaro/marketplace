@@ -1,5 +1,5 @@
 <nz-header>
-  <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="'assets/brand-logo.png'"></nz-avatar>
+  <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="'assets/brand-logo.png'" routerLink="/"></nz-avatar>
   <div class="header-collapse">
     <nz-input-group nzCompact class="search-box">
       <nz-select [ngModel]="'all'">
@@ -26,7 +26,7 @@
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
           </li>
-          <li nz-menu-item>Productos</li>
+          <li nz-menu-item>Artículos</li>
           <li nz-menu-item>Mensajes</li>
           <li nz-menu-item>Favoritos</li>
 
@@ -57,9 +57,9 @@
         </div>
       </nz-modal>
 
-      <button nz-button nzType="primary" nzShape="round">
+      <button nz-button nzType="primary" nzShape="round" (click)="onUploadArticle()">
         <i nz-icon nzType="plus"></i>
-        Subir producto
+        Subir artículo
       </button>
     </div>
   </div>
@@ -70,26 +70,25 @@
     </a>
     <nz-dropdown-menu #collapsedMenu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
-        <ng-container *ngIf="user">
-          <li nz-menu-item>Subir producto</li>
+        <ng-container *ngIf="!user">
+          <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
+        </ng-container>
 
+        <li nz-menu-item (click)="onUploadArticle()">Subir artículo</li>
+
+        <ng-container *ngIf="user">
           <li nz-menu-divider></li>
 
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
           </li>
-          <li nz-menu-item>Productos</li>
+          <li nz-menu-item>Artículos</li>
           <li nz-menu-item>Mensajes</li>
           <li nz-menu-item>Favoritos</li>
 
           <li nz-menu-divider></li>
 
           <li nz-menu-item (click)="onLogout()">Cerrar sesión</li>
-        </ng-container>
-
-        <ng-container *ngIf="!user">
-          <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
-          <li nz-menu-item>Subir producto</li>
         </ng-container>
       </ul>
     </nz-dropdown-menu>

@@ -19,6 +19,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './profile/info/info.component';
 import { AccountComponent } from './profile/account/account.component';
 import { SiderComponent } from './shared/sider/sider.component';
+import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
 
 registerLocaleData(en);
 
@@ -33,7 +34,8 @@ registerLocaleData(en);
     ResetPasswordComponent,
     ProfileComponent,
     InfoComponent,
-    AccountComponent
+    AccountComponent,
+    UploadArticleComponent
   ],
   imports: [
     BrowserModule,
