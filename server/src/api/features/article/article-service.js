@@ -50,10 +50,13 @@ const createArticle = async body => {
 
 const updateArticle = async (id, body) => {
   const { categoryId } = body;
-  const categoryExists = (await categoryDAL.count(categoryId)) > 0;
 
-  if (!categoryExists) {
-    throw new AppError(400, 'Bad Request');
+  if (categoryId) {
+    const categoryExists = (await categoryDAL.count(categoryId)) > 0;
+
+    if (!categoryExists) {
+      throw new AppError(400, 'Bad Request');
+    }
   }
 
   try {

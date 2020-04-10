@@ -18,7 +18,7 @@
     <div class="header-right">
       <a class="userDropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
         <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>
-        {{ user.name }}
+        {{ user.name | truncate }}
         <i nz-icon nzType="down"></i>
       </a>
       <nz-dropdown-menu #userMenu="nzDropdownMenu">

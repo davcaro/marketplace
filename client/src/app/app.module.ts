@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import en from '@angular/common/locales/en';
+import es from '@angular/common/locales/es';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
@@ -20,8 +20,10 @@ import { ProfileInfoComponent } from './profile/profile-info/profile-info.compon
 import { ProfileAccountComponent } from './profile/profile-account/profile-account.component';
 import { SiderComponent } from './shared/sider/sider.component';
 import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
+import { ViewArticleComponent } from './articles/view-article/view-article.component';
+import { TruncatePipe } from './shared/truncate.pipe';
 
-registerLocaleData(en);
+registerLocaleData(es);
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ registerLocaleData(en);
     ProfileComponent,
     ProfileInfoComponent,
     ProfileAccountComponent,
-    UploadArticleComponent
+    UploadArticleComponent,
+    ViewArticleComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,7 @@ registerLocaleData(en);
     BrowserAnimationsModule
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'es-ES' },
     { provide: NZ_I18N, useValue: en_US },
     {
       provide: HTTP_INTERCEPTORS,

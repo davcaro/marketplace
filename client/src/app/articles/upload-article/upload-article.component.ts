@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable, Observer } from 'rxjs';
 import { Category } from 'src/app/shared/category.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-article',
@@ -28,7 +29,7 @@ export class UploadArticleComponent {
   previewImage: string | undefined = '';
   previewVisible: boolean = false;
 
-  constructor(private http: HttpClient, private msg: NzMessageService) {
+  constructor(private http: HttpClient, private msg: NzMessageService, private router: Router) {
     this.apiUrl = environment.apiUrl;
 
     this.loadCategories();
@@ -86,7 +87,7 @@ export class UploadArticleComponent {
       )
       .subscribe(
         res => {
-          // TODO: Navigate to article
+          this.router.navigate(['article', res.id]);
         },
         err => {
           this.formUnknownError = true;

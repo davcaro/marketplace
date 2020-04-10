@@ -6,6 +6,8 @@ import { ProfileInfoComponent } from './profile/profile-info/profile-info.compon
 import { ProfileAccountComponent } from './profile/profile-account/profile-account.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
+import { ViewArticleComponent } from './articles/view-article/view-article.component';
+import { ArticleResolverService } from './articles/article-resolver.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -23,7 +25,8 @@ const routes: Routes = [
     path: 'catalog',
     canActivate: [AuthGuard],
     children: [{ path: 'upload', component: UploadArticleComponent }]
-  }
+  },
+  { path: 'article/:id', component: ViewArticleComponent, resolve: { article: ArticleResolverService } }
 ];
 
 @NgModule({
