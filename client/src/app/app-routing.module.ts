@@ -8,6 +8,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
 import { ViewArticleComponent } from './articles/view-article/view-article.component';
 import { ArticleResolverService } from './articles/article-resolver.service';
+import { SearchArticlesComponent } from './articles/search-articles/search-articles.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [{ path: 'upload', component: UploadArticleComponent }]
   },
+  { path: 'search', component: SearchArticlesComponent },
   { path: 'article/:id', component: ViewArticleComponent, resolve: { article: ArticleResolverService } }
 ];
 

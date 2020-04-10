@@ -1,0 +1,104 @@
+@import '../../../custom-styles.less';
+
+nz-content {
+  padding: 30px;
+  margin: 0 auto;
+}
+
+.article-card {
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+.card-header {
+  margin-bottom: 0.75rem;
+}
+
+.article-description {
+  height: 105px; // 5 lines
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  word-break: break-word;
+  overflow: hidden;
+}
+
+nz-carousel {
+  height: 260px;
+}
+
+nz-carousel img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+.carousel-controls {
+  display: none;
+  position: relative;
+  justify-content: space-between;
+}
+
+.article-card:hover .carousel-controls {
+  display: flex;
+}
+
+.carousel-arrow {
+  width: fit-content;
+  position: absolute;
+  top: 114px;
+  border: 0;
+  background-color: rgba(250, 250, 250, 0.8);
+  z-index: 1;
+}
+
+.carousel-arrow:hover {
+  color: @color-primary !important;
+  background-color: @bg-gray;
+}
+
+.carousel-arrow:focus {
+  color: @color-secondary;
+}
+
+.carousel-arrow.arrow-left {
+  left: 5px;
+}
+
+.carousel-arrow.arrow-right {
+  right: 5px;
+}
+
+.custom-badge {
+  font-size: 2rem;
+  color: @color-white;
+  top: 30px;
+  right: unset;
+  left: -5px;
+  z-index: 1000;
+  background-color: @color-primary;
+  padding: 3px;
+  border-radius: 50%;
+}
+
+.custom-badge.reserved {
+  font-size: 1.4rem;
+  padding: 8px;
+}
+
+p {
+  margin: 0;
+}
+
+@media (min-width: 992px) {
+  nz-content {
+    width: 90%;
+  }
+}
+
+@media (min-width: 1200px) {
+  nz-content {
+    width: 80%;
+  }
+}

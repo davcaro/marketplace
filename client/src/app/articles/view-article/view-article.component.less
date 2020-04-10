@@ -1,3 +1,5 @@
+@import '../../../custom-styles.less';
+
 nz-content {
   padding: 30px;
   min-height: 93vh;
@@ -19,11 +21,11 @@ nz-content {
 
 .custom-badge {
   font-size: 2rem;
-  color: #fff;
+  color: @color-white;
   top: 45px;
   right: unset;
   z-index: 1000;
-  background-color: #ef5350;
+  background-color: @color-primary;
   padding: 3px;
   border-radius: 50%;
 }
@@ -67,6 +69,10 @@ p,
   font-weight: 700;
 }
 
+.article-description {
+  word-break: break-word;
+}
+
 .article-stats {
   display: flex;
   justify-content: space-between;
@@ -101,12 +107,12 @@ nz-carousel img {
 }
 
 .carousel-arrow:hover {
-  color: #ef5350 !important;
-  background-color: #ececec;
+  color: @color-primary !important;
+  background-color: @bg-gray;
 }
 
 .carousel-arrow:focus {
-  color: rgba(0, 0, 0, 0.65);
+  color: @color-secondary;
 }
 
 .carousel-arrow.arrow-left {

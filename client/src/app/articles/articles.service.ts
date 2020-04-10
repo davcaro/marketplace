@@ -16,6 +16,15 @@ export class ArticlesService {
     this.apiUrl = environment.apiUrl;
   }
 
+  getArticles(): Observable<Article[]> {
+    return this.http.get<Article[]>(`${this.apiUrl}/api/articles`).pipe(
+      catchError(err => {
+        this.router.navigate(['']);
+        return of(null);
+      })
+    );
+  }
+
   getArticle(id: number): Observable<Article> {
     return this.http.get<Article>(`${this.apiUrl}/api/articles/${id}`).pipe(
       catchError(err => {

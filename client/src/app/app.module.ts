@@ -22,6 +22,7 @@ import { SiderComponent } from './shared/sider/sider.component';
 import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
 import { ViewArticleComponent } from './articles/view-article/view-article.component';
 import { TruncatePipe } from './shared/truncate.pipe';
+import { SearchArticlesComponent } from './articles/search-articles/search-articles.component';
 
 registerLocaleData(es);
 
@@ -39,7 +40,8 @@ registerLocaleData(es);
     ProfileAccountComponent,
     UploadArticleComponent,
     ViewArticleComponent,
-    TruncatePipe
+    TruncatePipe,
+    SearchArticlesComponent
   ],
   imports: [
     BrowserModule,
