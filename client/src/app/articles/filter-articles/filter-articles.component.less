@@ -1,0 +1,90 @@
+@import '../../../custom-styles.less';
+
+nz-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: @color-white;
+  overflow-x: auto;
+}
+
+nz-header button {
+  margin: 0 4px;
+}
+
+.category-col {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.category-btn {
+  display: flex;
+  text-align: center;
+  margin: 0 1rem;
+}
+
+.category-link {
+  color: @color-secondary;
+  transition: none;
+}
+
+.category-link .category-icon {
+  display: block;
+  font-size: 3rem;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+.category-link.active {
+  color: #e53935;
+}
+
+.category-link:hover {
+  color: #e57373;
+}
+
+.slider-inputs .max-price {
+  margin-left: 16px;
+}
+
+.order-list {
+  border: 0;
+}
+
+.order-list li[nz-menu-item] {
+  padding-left: 16px !important;
+  padding-right: 24px;
+}
+
+.popover-title {
+  margin-top: 0.5rem;
+}
+
+::ng-deep .ant-popover-title {
+  border: 0;
+}
+
+.popover-content {
+  margin-right: 24px;
+}
+
+.close-popover {
+  text-align: right;
+  margin-top: 1.2rem;
+}
+
+button[nz-popover] .anticon-arrow-down {
+  transition: transform 0.3s ease-in-out !important;
+}
+
+button[nz-popover].ant-popover-open .anticon-arrow-down {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 575.98px) {
+  nz-header {
+    padding: 0 10px;
+  }
+}

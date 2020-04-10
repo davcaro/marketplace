@@ -23,6 +23,7 @@ import { UploadArticleComponent } from './articles/upload-article/upload-article
 import { ViewArticleComponent } from './articles/view-article/view-article.component';
 import { TruncatePipe } from './shared/truncate.pipe';
 import { SearchArticlesComponent } from './articles/search-articles/search-articles.component';
+import { FilterArticlesComponent } from './articles/filter-articles/filter-articles.component';
 
 registerLocaleData(es);
 
@@ -41,7 +42,8 @@ registerLocaleData(es);
     UploadArticleComponent,
     ViewArticleComponent,
     TruncatePipe,
-    SearchArticlesComponent
+    SearchArticlesComponent,
+    FilterArticlesComponent
   ],
   imports: [
     BrowserModule,

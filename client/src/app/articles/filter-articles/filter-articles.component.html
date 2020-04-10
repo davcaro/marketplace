@@ -1,0 +1,141 @@
+<nz-header>
+  <button
+    nz-button
+    nzType="primary"
+    nzShape="round"
+    nz-popover
+    [(nzVisible)]="categoryVisible"
+    nzPopoverTrigger="click"
+    [nzPopoverTitle]="categoryTitleTpl"
+    [nzPopoverContent]="categoryBodyTpl"
+    nzPopoverPlacement="bottomLeft"
+  >
+    <i nz-icon nzType="car" nzTheme="outline"></i>
+    Coches
+    <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
+  </button>
+
+  <ng-template #categoryTitleTpl>
+    <div class="popover-title">
+      <span nz-text><strong>Elige una categoría en la que buscar</strong></span>
+    </div>
+  </ng-template>
+
+  <ng-template #categoryBodyTpl>
+    <div class="popover-content">
+      <div nz-row nzGutter="16" nzType="flex">
+        <div class="category-col" nz-col [nzXs]="8" [nzSm]="6" [nzMd]="4" *ngFor="let category of categories">
+          <div class="category-btn">
+            <a class="category-link" [ngClass]="{ active: false }">
+              <i class="category-icon" nz-icon [nzType]="category.icon" nzTheme="outline"></i>
+              <span class="category-name">{{ category.name }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="close-popover">
+      <a (click)="closeCategoryPopover()"><span nz-text nzType="secondary">Cancelar</span></a>
+    </div>
+  </ng-template>
+
+  <button
+    nz-button
+    nzType="default"
+    nzShape="round"
+    nz-popover
+    [(nzVisible)]="priceVisible"
+    nzPopoverTrigger="click"
+    [nzPopoverTitle]="priceTitleTpl"
+    [nzPopoverContent]="priceBodyTpl"
+    nzPopoverPlacement="bottomLeft"
+  >
+    <i nz-icon nzType="euro" nzTheme="outline"></i>
+    Precio
+    <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
+  </button>
+
+  <ng-template #priceTitleTpl>
+    <div class="popover-title">
+      <span nz-text><strong>¿Cuánto quieres pagar?</strong></span>
+    </div>
+  </ng-template>
+
+  <ng-template #priceBodyTpl>
+    <div class="popover-content">
+      <nz-slider [nzMin]="1" [nzMax]="20" [(ngModel)]="priceRange" nzRange></nz-slider>
+
+      <div class="slider-inputs">
+        <nz-input-number
+          class="min-price"
+          [nzMin]="1"
+          [nzMax]="20"
+          [(ngModel)]="priceRange[0]"
+          (ngModelChange)="onPriceRangeChange()"
+        ></nz-input-number>
+
+        <nz-input-number
+          class="max-price"
+          [nzMin]="1"
+          [nzMax]="20"
+          [(ngModel)]="priceRange[1]"
+          (ngModelChange)="onPriceRangeChange()"
+        ></nz-input-number>
+      </div>
+    </div>
+
+    <div class="close-popover">
+      <a (click)="closePricePopover()"><span nz-text nzType="secondary">Cancelar</span></a>
+    </div>
+  </ng-template>
+
+  <button
+    nz-button
+    nzType="link"
+    nzShape="round"
+    nz-popover
+    [(nzVisible)]="orderVisible"
+    nzPopoverTrigger="click"
+    [nzPopoverTitle]="orderTitleTpl"
+    [nzPopoverContent]="orderBodyTpl"
+    nzPopoverPlacement="bottomLeft"
+  >
+    <i nz-icon nzType="sort-ascending" nzTheme="outline"></i>
+    Ordenar
+    <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
+  </button>
+
+  <ng-template #orderTitleTpl>
+    <div class="popover-title">
+      <span nz-text><strong>Ordenar por...</strong></span>
+    </div>
+  </ng-template>
+
+  <ng-template #orderBodyTpl>
+    <div class="popover-content">
+      <ul class="order-list" nz-menu nzMode="inline">
+        <li nz-menu-item>
+          <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+          Fecha: Más recientes
+        </li>
+        <li nz-menu-item>
+          <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+          Fecha: Más antiguos
+        </li>
+        <li nz-menu-item>
+          <i nz-icon nzType="euro" nzTheme="outline"></i>
+          Precio: de menor a mayor
+        </li>
+        <li nz-menu-item>
+          <i nz-icon nzType="euro" nzTheme="outline"></i>
+          Precio: de mayor a menor
+        </li>
+      </ul>
+    </div>
+
+    <div class="close-popover">
+      <a (click)="closeOrderPopover()"><span nz-text nzType="secondary">Cancelar</span></a>
+    </div>
+  </ng-template>
+</nz-header>

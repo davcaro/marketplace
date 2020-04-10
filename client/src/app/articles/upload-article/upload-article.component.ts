@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UploadFile, UploadXHRArgs, NzMessageService } from 'ng-zorro-antd';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -7,13 +7,14 @@ import { catchError } from 'rxjs/operators';
 import { throwError, Observable, Observer } from 'rxjs';
 import { Category } from 'src/app/shared/category.model';
 import { Router } from '@angular/router';
+import { ArticlesService } from '../articles.service';
 
 @Component({
   selector: 'app-upload-article',
   templateUrl: './upload-article.component.html',
   styleUrls: ['./upload-article.component.less']
 })
-export class UploadArticleComponent {
+export class UploadArticleComponent implements OnInit {
   apiUrl: string;
   form: FormGroup;
   categories: Category[] | null;
@@ -27,12 +28,15 @@ export class UploadArticleComponent {
   };
   imagesList = [];
   previewImage: string | undefined = '';
-  previewVisible: boolean = false;
+  previewVisible: boolean;
 
-  constructor(private http: HttpClient, private msg: NzMessageService, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private articlesService: ArticlesService,
+    private msg: NzMessageService,
+    private router: Router
+  ) {
     this.apiUrl = environment.apiUrl;
-
-    this.loadCategories();
 
     this.form = new FormGroup({
       categoryId: new FormControl(null, [Validators.required]),
@@ -42,6 +46,17 @@ export class UploadArticleComponent {
       description: new FormControl(null, [Validators.required, Validators.maxLength(650)]),
       location: new FormControl(null, [Validators.required, Validators.maxLength(255)])
     });
+  }
+
+  ngOnInit() {
+    this.articlesService.getCategories().subscribe(
+      (res: Category[]) => {
+        this.categories = res;
+      },
+      err => {
+        this.formUnknownError = true;
+      }
+    );
   }
 
   submitForm(): void {
@@ -156,27 +171,5 @@ export class UploadArticleComponent {
         resolve(width >= 300 && height >= 300);
       };
     });
-  }
-
-  private loadCategories(): void {
-    this.http
-      .get<any>(`${this.apiUrl}/api/category`, {})
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.error) {
-            return throwError(err.error);
-          } else {
-            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
-          }
-        })
-      )
-      .subscribe(
-        (res: Category[]) => {
-          this.categories = res;
-        },
-        err => {
-          this.formUnknownError = true;
-        }
-      );
   }
 }
