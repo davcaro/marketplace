@@ -21,11 +21,11 @@ app.use(passport.initialize());
 app.use(config.API.prefix, routes());
 app.use(
   '/images/avatars',
-  express.static(__dirname + '/../' + config.API.avatars_path)
+  express.static(`${__dirname}/../${config.API.avatars_path}`)
 );
 app.use(
   '/images/articles',
-  express.static(__dirname + '/../' + config.API.articles_path)
+  express.static(`${__dirname}/../${config.API.articles_path}`)
 );
 
 app.use(errors.validationError);

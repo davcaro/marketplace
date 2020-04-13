@@ -37,13 +37,15 @@ export class ArticlesService {
     );
   }
 
-  getArticles(query: object): Observable<Article[]> {
-    return this.http.get<Article[]>(`${this.apiUrl}/api/articles`, query).pipe(
-      catchError(err => {
-        this.router.navigate(['']);
-        return of(null);
-      })
-    );
+  getArticles(query: { [param: string]: string }): Observable<Article[]> {
+    return this.http
+      .get<Article[]>(`${this.apiUrl}/api/articles`, { params: query })
+      .pipe(
+        catchError(err => {
+          this.router.navigate(['']);
+          return of(null);
+        })
+      );
   }
 
   getArticle(id: number): Observable<Article> {

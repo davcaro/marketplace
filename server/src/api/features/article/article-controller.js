@@ -3,7 +3,7 @@ const AppError = require('../../utils/app-error');
 
 const getArticles = async (req, res, next) => {
   try {
-    const articles = await articleService.readArticles();
+    const articles = await articleService.readArticles(req.query);
 
     return res.json(articles);
   } catch (e) {
@@ -23,7 +23,7 @@ const getArticle = async (req, res, next) => {
   }
 };
 
-const uploadImage = async (req, res, next) => {
+const uploadImage = async (req, res) => {
   return res.json({
     image: req.file.filename
   });
