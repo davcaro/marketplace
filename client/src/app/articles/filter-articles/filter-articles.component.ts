@@ -13,19 +13,28 @@ export class FilterArticlesComponent implements OnInit, OnDestroy {
   categories: Category[];
   categoryVisible: boolean;
   priceVisible: boolean;
+  publicationVisible: boolean;
   orderVisible: boolean;
   priceLimits: number[];
   priceRange: number[];
   selectedCategory: Category;
+  selectedPublication: { label: string; value: string };
+  publicationOptions: { label: string; value: string }[];
   selectedOrder: { label: string; value: string; icon: string };
   orderOptions: { label: string; value: string; icon: string }[];
-  appliedFilters: { category: boolean; price: boolean; order: boolean };
+  appliedFilters: { category: boolean; price: boolean; publicationDate: boolean; order: boolean };
 
   queryParamsSubscription: Subscription;
   categoriesSubscription: Subscription;
   articlesSubscription: Subscription;
 
   constructor(private articlesService: ArticlesService, private router: Router, private route: ActivatedRoute) {
+    this.publicationOptions = [
+      { label: '24 Horas', value: '24h' },
+      { label: '7 Días', value: '7d' },
+      { label: '1 Mes', value: '1m' },
+      { label: '3 Meses', value: '3m' }
+    ];
     this.orderOptions = [
       { label: 'Fecha: Más recientes', value: 'newest', icon: 'clock-circle' },
       { label: 'Fecha: Más antiguos', value: 'oldest', icon: 'clock-circle' },
@@ -43,6 +52,7 @@ export class FilterArticlesComponent implements OnInit, OnDestroy {
       this.appliedFilters = {
         category: !!params.category,
         price: !!params.min_price || !!params.max_price,
+        publicationDate: !!params.published,
         order: !!params.order
       };
 
@@ -68,9 +78,9 @@ export class FilterArticlesComponent implements OnInit, OnDestroy {
         this.priceRange[1] = +params.max_price;
       }
 
-      if (params.order) {
-        this.selectedOrder = this.orderOptions.find(order => order.value === params.order);
-      }
+      this.selectedPublication = this.publicationOptions.find(date => date.value === params.published);
+
+      this.selectedOrder = this.orderOptions.find(order => order.value === params.order);
     });
 
     this.categoriesSubscription = this.articlesService.categories.subscribe(categories => {
@@ -107,6 +117,10 @@ export class FilterArticlesComponent implements OnInit, OnDestroy {
     this.priceVisible = false;
   }
 
+  closePublicationPopover(): void {
+    this.publicationVisible = false;
+  }
+
   closeOrderPopover(): void {
     this.orderVisible = false;
   }
@@ -126,15 +140,28 @@ export class FilterArticlesComponent implements OnInit, OnDestroy {
     this.updateQuery({ min_price: this.priceRange[0], max_price: this.priceRange[1] });
   }
 
+  onSelectPublicationDate(published: string) {
+    this.updateQuery({ published });
+  }
+
   onSelectOrder(order: string) {
     this.updateQuery({ order });
+  }
+
+  onClearFilters() {
+    this.router.navigate(['search']);
+
+    this.selectedCategory = this.categories[0];
+    this.priceRange = this.priceLimits.slice();
+    this.selectedPublication = null;
+    this.selectedOrder = null;
   }
 
   updateQuery(queryParams: object) {
     this.router.navigate(['search'], { queryParams, queryParamsHandling: 'merge' });
   }
 
-  isInsideLimits(number: number) {
-    return number >= this.priceLimits[0] && number <= this.priceLimits[1];
+  isInsideLimits(price: number) {
+    return price >= this.priceLimits[0] && price <= this.priceLimits[1];
   }
 }

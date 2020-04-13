@@ -39,4 +39,8 @@ export class SearchArticlesComponent implements OnInit {
       });
     });
   }
+
+  onClearFilters() {
+    this.router.navigate(['search']);
+  }
 }

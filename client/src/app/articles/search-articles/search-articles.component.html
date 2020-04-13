@@ -1,6 +1,19 @@
 <app-filter-articles></app-filter-articles>
 
 <nz-content>
+  <nz-empty
+    [nzNotFoundContent]="emptyDescriptionTpl"
+    [nzNotFoundFooter]="emptyFooterTpl"
+    *ngIf="!articles.length && !loading"
+  >
+    <ng-template #emptyDescriptionTpl>
+      <span>No se encontraron artículos que se correspondan con lo que buscas</span>
+    </ng-template>
+    <ng-template #emptyFooterTpl>
+      <button nz-button nzType="primary" (click)="onClearFilters()">Limpiar filtros</button>
+    </ng-template>
+  </nz-empty>
+
   <div class="articles-wall" nz-row [nzGutter]="24" [class.loading]="loading">
     <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXXl]="6" *ngFor="let article of articles">
       <nz-card class="article-card" nzHoverable [nzCover]="coverTpl" [routerLink]="'/article/' + article.id">

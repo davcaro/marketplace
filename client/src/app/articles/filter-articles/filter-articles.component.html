@@ -107,6 +107,48 @@
 
   <button
     nz-button
+    [nzType]="appliedFilters.publicationDate ? 'primary' : 'default'"
+    nzShape="round"
+    nz-popover
+    [(nzVisible)]="publicationVisible"
+    nzPopoverTrigger="click"
+    [nzPopoverTitle]="publicationTitleTpl"
+    [nzPopoverContent]="publicationBodyTpl"
+    nzPopoverPlacement="bottomLeft"
+  >
+    <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+    Publicado hace
+    <ng-container *ngIf="appliedFilters.publicationDate">{{ selectedPublication.label }}</ng-container>
+    <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
+  </button>
+
+  <ng-template #publicationTitleTpl>
+    <div class="popover-title">
+      <span nz-text><strong>Publicado hace...</strong></span>
+    </div>
+  </ng-template>
+
+  <ng-template #publicationBodyTpl>
+    <div class="popover-content">
+      <ul class="order-list" nz-menu nzMode="inline" [nzInlineIndent]="16">
+        <li
+          nz-menu-item
+          [nzSelected]="selectedPublication === option"
+          (click)="onSelectPublicationDate(option.value)"
+          *ngFor="let option of publicationOptions"
+        >
+          {{ option.label }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="close-popover">
+      <a (click)="closePublicationPopover()"><span nz-text nzType="secondary">Cancelar</span></a>
+    </div>
+  </ng-template>
+
+  <button
+    nz-button
     [nzType]="appliedFilters.order ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
@@ -147,4 +189,9 @@
       <a (click)="closeOrderPopover()"><span nz-text nzType="secondary">Cancelar</span></a>
     </div>
   </ng-template>
+
+  <button class="clear-filters" nz-button nzType="link" nzShape="round" (click)="onClearFilters()">
+    <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+    Limpiar filtros
+  </button>
 </nz-header>
