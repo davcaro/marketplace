@@ -5,15 +5,15 @@
 
 <div class="main-content">
   <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
-    <nz-form-item>
-      <nz-alert
-        nzType="error"
-        nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
-        nzShowIcon
-        *ngIf="unknownError"
-      >
-      </nz-alert>
+    <nz-alert
+      nzType="error"
+      nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+      nzShowIcon
+      *ngIf="unknownError"
+    >
+    </nz-alert>
 
+    <nz-form-item>
       <nz-form-control [nzErrorTip]="emailErrorTpl">
         <nz-input-group nzPrefixIcon="user">
           <input type="text" nz-input formControlName="email" placeholder="Dirección de email" />

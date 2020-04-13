@@ -1,20 +1,32 @@
 <nz-header>
   <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="'assets/brand-logo.png'" routerLink="/"></nz-avatar>
-  <div class="header-collapse">
-    <nz-input-group nzCompact class="search-box">
-      <nz-select [ngModel]="'all'">
-        <nz-option [nzLabel]="'Todas las categorías'" [nzValue]="'all'"></nz-option>
-        <nz-option [nzLabel]="'Coches'" [nzValue]="'cars'"></nz-option>
-        <nz-option [nzLabel]="'Hogar y Jardín'" [nzValue]="'home'"></nz-option>
-      </nz-select>
 
-      <nz-input-group [nzSuffix]="suffixIconSearch">
-        <input type="text" nz-input [ngModel]="null" placeholder="Buscar artículo..." />
-      </nz-input-group>
-      <ng-template #suffixIconSearch>
-        <i nz-icon nzType="search"></i>
-      </ng-template>
-    </nz-input-group>
+  <div class="header-collapse">
+    <form nz-form class="search-box" [nzLayout]="'inline'" [formGroup]="form" (ngSubmit)="submitForm()">
+      <nz-form-item class="category-item">
+        <nz-form-control>
+          <nz-select formControlName="category">
+            <nz-option
+              *ngFor="let category of categories"
+              [nzValue]="category.id"
+              [nzLabel]="category.name"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="keywords-item">
+        <nz-form-control>
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input nz-input formControlName="keywords" placeholder="Buscar artículo..." />
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+
     <div class="header-right">
       <a class="userDropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
         <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>

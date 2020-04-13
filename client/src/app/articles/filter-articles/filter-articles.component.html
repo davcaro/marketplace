@@ -1,7 +1,7 @@
 <nz-header>
   <button
     nz-button
-    nzType="primary"
+    [nzType]="appliedFilters.category ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
     [(nzVisible)]="categoryVisible"
@@ -10,8 +10,8 @@
     [nzPopoverContent]="categoryBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
-    <i nz-icon nzType="car" nzTheme="outline"></i>
-    Coches
+    <i nz-icon [nzType]="selectedCategory.icon" nzTheme="outline"></i>
+    {{ selectedCategory.name }}
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
 
@@ -26,7 +26,11 @@
       <div nz-row nzGutter="16" nzType="flex">
         <div class="category-col" nz-col [nzXs]="8" [nzSm]="6" [nzMd]="4" *ngFor="let category of categories">
           <div class="category-btn">
-            <a class="category-link" [ngClass]="{ active: false }">
+            <a
+              (click)="onSelectCategory(category.id)"
+              class="category-link"
+              [ngClass]="{ active: category === selectedCategory }"
+            >
               <i class="category-icon" nz-icon [nzType]="category.icon" nzTheme="outline"></i>
               <span class="category-name">{{ category.name }}</span>
             </a>
@@ -42,7 +46,7 @@
 
   <button
     nz-button
-    nzType="default"
+    [nzType]="appliedFilters.price ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
     [(nzVisible)]="priceVisible"
@@ -52,7 +56,12 @@
     nzPopoverPlacement="bottomLeft"
   >
     <i nz-icon nzType="euro" nzTheme="outline"></i>
-    Precio
+    <ng-container *ngIf="!appliedFilters.price">
+      Precio
+    </ng-container>
+    <ng-container *ngIf="appliedFilters.price">
+      {{ priceRange[0] | currency: 'EUR' }} - {{ priceRange[1] | currency: 'EUR' }}
+    </ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
 
@@ -64,23 +73,29 @@
 
   <ng-template #priceBodyTpl>
     <div class="popover-content">
-      <nz-slider [nzMin]="1" [nzMax]="20" [(ngModel)]="priceRange" nzRange></nz-slider>
+      <nz-slider
+        nzRange
+        [nzMin]="priceLimits[0]"
+        [nzMax]="priceLimits[1]"
+        [(ngModel)]="priceRange"
+        (ngModelChange)="onSelectPriceRange()"
+      ></nz-slider>
 
       <div class="slider-inputs">
         <nz-input-number
           class="min-price"
-          [nzMin]="1"
-          [nzMax]="20"
+          [nzMin]="priceLimits[0]"
+          [nzMax]="priceRange[1]"
           [(ngModel)]="priceRange[0]"
-          (ngModelChange)="onPriceRangeChange()"
+          (ngModelChange)="updateSlider(); onSelectPriceRange()"
         ></nz-input-number>
 
         <nz-input-number
           class="max-price"
-          [nzMin]="1"
-          [nzMax]="20"
+          [nzMin]="priceRange[0]"
+          [nzMax]="priceLimits[1]"
           [(ngModel)]="priceRange[1]"
-          (ngModelChange)="onPriceRangeChange()"
+          (ngModelChange)="updateSlider(); onSelectPriceRange()"
         ></nz-input-number>
       </div>
     </div>
@@ -92,7 +107,7 @@
 
   <button
     nz-button
-    nzType="link"
+    [nzType]="appliedFilters.order ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
     [(nzVisible)]="orderVisible"
@@ -102,7 +117,8 @@
     nzPopoverPlacement="bottomLeft"
   >
     <i nz-icon nzType="sort-ascending" nzTheme="outline"></i>
-    Ordenar
+    <ng-container *ngIf="!appliedFilters.order">Ordenar</ng-container>
+    <ng-container *ngIf="appliedFilters.order">{{ selectedOrder.label }}</ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
 
@@ -114,22 +130,15 @@
 
   <ng-template #orderBodyTpl>
     <div class="popover-content">
-      <ul class="order-list" nz-menu nzMode="inline">
-        <li nz-menu-item>
-          <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
-          Fecha: Más recientes
-        </li>
-        <li nz-menu-item>
-          <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
-          Fecha: Más antiguos
-        </li>
-        <li nz-menu-item>
-          <i nz-icon nzType="euro" nzTheme="outline"></i>
-          Precio: de menor a mayor
-        </li>
-        <li nz-menu-item>
-          <i nz-icon nzType="euro" nzTheme="outline"></i>
-          Precio: de mayor a menor
+      <ul class="order-list" nz-menu nzMode="inline" [nzInlineIndent]="16">
+        <li
+          nz-menu-item
+          [nzSelected]="selectedOrder === option"
+          (click)="onSelectOrder(option.value)"
+          *ngFor="let option of orderOptions"
+        >
+          <i nz-icon [nzType]="option.icon" nzTheme="outline"></i>
+          {{ option.label }}
         </li>
       </ul>
     </div>

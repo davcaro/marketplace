@@ -46,8 +46,22 @@ nz-header a {
   margin-left: 2.5rem;
 }
 
-.search-box nz-select {
+.search-box nz-form-item {
+  margin: 0;
+}
+
+.search-box .category-item {
   max-width: 30%;
+  position: relative;
+  top: -1px;
+}
+
+.search-box .keywords-item {
+  flex: 1 1 auto;
+}
+
+.search-box nz-form-control {
+  width: 100%;
 }
 
 :host ::ng-deep .search-box nz-select [nz-select-top-control] {
@@ -136,7 +150,7 @@ nz-form-item {
     border-radius: @border-radius;
   }
 
-  .search-box nz-select {
+  .search-box .category-item {
     display: none;
   }
 }
