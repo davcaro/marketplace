@@ -17,7 +17,7 @@ export class ArticlesService {
 
   constructor(private http: HttpClient, private router: Router) {
     this.apiUrl = environment.apiUrl;
-    this.categories = new BehaviorSubject<Category[]>([{ id: -1, name: 'Todas las categorías', icon: 'heat-map' }]);
+    this.categories = new BehaviorSubject<Category[]>([{ id: -1, name: 'Todas las categorías', icon: 'power' }]);
     this.articles = new BehaviorSubject<Article[]>(null);
 
     this.getCategories().subscribe((res: Category[]) => {

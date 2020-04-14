@@ -33,7 +33,8 @@
               }
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "src/icomoon.css"
             ],
             "scripts": []
           },
@@ -97,7 +98,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "src/icomoon.css"
             ],
             "scripts": []
           }

@@ -10,7 +10,7 @@
     [nzPopoverContent]="categoryBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
-    <i nz-icon [nzType]="categoryFilter.selected.icon" nzTheme="outline"></i>
+    <i class="icon-{{ categoryFilter.selected.icon }}" style="margin-right: 2px;"></i>
     {{ categoryFilter.selected.name }}
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
@@ -23,7 +23,7 @@
 
   <ng-template #categoryBodyTpl>
     <div class="popover-content">
-      <div nz-row nzGutter="16" nzType="flex">
+      <div class="categories-wall" nz-row nzGutter="8" nzType="flex">
         <div class="category-col" nz-col [nzXs]="8" [nzSm]="6" [nzMd]="4" *ngFor="let category of categories">
           <div class="category-btn">
             <a
@@ -31,7 +31,7 @@
               class="category-link"
               [ngClass]="{ active: category === categoryFilter.selected }"
             >
-              <i class="category-icon" nz-icon [nzType]="category.icon" nzTheme="outline"></i>
+              <i class="icon-{{ category.icon }} category-icon"></i>
               <span class="category-name">{{ category.name }}</span>
             </a>
           </div>
@@ -55,7 +55,7 @@
     [nzPopoverContent]="priceBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
-    <i nz-icon nzType="euro" nzTheme="outline"></i>
+    <i class="icon-coin-euro"></i>
     <ng-container *ngIf="!priceFilter.isApplied">
       Precio
     </ng-container>
@@ -116,7 +116,7 @@
     [nzPopoverContent]="publicationBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
-    <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+    <i class="icon-clock" style="margin-right: 2px;"></i>
     Publicado hace
     <ng-container *ngIf="publicationDateFilter.isApplied">{{ publicationDateFilter.selected.label }}</ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
@@ -158,7 +158,7 @@
     [nzPopoverContent]="orderBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
-    <i nz-icon nzType="sort-ascending" nzTheme="outline"></i>
+    <i class="icon-sort-alpha-asc" style="margin-right: 5px;"></i>
     <ng-container *ngIf="!orderFilter.isApplied">Ordenar</ng-container>
     <ng-container *ngIf="orderFilter.isApplied">{{ orderFilter.selected.label }}</ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
@@ -179,7 +179,7 @@
           (click)="onSelectOrder(option.value)"
           *ngFor="let option of orderFilter.options"
         >
-          <i nz-icon [nzType]="option.icon" nzTheme="outline"></i>
+          <i class="icon-{{ option.icon }}"></i>
           {{ option.label }}
         </li>
       </ul>
@@ -191,7 +191,7 @@
   </ng-template>
 
   <button class="clear-filters" nz-button nzType="link" nzShape="round" (click)="onClearFilters()">
-    <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+    <i class="icon-cancel-circle"></i>
     Limpiar filtros
   </button>
 </nz-header>

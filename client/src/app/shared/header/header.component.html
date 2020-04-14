@@ -20,7 +20,7 @@
           <nz-input-group [nzSuffix]="suffixIconSearch">
             <input nz-input formControlName="keywords" placeholder="Buscar artículo..." />
             <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
+              <i class="icon-search"></i>
             </ng-template>
           </nz-input-group>
         </nz-form-control>
@@ -28,10 +28,10 @@
     </form>
 
     <div class="header-right">
-      <a class="userDropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
+      <a class="user-dropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
         <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>
         {{ user.name | truncate }}
-        <i nz-icon nzType="down"></i>
+        <i class="icon-keyboard_arrow_down"></i>
       </a>
       <nz-dropdown-menu #userMenu="nzDropdownMenu">
         <ul nz-menu nzSelectable>
@@ -56,7 +56,7 @@
         <div class="auth-modal-body">
           <div class="modal-back" *ngIf="authModalView !== 'oauth'">
             <button nz-button nzType="link" [nzSize]="'large'" class="modal-back-arrow" (click)="onAuthModalBack()">
-              <i nz-icon nzType="arrow-left"></i>
+              <i class="icon-arrow-left2"></i>
             </button>
           </div>
 
@@ -69,8 +69,8 @@
         </div>
       </nz-modal>
 
-      <button nz-button nzType="primary" nzShape="round" (click)="onUploadArticle()">
-        <i nz-icon nzType="plus"></i>
+      <button class="upload-article-btn" nz-button nzType="primary" nzShape="round" (click)="onUploadArticle()">
+        <i class="icon-plus"></i>
         Subir artículo
       </button>
     </div>
@@ -78,7 +78,7 @@
 
   <div class="collapsed-menu">
     <a nz-dropdown [nzDropdownMenu]="collapsedMenu" [nzPlacement]="'bottomRight'">
-      <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+      <i class="icon-list2"></i>
     </a>
     <nz-dropdown-menu #collapsedMenu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
