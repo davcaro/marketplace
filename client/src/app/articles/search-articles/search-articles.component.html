@@ -74,4 +74,15 @@
       </nz-card>
     </div>
   </div>
+
+  <nz-pagination
+    [(nzPageIndex)]="pagination.page"
+    [(nzTotal)]="pagination.total"
+    [(nzPageSize)]="pagination.limit"
+    [nzShowTotal]="rangeTemplate"
+    (nzPageIndexChange)="loadArticles()"
+  ></nz-pagination>
+  <ng-template #rangeTemplate let-range="range" let-total>
+    {{ range[0] }}-{{ range[1] }} de {{ total }} artículos
+  </ng-template>
 </nz-content>

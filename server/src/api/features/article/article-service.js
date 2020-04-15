@@ -4,15 +4,26 @@ const { Op } = require('sequelize');
 const articleDAL = require('./article-dal');
 const categoryDAL = require('../category/category-dal');
 const AppError = require('../../utils/app-error');
+const Paginator = require('../../utils/paginator');
 
 const readArticles = async params => {
+  if (!params.limit) {
+    params.limit = 30;
+  }
+  if (!params.offset) {
+    params.offset = 0;
+  }
+
   const query = getQuery(params);
+  let articles;
 
   try {
-    return await articleDAL.findAll(query);
+    articles = await articleDAL.findAndPaginate(query);
   } catch (e) {
     throw new AppError(500, e.message);
   }
+
+  return Paginator.paginate(articles, +params.limit, +params.offset);
 };
 
 const readArticle = async id => {
@@ -198,7 +209,7 @@ const getQuery = params => {
     }
   }
 
-  return { where, order };
+  return { where, order, limit: +params.limit, offset: +params.offset };
 };
 
 module.exports = {

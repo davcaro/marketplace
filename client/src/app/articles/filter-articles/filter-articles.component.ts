@@ -101,6 +101,8 @@ export class FilterArticlesComponent implements OnInit, OnDestroy {
     this.router.navigate(['search']);
 
     this.filtersService.clearFilters();
+
+    this.filtersService.requestArticles.next(true);
   }
 
   private updateFilter(queryParams: object) {

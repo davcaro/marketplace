@@ -33,7 +33,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.associate = function(models) {
-    User.hasMany(models.Article, { as: 'articles' });
+    User.hasMany(models.Article, {
+      foreignKey: 'id',
+      as: 'articles'
+    });
   };
 
   User.beforeCreate(async (user, options) => {

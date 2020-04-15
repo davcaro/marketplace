@@ -1,7 +1,7 @@
 const { Article } = require('../../../db/models');
 const { ArticleImage } = require('../../../db/models');
 
-const findAll = query => Article.scope('full').findAll(query);
+const findAndPaginate = query => Article.scope('full').findAndCountAll(query);
 const findById = id => Article.scope('full').findOne({ where: { id } });
 const create = payload => Article.create(payload);
 const addImages = images => ArticleImage.bulkCreate(images);
@@ -14,7 +14,7 @@ const removeImage = (id, articleId) =>
   ArticleImage.destroy({ where: { id, articleId } });
 
 module.exports = {
-  findAll,
+  findAndPaginate,
   findById,
   create,
   addImages,

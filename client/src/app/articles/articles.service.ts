@@ -37,9 +37,9 @@ export class ArticlesService {
     );
   }
 
-  getArticles(query: { [param: string]: string }): Observable<Article[]> {
+  getArticles(query: { [param: string]: any }): Observable<any> {
     return this.http
-      .get<Article[]>(`${this.apiUrl}/api/articles`, { params: query })
+      .get<any>(`${this.apiUrl}/api/articles`, { params: query })
       .pipe(
         catchError(err => {
           this.router.navigate(['']);
