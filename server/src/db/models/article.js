@@ -52,17 +52,15 @@ module.exports = (sequelize, DataTypes) => {
 
   Article.associate = function(models) {
     Article.belongsTo(models.User.scope('public'), {
-      foreignKey: 'userId',
       as: 'user'
     });
 
     Article.belongsTo(models.Category, {
-      foreignKey: 'categoryId',
       as: 'category'
     });
 
     Article.hasMany(models.ArticleImage, {
-      foreignKey: 'id',
+      foreignKey: 'articleId',
       as: 'images'
     });
   };
