@@ -4,10 +4,11 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
 import { environment } from 'src/environments/environment';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ArticlesService } from 'src/app/articles/articles.service';
 import { Category } from '../category.model';
+import { FilterArticlesService, Filters } from 'src/app/articles/filter-articles.service';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user: User;
   form: FormGroup;
   categories: Category[];
+  filters: Filters;
 
   authModalIsVisible: boolean;
   authModalView: string;
@@ -27,18 +29,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authModalViewSubscription: Subscription;
   userSubscription: Subscription;
   categoriesSubscription: Subscription;
-  queryParamsSubscription: Subscription;
+  filtersSubscription: Subscription;
 
   constructor(
     private authModalService: AuthModalService,
     private authService: AuthService,
     private articlesService: ArticlesService,
-    private router: Router,
-    private route: ActivatedRoute
+    private filtersService: FilterArticlesService,
+    private router: Router
   ) {
     this.apiUrl = environment.apiUrl;
     this.user = authService.user.value;
     this.categories = articlesService.categories.value;
+    this.filters = filtersService.filters.value;
     this.authModalIsVisible = authModalService.isVisible;
     this.authModalView = authModalService.view;
 
@@ -61,8 +64,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.categoriesSubscription = this.articlesService.categories.subscribe(categories => {
       this.categories = categories;
     });
-    this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
-      this.form.controls.keywords.setValue(params.keywords);
+    this.filtersSubscription = this.filtersService.filters.subscribe(filters => {
+      this.filters = filters;
+
+      this.form.controls.keywords.setValue(filters.keywords);
     });
   }
 
@@ -71,7 +76,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authModalViewSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
     this.categoriesSubscription.unsubscribe();
-    this.queryParamsSubscription.unsubscribe();
   }
 
   showAuthModal(): void {
@@ -102,6 +106,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   submitForm() {
     const { category, keywords } = this.form.value;
 
-    this.router.navigate(['search'], { queryParams: { category, keywords } });
+    this.filtersService.clearFilters();
+    this.filters.keywords = keywords;
+    this.filters.category.isApplied = category !== -1 ? true : false;
+    this.filters.category.selected = this.categories.find(cat => cat.id === category) || this.categories[0];
+    this.filtersService.filters.next(this.filters);
+    this.filtersService.requestArticles.next(true);
+
+    this.router.navigate(['search'], {
+      queryParams: {
+        category: category !== -1 ? category : null,
+        keywords
+      }
+    });
   }
 }

@@ -1,17 +1,20 @@
 <nz-header>
   <button
     nz-button
-    [nzType]="categoryFilter.isApplied ? 'primary' : 'default'"
+    [nzType]="filters.category.isApplied ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
-    [(nzVisible)]="categoryFilter.isVisible"
+    [(nzVisible)]="filters.category.isVisible"
     nzPopoverTrigger="click"
     [nzPopoverTitle]="categoryTitleTpl"
     [nzPopoverContent]="categoryBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
-    <i class="icon-{{ categoryFilter.selected.icon }}" style="margin-right: 2px;"></i>
-    {{ categoryFilter.selected.name }}
+    <i
+      class="icon-{{ filters.category.selected ? filters.category.selected.icon : categories[0].icon }}"
+      style="margin-right: 2px;"
+    ></i>
+    {{ filters.category.selected ? filters.category.selected.name : categories[0].name }}
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
 
@@ -27,9 +30,9 @@
         <div class="category-col" nz-col [nzXs]="8" [nzSm]="6" [nzMd]="4" *ngFor="let category of categories">
           <div class="category-btn">
             <a
-              (click)="onSelectCategory(category.id)"
+              (click)="onSelectCategory(category)"
               class="category-link"
-              [ngClass]="{ active: category === categoryFilter.selected }"
+              [ngClass]="{ active: category === filters.category.selected }"
             >
               <i class="icon-{{ category.icon }} category-icon"></i>
               <span class="category-name">{{ category.name }}</span>
@@ -46,21 +49,21 @@
 
   <button
     nz-button
-    [nzType]="priceFilter.isApplied ? 'primary' : 'default'"
+    [nzType]="filters.price.isApplied ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
-    [(nzVisible)]="priceFilter.isVisible"
+    [(nzVisible)]="filters.price.isVisible"
     nzPopoverTrigger="click"
     [nzPopoverTitle]="priceTitleTpl"
     [nzPopoverContent]="priceBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
     <i class="icon-coin-euro"></i>
-    <ng-container *ngIf="!priceFilter.isApplied">
+    <ng-container *ngIf="!filters.price.isApplied">
       Precio
     </ng-container>
-    <ng-container *ngIf="priceFilter.isApplied">
-      {{ priceFilter.range[0] | currency: 'EUR' }} - {{ priceFilter.range[1] | currency: 'EUR' }}
+    <ng-container *ngIf="filters.price.isApplied">
+      {{ filters.price.range[0] | currency: 'EUR' }} - {{ filters.price.range[1] | currency: 'EUR' }}
     </ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
@@ -75,27 +78,28 @@
     <div class="popover-content">
       <nz-slider
         nzRange
-        [nzMin]="priceFilter.limits[0]"
-        [nzMax]="priceFilter.limits[1]"
-        [(ngModel)]="priceFilter.range"
-        (ngModelChange)="onSelectPriceRange()"
+        [nzMin]="0"
+        [nzMax]="10000"
+        [nzStep]="50"
+        [(ngModel)]="filters.price.range"
+        (nzOnAfterChange)="onSelectPriceRange()"
       ></nz-slider>
 
       <div class="slider-inputs">
         <nz-input-number
           class="min-price"
-          [nzMin]="priceFilter.limits[0]"
-          [nzMax]="priceFilter.range[1]"
-          [(ngModel)]="priceFilter.range[0]"
-          (ngModelChange)="updateSlider(); onSelectPriceRange()"
+          [nzMin]="filters.price.limits[0]"
+          [nzMax]="filters.price.range[1]"
+          [(ngModel)]="filters.price.range[0]"
+          (focusout)="updateSlider(); onSelectPriceRange()"
         ></nz-input-number>
 
         <nz-input-number
           class="max-price"
-          [nzMin]="priceFilter.range[0]"
-          [nzMax]="priceFilter.limits[1]"
-          [(ngModel)]="priceFilter.range[1]"
-          (ngModelChange)="updateSlider(); onSelectPriceRange()"
+          [nzMin]="filters.price.range[0]"
+          [nzMax]="filters.price.limits[1]"
+          [(ngModel)]="filters.price.range[1]"
+          (focusout)="updateSlider(); onSelectPriceRange()"
         ></nz-input-number>
       </div>
     </div>
@@ -107,10 +111,10 @@
 
   <button
     nz-button
-    [nzType]="publicationDateFilter.isApplied ? 'primary' : 'default'"
+    [nzType]="filters.publicationDate.isApplied ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
-    [(nzVisible)]="publicationDateFilter.isVisible"
+    [(nzVisible)]="filters.publicationDate.isVisible"
     nzPopoverTrigger="click"
     [nzPopoverTitle]="publicationTitleTpl"
     [nzPopoverContent]="publicationBodyTpl"
@@ -118,7 +122,7 @@
   >
     <i class="icon-clock" style="margin-right: 2px;"></i>
     Publicado hace
-    <ng-container *ngIf="publicationDateFilter.isApplied">{{ publicationDateFilter.selected.label }}</ng-container>
+    <ng-container *ngIf="filters.publicationDate.isApplied">{{ filters.publicationDate.selected.label }}</ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
 
@@ -133,9 +137,9 @@
       <ul class="order-list" nz-menu nzMode="inline" [nzInlineIndent]="16">
         <li
           nz-menu-item
-          [nzSelected]="publicationDateFilter.selected === option"
-          (click)="onSelectPublicationDate(option.value)"
-          *ngFor="let option of publicationDateFilter.options"
+          [nzSelected]="filters.publicationDate.selected === option"
+          (click)="onSelectPublicationDate(option)"
+          *ngFor="let option of filters.publicationDate.options"
         >
           {{ option.label }}
         </li>
@@ -149,18 +153,18 @@
 
   <button
     nz-button
-    [nzType]="orderFilter.isApplied ? 'primary' : 'default'"
+    [nzType]="filters.order.isApplied ? 'primary' : 'default'"
     nzShape="round"
     nz-popover
-    [(nzVisible)]="orderFilter.isVisible"
+    [(nzVisible)]="filters.order.isVisible"
     nzPopoverTrigger="click"
     [nzPopoverTitle]="orderTitleTpl"
     [nzPopoverContent]="orderBodyTpl"
     nzPopoverPlacement="bottomLeft"
   >
     <i class="icon-sort-alpha-asc" style="margin-right: 5px;"></i>
-    <ng-container *ngIf="!orderFilter.isApplied">Ordenar</ng-container>
-    <ng-container *ngIf="orderFilter.isApplied">{{ orderFilter.selected.label }}</ng-container>
+    <ng-container *ngIf="!filters.order.isApplied">Ordenar</ng-container>
+    <ng-container *ngIf="filters.order.isApplied">{{ filters.order.selected.label }}</ng-container>
     <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
   </button>
 
@@ -175,9 +179,9 @@
       <ul class="order-list" nz-menu nzMode="inline" [nzInlineIndent]="16">
         <li
           nz-menu-item
-          [nzSelected]="orderFilter.selected === option"
-          (click)="onSelectOrder(option.value)"
-          *ngFor="let option of orderFilter.options"
+          [nzSelected]="filters.order.selected === option"
+          (click)="onSelectOrder(option)"
+          *ngFor="let option of filters.order.options"
         >
           <i class="icon-{{ option.icon }}"></i>
           {{ option.label }}
