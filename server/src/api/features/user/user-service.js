@@ -1,5 +1,7 @@
 const userDAL = require('./user-dal');
+const articlesDAL = require('../article/article-dal');
 const AppError = require('../../utils/app-error');
+const Paginator = require('../../utils/paginator');
 
 const readUsers = async () => {
   try {
@@ -25,9 +27,39 @@ const readUser = async id => {
   return user;
 };
 
+const readUserArticles = async (id, query) => {
+  let user;
+  let articles;
+
+  try {
+    user = await userDAL.countById(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!user) {
+    throw new AppError(404, 'User not found');
+  }
+
+  try {
+    articles = await articlesDAL.findAndPaginate({
+      where: {
+        userId: id,
+        status: query.status ? query.status : 'for_sale'
+      },
+      limit: +query.limit || null,
+      offset: +query.offset || null
+    });
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  return Paginator.paginate(articles, +query.limit, +query.offset);
+};
+
 const createUser = async body => {
   const { email } = body;
-  const userExists = (await userDAL.count(email)) > 0;
+  const userExists = (await userDAL.countByEmail(email)) > 0;
 
   if (userExists) {
     throw new AppError(409, 'User already registered');
@@ -83,6 +115,7 @@ const deleteUser = async id => {
 module.exports = {
   readUsers,
   readUser,
+  readUserArticles,
   createUser,
   updateUser,
   deleteUser

@@ -38,6 +38,8 @@ function defineAbilitiesFor(user) {
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);
+    allow(ACTIONS.READ, SUBJECTS.USER);
+    allow(ACTIONS.READ, SUBJECTS.ARTICLE);
   }
 
   return new Ability(rules);

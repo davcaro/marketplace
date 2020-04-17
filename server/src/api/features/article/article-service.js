@@ -7,13 +7,6 @@ const AppError = require('../../utils/app-error');
 const Paginator = require('../../utils/paginator');
 
 const readArticles = async params => {
-  if (!params.limit) {
-    params.limit = 30;
-  }
-  if (!params.offset) {
-    params.offset = 0;
-  }
-
   const query = getQuery(params);
   let articles;
 
@@ -209,7 +202,12 @@ const getQuery = params => {
     }
   }
 
-  return { where, order, limit: +params.limit, offset: +params.offset };
+  return {
+    where,
+    order,
+    limit: +params.limit || null,
+    offset: +params.offset || null
+  };
 };
 
 module.exports = {

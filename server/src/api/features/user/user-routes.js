@@ -12,11 +12,12 @@ const {
 const route = express.Router();
 
 module.exports = app => {
-  app.use('/users', isAuthorized, route);
+  app.use('/users', route);
 
   route.get(
     '/',
-    hasPermission(ACTIONS.READ, SUBJECTS.USER),
+    isAuthorized,
+    hasPermission(ACTIONS.MANAGE, SUBJECTS.USER),
     userController.getUsers
   );
   route.get(
@@ -24,20 +25,28 @@ module.exports = app => {
     hasPermission(ACTIONS.READ, SUBJECTS.USER),
     userController.getUser
   );
+  route.get(
+    '/:id/articles',
+    hasPermission(ACTIONS.READ, SUBJECTS.USER),
+    userController.getUserArticles
+  );
   route.post(
     '/',
+    isAuthorized,
     hasPermission(ACTIONS.CREATE, SUBJECTS.USER),
     celebrate(userValidation.create),
     userController.createUser
   );
   route.patch(
     '/:id',
+    isAuthorized,
     hasPermission(ACTIONS.UPDATE, SUBJECTS.USER),
     celebrate(userValidation.update),
     userController.updateUser
   );
   route.delete(
     '/:id',
+    isAuthorized,
     hasPermission(ACTIONS.DELETE, SUBJECTS.USER),
     userController.deleteUser
   );
