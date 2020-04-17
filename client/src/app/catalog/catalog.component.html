@@ -1,0 +1,27 @@
+<app-sider>
+  <div class="main-content">
+    <h3 nz-title>Tus artículos</h3>
+    <span nz-text>Aquí puedes gestionar tus artículos en venta y los que ya has vendido</span>
+
+    <nz-tabset nzLinkRouter [nzTabBarExtraContent]="extraTpl">
+      <nz-tab>
+        <a nz-tab-link [routerLink]="['/catalog/articles']">
+          En venta
+        </a>
+      </nz-tab>
+      <nz-tab>
+        <a nz-tab-link [routerLink]="['/catalog/upload']">
+          Vendidos
+        </a>
+      </nz-tab>
+    </nz-tabset>
+    <ng-template #extraTpl>
+      <div class="articles-count">
+        <span class="articles-total" nz-text><strong>0</strong></span>
+        <p>artículos</p>
+      </div>
+    </ng-template>
+
+    <ng-content></ng-content>
+  </div>
+</app-sider>

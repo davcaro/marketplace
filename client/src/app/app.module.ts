@@ -24,6 +24,7 @@ import { ViewArticleComponent } from './articles/view-article/view-article.compo
 import { TruncatePipe } from './shared/truncate.pipe';
 import { SearchArticlesComponent } from './articles/search-articles/search-articles.component';
 import { FilterArticlesComponent } from './articles/filter-articles/filter-articles.component';
+import { CatalogComponent } from './catalog/catalog.component';
 
 registerLocaleData(es);
 
@@ -43,7 +44,8 @@ registerLocaleData(es);
     ViewArticleComponent,
     TruncatePipe,
     SearchArticlesComponent,
-    FilterArticlesComponent
+    FilterArticlesComponent,
+    CatalogComponent
   ],
   imports: [
     BrowserModule,
