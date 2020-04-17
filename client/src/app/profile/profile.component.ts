@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.less']
 })
-export class ProfileComponent {
-  isCollapsed: boolean;
-}
+export class ProfileComponent {}

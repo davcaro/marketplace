@@ -7,11 +7,16 @@ export class Article {
   public status: string;
   public condition: string;
   public createdAt: string;
+  public updatedAt: string;
   public user: { id: number; name: string; avatar: string };
   public category: { id: number; name: string; icon: string };
   public images: { id: number; image: string }[];
 
   get creationDate() {
     return new Date(this.createdAt).toLocaleDateString('es-ES');
+  }
+
+  get updatedDate() {
+    return new Date(this.updatedAt).toLocaleDateString('es-ES');
   }
 }

@@ -57,9 +57,7 @@ export class AuthService {
 
   checkAvailable(email: string) {
     return this.http
-      .post<AuthResponseData>(`${this.apiUrl}/api/auth/check`, {
-        email
-      })
+      .post<any>(`${this.apiUrl}/api/auth/check`, { email })
       .pipe(catchError(this.handleError));
   }
 
@@ -99,7 +97,7 @@ export class AuthService {
 
   reloadUser() {
     const userData = this.http
-      .get<AuthResponseData>(`${this.apiUrl}/api/me`)
+      .get<any>(`${this.apiUrl}/api/me`)
       .pipe(
         catchError((err: HttpErrorResponse) => {
           if (err.error) {
@@ -111,7 +109,7 @@ export class AuthService {
       )
       .subscribe(
         res => {
-          this.user.value._id = res._id;
+          this.user.value._id = res.id;
           this.user.value.email = res.email;
           this.user.value.name = res.name;
           this.user.value.avatar = res.avatar;
