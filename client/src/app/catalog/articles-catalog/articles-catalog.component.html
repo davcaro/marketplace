@@ -1,0 +1,41 @@
+<app-catalog>
+  <div nz-row [nzGutter]="16">
+    <div class="article" nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXl]="6" *ngFor="let article of articles">
+      <nz-card
+        class="article-card"
+        [nzCover]="coverTemplate"
+        [nzActions]="[markAsSold, markAsReserved, actionEdit, actionDelete]"
+      >
+        <nz-card-meta
+          nzTitle="{{ article.article.price | currency: 'EUR' }}"
+          nzDescription="{{ article.article.title }}"
+        ></nz-card-meta>
+
+        <div class="article-body">
+          <span><i class="icon-calendar"></i> {{ article.article.creationDate }}</span>
+
+          <div>
+            <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
+            <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
+          </div>
+        </div>
+      </nz-card>
+
+      <ng-template #coverTemplate>
+        <img class="article-img" [src]="apiUrl + '/images/articles/' + article.article.images[0].image" />
+      </ng-template>
+      <ng-template #markAsSold>
+        <i class="icon-handshake-o" nz-tooltip nzTooltipTitle="Marcar como vendido"></i>
+      </ng-template>
+      <ng-template #markAsReserved>
+        <i class="icon-bookmark" nz-tooltip nzTooltipTitle="Marcar como reservado"></i>
+      </ng-template>
+      <ng-template #actionEdit>
+        <i class="icon-pencil" nz-tooltip nzTooltipTitle="Editar"></i>
+      </ng-template>
+      <ng-template #actionDelete>
+        <i class="icon-bin" nz-tooltip nzTooltipTitle="Eliminar"></i>
+      </ng-template>
+    </div>
+  </div>
+</app-catalog>

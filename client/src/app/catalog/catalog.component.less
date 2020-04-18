@@ -8,7 +8,6 @@ nz-content {
 }
 
 .main-content {
-  width: 75%;
   margin: 0 auto;
 }
 
@@ -27,11 +26,14 @@ nz-content {
     padding: 15px;
   }
 
-  .main-content {
-    width: 100%;
-  }
-
   .articles-count {
     display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-content {
+    width: 85%;
+    max-width: 1200px;
   }
 }

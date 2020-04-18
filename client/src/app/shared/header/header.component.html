@@ -38,7 +38,9 @@
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
           </li>
-          <li nz-menu-item>Artículos</li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'catalog', 'articles']">Artículos</a>
+          </li>
           <li nz-menu-item>Mensajes</li>
           <li nz-menu-item>Favoritos</li>
 

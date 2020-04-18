@@ -108,6 +108,9 @@ i {
 .icon-office:before {
   content: '\e916';
 }
+.icon-pencil:before {
+  content: '\e919';
+}
 .icon-music:before {
   content: '\e917';
 }
@@ -120,6 +123,9 @@ i {
 .icon-clock:before {
   content: '\e94e';
 }
+.icon-calendar:before {
+  content: '\e953';
+}
 .icon-bubbles2:before {
   content: '\e96d';
 }
@@ -131,6 +137,9 @@ i {
 }
 .icon-stats-bars:before {
   content: '\e99c';
+}
+.icon-bin:before {
+  content: '\e9ac';
 }
 .icon-briefcase:before {
   content: '\e9ae';

@@ -1,0 +1,43 @@
+.article {
+  margin-bottom: 0.4rem;
+}
+
+.article-card {
+  margin-top: 8px;
+  border-radius: 10px;
+}
+
+.article-img {
+  object-fit: cover;
+  height: 200px;
+  border-radius: 10px 10px 0 0;
+}
+
+:host ::ng-deep .ant-card-meta-description {
+  height: 42px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.article-body {
+  height: 47px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.article-card:hover .article-body {
+  display: none;
+}
+
+:host ::ng-deep .ant-card-actions {
+  display: none;
+  border-radius: 0 0 10px 10px;
+}
+
+:host ::ng-deep .article-card:hover .ant-card-actions {
+  display: block;
+}

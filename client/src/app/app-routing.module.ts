@@ -9,6 +9,7 @@ import { UploadArticleComponent } from './articles/upload-article/upload-article
 import { ViewArticleComponent } from './articles/view-article/view-article.component';
 import { ArticleResolverService } from './articles/article-resolver.service';
 import { SearchArticlesComponent } from './articles/search-articles/search-articles.component';
+import { ArticlesCatalogComponent } from './catalog/articles-catalog/articles-catalog.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -25,7 +26,10 @@ const routes: Routes = [
   {
     path: 'catalog',
     canActivate: [AuthGuard],
-    children: [{ path: 'upload', component: UploadArticleComponent }]
+    children: [
+      { path: 'upload', component: UploadArticleComponent },
+      { path: 'articles', component: ArticlesCatalogComponent }
+    ]
   },
   { path: 'search', component: SearchArticlesComponent },
   { path: 'article/:id', component: ViewArticleComponent, resolve: { article: ArticleResolverService } }

@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { of, Observable, throwError, BehaviorSubject } from 'rxjs';
 import { Article } from './article.model';
 import { Category } from '../shared/category.model';
+import { User } from '../auth/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,20 @@ export class ArticlesService {
         catchError(err => {
           this.router.navigate(['']);
           return of(null);
+        })
+      );
+  }
+
+  getUserArticles(user: User, status?: string): Observable<any> {
+    return this.http
+      .get<any>(`${this.apiUrl}/api/users/${user._id}/articles`, { params: { status } })
+      .pipe(
+        catchError(err => {
+          if (err.error) {
+            return throwError(err.error);
+          } else {
+            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+          }
         })
       );
   }
