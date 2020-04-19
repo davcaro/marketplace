@@ -16,7 +16,9 @@
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="['/', 'catalog', 'items']">En venta</a>
           </li>
-          <li nz-menu-item>Vendidos</li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'catalog', 'sold']">Vendidos</a>
+          </li>
         </ul>
       </li>
       <li nz-menu-item>

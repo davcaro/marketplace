@@ -15,7 +15,11 @@
           class="item-card"
           [class.tooltip-open]="itemTooltipOpen === item || itemConfirmOpen === item"
           [nzCover]="coverTemplate"
-          [nzActions]="[markAsReserved, markAsSold, actionEdit, actionDelete]"
+          [nzActions]="
+            itemsStatus === 'sold'
+              ? [markAsForSale, actionEdit, actionDelete]
+              : [markAsReserved, markAsSold, actionEdit, actionDelete]
+          "
         >
           <nz-card-meta nzTitle="{{ item.price | currency: 'EUR' }}" nzDescription="{{ item.title }}"></nz-card-meta>
 
@@ -52,6 +56,16 @@
         </ng-template>
 
         <img class="item-img" [src]="apiUrl + '/images/items/' + item.images[0].image" />
+      </ng-template>
+      <ng-template #markAsForSale>
+        <span
+          (click)="$event.preventDefault(); $event.stopPropagation(); onMarkAsForSale(item)"
+          nz-tooltip
+          nzTooltipTitle="Poner a la venta"
+          (nzVisibleChange)="onTooltipChange($event, item)"
+        >
+          <i class="icon-rotate-left"></i>
+        </span>
       </ng-template>
       <ng-template #markAsReserved>
         <span

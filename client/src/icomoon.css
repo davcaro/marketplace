@@ -84,6 +84,9 @@ i {
 .icon-keyboard_arrow_down:before {
   content: '\e909';
 }
+.icon-rotate-left:before {
+  content: '\e91b';
+}
 .icon-paw:before {
   content: '\e913';
 }

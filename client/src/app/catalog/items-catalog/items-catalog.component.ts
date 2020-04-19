@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ItemsCatalogComponent implements OnInit {
   apiUrl: string;
   items: Item[];
+  itemsStatus: string;
   itemTooltipOpen: Item;
   itemConfirmOpen: Item;
   pagination: { page: number; limit: number; offset: number; total: number };
@@ -25,6 +26,7 @@ export class ItemsCatalogComponent implements OnInit {
   ) {
     this.apiUrl = environment.apiUrl;
     this.items = [];
+    this.itemsStatus = this.route.snapshot.data.itemsStatus;
 
     const page = +this.route.snapshot.queryParams.page;
     this.pagination = { page: page ? page : 1, limit: 30, offset: 0, total: null };
@@ -40,11 +42,17 @@ export class ItemsCatalogComponent implements OnInit {
       offset: (this.pagination.page - 1) * this.pagination.limit
     };
 
-    this.itemsService.getUserItems(query, this.authService.user.value).subscribe(res => {
+    this.itemsService.getUserItems(query, this.authService.user.value, this.itemsStatus).subscribe(res => {
       this.items = res.data.map((item: Item) => Object.assign(new Item(), item));
 
       this.pagination = { page: res.pagination.offset / res.pagination.limit + 1, ...res.pagination };
       this.router.navigate([], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
+    });
+  }
+
+  onMarkAsForSale(item: Item) {
+    this.itemsService.updateItem(item.id, { status: 'for_sale' }).subscribe(() => {
+      this.loadItems();
     });
   }
 
@@ -58,7 +66,7 @@ export class ItemsCatalogComponent implements OnInit {
 
   onMarkAsSold(item: Item) {
     this.itemsService.updateItem(item.id, { status: 'sold' }).subscribe(() => {
-      this.items.splice(this.items.indexOf(item), 1);
+      this.loadItems();
     });
   }
 
@@ -68,7 +76,7 @@ export class ItemsCatalogComponent implements OnInit {
 
   onDeleteItem(item: Item) {
     this.itemsService.deleteItem(item.id).subscribe(() => {
-      this.items.splice(this.items.indexOf(item), 1);
+      this.loadItems();
     });
   }
 

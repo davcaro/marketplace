@@ -28,7 +28,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'upload', component: UploadItemComponent },
-      { path: 'items', component: ItemsCatalogComponent }
+      { path: 'items', component: ItemsCatalogComponent, data: { itemsStatus: '' } },
+      { path: 'sold', component: ItemsCatalogComponent, data: { itemsStatus: 'sold' } }
     ]
   },
   { path: 'search', component: SearchItemsComponent },
