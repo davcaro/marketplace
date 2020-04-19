@@ -24,8 +24,8 @@ app.use(
   express.static(`${__dirname}/../${config.API.avatars_path}`)
 );
 app.use(
-  '/images/articles',
-  express.static(`${__dirname}/../${config.API.articles_path}`)
+  '/images/items',
+  express.static(`${__dirname}/../${config.API.items_path}`)
 );
 
 app.use(errors.validationError);

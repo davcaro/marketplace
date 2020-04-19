@@ -6,9 +6,9 @@ import { User } from 'src/app/auth/user.model';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ArticlesService } from 'src/app/articles/articles.service';
+import { ItemsService } from 'src/app/items/items.service';
 import { Category } from '../category.model';
-import { FilterArticlesService, Filters } from 'src/app/articles/filter-articles.service';
+import { FilterItemsService, Filters } from 'src/app/items/filter-items.service';
 
 @Component({
   selector: 'app-header',
@@ -34,13 +34,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authModalService: AuthModalService,
     private authService: AuthService,
-    private articlesService: ArticlesService,
-    private filtersService: FilterArticlesService,
+    private itemsService: ItemsService,
+    private filtersService: FilterItemsService,
     private router: Router
   ) {
     this.apiUrl = environment.apiUrl;
     this.user = authService.user.value;
-    this.categories = articlesService.categories.value;
+    this.categories = itemsService.categories.value;
     this.filters = filtersService.filters.value;
     this.authModalIsVisible = authModalService.isVisible;
     this.authModalView = authModalService.view;
@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.user.subscribe(() => {
       this.user = this.authService.user.value;
     });
-    this.categoriesSubscription = this.articlesService.categories.subscribe(categories => {
+    this.categoriesSubscription = this.itemsService.categories.subscribe(categories => {
       this.categories = categories;
     });
     this.filtersSubscription = this.filtersService.filters.subscribe(filters => {
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
-  onUploadArticle(): void {
+  onUploadItem(): void {
     if (this.authService.user.value) {
       this.router.navigate(['catalog', 'upload']);
     } else {
@@ -111,7 +111,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.filters.category.isApplied = category !== -1 ? true : false;
     this.filters.category.selected = this.categories.find(cat => cat.id === category) || this.categories[0];
     this.filtersService.filters.next(this.filters);
-    this.filtersService.requestArticles.next(true);
+    this.filtersService.requestItems.next(true);
 
     this.router.navigate(['search'], {
       queryParams: {

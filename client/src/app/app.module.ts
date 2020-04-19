@@ -19,13 +19,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProfileInfoComponent } from './profile/profile-info/profile-info.component';
 import { ProfileAccountComponent } from './profile/profile-account/profile-account.component';
 import { SiderComponent } from './shared/sider/sider.component';
-import { UploadArticleComponent } from './articles/upload-article/upload-article.component';
-import { ViewArticleComponent } from './articles/view-article/view-article.component';
+import { UploadItemComponent } from './items/upload-item/upload-item.component';
+import { ViewItemComponent } from './items/view-item/view-item.component';
 import { TruncatePipe } from './shared/truncate.pipe';
-import { SearchArticlesComponent } from './articles/search-articles/search-articles.component';
-import { FilterArticlesComponent } from './articles/filter-articles/filter-articles.component';
+import { SearchItemsComponent } from './items/search-items/search-items.component';
+import { FilterItemsComponent } from './items/filter-items/filter-items.component';
 import { CatalogComponent } from './catalog/catalog.component';
-import { ArticlesCatalogComponent } from './catalog/articles-catalog/articles-catalog.component';
+import { ItemsCatalogComponent } from './catalog/items-catalog/items-catalog.component';
 
 registerLocaleData(es);
 
@@ -41,13 +41,13 @@ registerLocaleData(es);
     ProfileComponent,
     ProfileInfoComponent,
     ProfileAccountComponent,
-    UploadArticleComponent,
-    ViewArticleComponent,
+    UploadItemComponent,
+    ViewItemComponent,
     TruncatePipe,
-    SearchArticlesComponent,
-    FilterArticlesComponent,
+    SearchItemsComponent,
+    FilterItemsComponent,
     CatalogComponent,
-    ArticlesCatalogComponent
+    ItemsCatalogComponent
   ],
   imports: [
     BrowserModule,

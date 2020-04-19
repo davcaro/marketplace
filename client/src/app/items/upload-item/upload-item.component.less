@@ -1,0 +1,55 @@
+@import '../../../custom-styles.less';
+
+nz-card {
+  border-radius: 15px;
+  margin: 0.5rem 0;
+}
+
+.card-header {
+  margin-bottom: 1.3rem;
+}
+
+.form-inline {
+  display: flex;
+}
+
+.item-category {
+  flex: 1 1 70%;
+}
+
+.item-price {
+  flex: 1 1 auto;
+  margin-left: 1.5rem;
+}
+
+.item-price nz-input-number {
+  width: 100%;
+}
+
+i[nz-icon] {
+  font-size: 32px;
+  color: @color-light-gray;
+}
+
+.ant-upload-text {
+  margin-top: 8px;
+  color: @color-gray;
+}
+
+.upload-btn {
+  margin-top: 1rem;
+}
+
+.images-error {
+  color: @color-red;
+}
+
+@media (max-width: 575.98px) {
+  .form-inline {
+    flex-direction: column;
+  }
+
+  .item-price {
+    margin-left: 0;
+  }
+}

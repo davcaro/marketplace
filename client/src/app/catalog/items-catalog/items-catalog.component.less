@@ -1,0 +1,62 @@
+@import '../../../custom-styles.less';
+
+.item {
+  margin-bottom: 0.4rem;
+}
+
+.item-card {
+  margin-top: 8px;
+  border-radius: 10px;
+}
+
+.status-badge {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.status-badge i {
+  font-size: 1.3rem;
+  color: @color-white;
+  background-color: @color-primary;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.item-img {
+  object-fit: cover;
+  height: 200px;
+  border-radius: 10px 10px 0 0;
+}
+
+:host ::ng-deep .ant-card-meta-description {
+  height: 42px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.item-body {
+  height: 47px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.item-card:hover .item-body,
+.item-card.tooltip-open .item-body {
+  display: none;
+}
+
+:host ::ng-deep .ant-card-actions {
+  display: none;
+  border-radius: 0 0 10px 10px;
+}
+
+:host ::ng-deep .item-card:hover .ant-card-actions,
+:host ::ng-deep .item-card.tooltip-open .ant-card-actions {
+  display: block;
+}

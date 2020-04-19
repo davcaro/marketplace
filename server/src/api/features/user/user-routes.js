@@ -26,9 +26,9 @@ module.exports = app => {
     userController.getUser
   );
   route.get(
-    '/:id/articles',
+    '/:id/items',
     hasPermission(ACTIONS.READ, SUBJECTS.USER),
-    userController.getUserArticles
+    userController.getUserItems
   );
   route.post(
     '/',

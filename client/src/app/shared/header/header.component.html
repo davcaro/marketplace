@@ -39,7 +39,7 @@
             <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a [routerLink]="['/', 'catalog', 'articles']">Artículos</a>
+            <a [routerLink]="['/', 'catalog', 'items']">Artículos</a>
           </li>
           <li nz-menu-item>Mensajes</li>
           <li nz-menu-item>Favoritos</li>
@@ -71,7 +71,7 @@
         </div>
       </nz-modal>
 
-      <button class="upload-article-btn" nz-button nzType="primary" nzShape="round" (click)="onUploadArticle()">
+      <button class="upload-item-btn" nz-button nzType="primary" nzShape="round" (click)="onUploadItem()">
         <i class="icon-plus"></i>
         Subir artículo
       </button>
@@ -88,7 +88,7 @@
           <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
         </ng-container>
 
-        <li nz-menu-item (click)="onUploadArticle()">Subir artículo</li>
+        <li nz-menu-item (click)="onUploadItem()">Subir artículo</li>
 
         <ng-container *ngIf="user">
           <li nz-menu-divider></li>

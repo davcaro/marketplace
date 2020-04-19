@@ -22,13 +22,13 @@ const getUser = async (req, res, next) => {
   }
 };
 
-const getUserArticles = async (req, res, next) => {
+const getUserItems = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const articles = await userService.readUserArticles(id, req.query);
+    const items = await userService.readUserItems(id, req.query);
 
-    return res.json(articles);
+    return res.json(items);
   } catch (e) {
     return next(e);
   }
@@ -71,7 +71,7 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   getUsers,
   getUser,
-  getUserArticles,
+  getUserItems,
   createUser,
   updateUser,
   deleteUser

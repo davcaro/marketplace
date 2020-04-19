@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const userDAL = require('./user-dal');
-const articlesDAL = require('../article/article-dal');
+const itemsDAL = require('../item/item-dal');
 const AppError = require('../../utils/app-error');
 const Paginator = require('../../utils/paginator');
 
@@ -28,9 +28,9 @@ const readUser = async id => {
   return user;
 };
 
-const readUserArticles = async (id, query) => {
+const readUserItems = async (id, query) => {
   let user;
-  let articles;
+  let items;
 
   try {
     user = await userDAL.countById(id);
@@ -60,7 +60,7 @@ const readUserArticles = async (id, query) => {
   }
 
   try {
-    articles = await articlesDAL.findAndPaginate({
+    items = await itemsDAL.findAndPaginate({
       where,
       limit: +query.limit || null,
       offset: +query.offset || null
@@ -69,7 +69,7 @@ const readUserArticles = async (id, query) => {
     throw new AppError(500, e.message);
   }
 
-  return Paginator.paginate(articles, +query.limit, +query.offset);
+  return Paginator.paginate(items, +query.limit, +query.offset);
 };
 
 const createUser = async body => {
@@ -130,7 +130,7 @@ const deleteUser = async id => {
 module.exports = {
   readUsers,
   readUser,
-  readUserArticles,
+  readUserItems,
   createUser,
   updateUser,
   deleteUser
