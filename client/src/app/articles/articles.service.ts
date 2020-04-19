@@ -49,9 +49,14 @@ export class ArticlesService {
       );
   }
 
-  getUserArticles(user: User, status?: string): Observable<any> {
+  getUserArticles(pagination: { limit: any; offset: any }, user: User, status?: string): Observable<any> {
+    const params: any = pagination;
+    if (status) {
+      params.status = status;
+    }
+
     return this.http
-      .get<any>(`${this.apiUrl}/api/users/${user._id}/articles`, { params: { status } })
+      .get<any>(`${this.apiUrl}/api/users/${user._id}/articles`, { params })
       .pipe(
         catchError(err => {
           if (err.error) {
@@ -68,6 +73,30 @@ export class ArticlesService {
       catchError(err => {
         this.router.navigate(['']);
         return of(null);
+      })
+    );
+  }
+
+  updateArticle(id: number, changes: object): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/api/articles/${id}`, changes).pipe(
+      catchError(err => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
+  }
+
+  deleteArticle(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/api/articles/${id}`).pipe(
+      catchError(err => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
       })
     );
   }

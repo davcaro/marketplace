@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const userDAL = require('./user-dal');
 const articlesDAL = require('../article/article-dal');
 const AppError = require('../../utils/app-error');
@@ -41,12 +42,26 @@ const readUserArticles = async (id, query) => {
     throw new AppError(404, 'User not found');
   }
 
+  const where = {
+    userId: id
+  };
+
+  if (query.status) {
+    where.status = query.status;
+  } else {
+    where[Op.or] = [
+      {
+        status: 'for_sale'
+      },
+      {
+        status: 'reserved'
+      }
+    ];
+  }
+
   try {
     articles = await articlesDAL.findAndPaginate({
-      where: {
-        userId: id,
-        status: query.status ? query.status : 'for_sale'
-      },
+      where,
       limit: +query.limit || null,
       offset: +query.offset || null
     });

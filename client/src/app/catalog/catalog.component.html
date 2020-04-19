@@ -3,7 +3,7 @@
     <h3 nz-title>Tus artículos</h3>
     <span nz-text>Aquí puedes gestionar tus artículos en venta y los que ya has vendido</span>
 
-    <nz-tabset nzLinkRouter [nzTabBarExtraContent]="extraTpl">
+    <nz-tabset nzLinkRouter [nzLinkExact]="false" [nzTabBarExtraContent]="extraTpl">
       <nz-tab>
         <a nz-tab-link [routerLink]="['/catalog/articles']">
           En venta

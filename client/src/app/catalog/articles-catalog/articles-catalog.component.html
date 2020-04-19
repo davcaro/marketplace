@@ -1,41 +1,123 @@
 <app-catalog>
-  <div nz-row [nzGutter]="16">
+  <nz-empty [nzNotFoundContent]="emptyDescriptionTpl" [nzNotFoundFooter]="emptyFooterTpl" *ngIf="!articles.length">
+    <ng-template #emptyDescriptionTpl>
+      <span>No se encontraron artículos.</span>
+    </ng-template>
+    <ng-template #emptyFooterTpl>
+      <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'upload']">Subir artículo</button>
+    </ng-template>
+  </nz-empty>
+
+  <div nz-row [nzGutter]="16" *ngIf="articles.length">
     <div class="article" nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXl]="6" *ngFor="let article of articles">
-      <nz-card
-        class="article-card"
-        [nzCover]="coverTemplate"
-        [nzActions]="[markAsSold, markAsReserved, actionEdit, actionDelete]"
-      >
-        <nz-card-meta
-          nzTitle="{{ article.article.price | currency: 'EUR' }}"
-          nzDescription="{{ article.article.title }}"
-        ></nz-card-meta>
+      <a [routerLink]="['/', 'article', article.id]">
+        <nz-card
+          class="article-card"
+          [class.tooltip-open]="articleTooltipOpen === article || articleConfirmOpen === article"
+          [nzCover]="coverTemplate"
+          [nzActions]="[markAsReserved, markAsSold, actionEdit, actionDelete]"
+        >
+          <nz-card-meta
+            nzTitle="{{ article.price | currency: 'EUR' }}"
+            nzDescription="{{ article.title }}"
+          ></nz-card-meta>
 
-        <div class="article-body">
-          <span><i class="icon-calendar"></i> {{ article.article.creationDate }}</span>
+          <div class="article-body">
+            <span><i class="icon-calendar"></i> {{ article.creationDate }}</span>
 
-          <div>
-            <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
-            <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
+            <div>
+              <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
+              <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
+            </div>
           </div>
-        </div>
-      </nz-card>
+        </nz-card>
+      </a>
 
       <ng-template #coverTemplate>
-        <img class="article-img" [src]="apiUrl + '/images/articles/' + article.article.images[0].image" />
-      </ng-template>
-      <ng-template #markAsSold>
-        <i class="icon-handshake-o" nz-tooltip nzTooltipTitle="Marcar como vendido"></i>
+        <nz-badge
+          class="status-badge"
+          [nzCount]="reservedIconTpl"
+          title="Reservado"
+          *ngIf="article.status === 'reserved'"
+        ></nz-badge>
+        <ng-template #reservedIconTpl>
+          <i class="icon-bookmark"></i>
+        </ng-template>
+
+        <nz-badge
+          class="status-badge"
+          [nzCount]="soldIconTpl"
+          title="Vendido"
+          *ngIf="article.status === 'sold'"
+        ></nz-badge>
+        <ng-template #soldIconTpl>
+          <i class="icon-handshake-o"></i>
+        </ng-template>
+
+        <img class="article-img" [src]="apiUrl + '/images/articles/' + article.images[0].image" />
       </ng-template>
       <ng-template #markAsReserved>
-        <i class="icon-bookmark" nz-tooltip nzTooltipTitle="Marcar como reservado"></i>
+        <span
+          (click)="$event.preventDefault(); $event.stopPropagation(); onMarkAsReserved(article)"
+          nz-tooltip
+          nzTooltipTitle="Marcar como reservado"
+          (nzVisibleChange)="onTooltipChange($event, article)"
+        >
+          <i class="icon-bookmark"></i>
+        </span>
+      </ng-template>
+      <ng-template #markAsSold>
+        <span
+          (click)="$event.preventDefault(); $event.stopPropagation(); onMarkAsSold(article)"
+          nz-tooltip
+          nzTooltipTitle="Marcar como vendido"
+          (nzVisibleChange)="onTooltipChange($event, article)"
+        >
+          <i class="icon-handshake-o"></i>
+        </span>
       </ng-template>
       <ng-template #actionEdit>
-        <i class="icon-pencil" nz-tooltip nzTooltipTitle="Editar"></i>
+        <span
+          (click)="$event.preventDefault(); $event.stopPropagation(); onEditArticle(article)"
+          nz-tooltip
+          nzTooltipTitle="Editar"
+          (nzVisibleChange)="onTooltipChange($event, article)"
+        >
+          <i class="icon-pencil"></i>
+        </span>
       </ng-template>
       <ng-template #actionDelete>
-        <i class="icon-bin" nz-tooltip nzTooltipTitle="Eliminar"></i>
+        <span
+          nz-tooltip
+          nzTooltipTitle="Eliminar"
+          (nzVisibleChange)="onTooltipChange($event, article)"
+          (click)="$event.preventDefault(); $event.stopPropagation()"
+        >
+          <span
+            nz-popconfirm
+            nzPopconfirmTitle="¿Seguro que quieres eliminar este artículo?"
+            nzPopconfirmPlacement="bottom"
+            nzOkText="Eliminar"
+            nzCancelText="Cancelar"
+            (nzVisibleChange)="onConfirmChange($event, article)"
+            (nzOnConfirm)="onDeleteArticle(article)"
+          >
+            <i class="icon-bin"></i>
+          </span>
+        </span>
       </ng-template>
     </div>
   </div>
+
+  <nz-pagination
+    [nzHideOnSinglePage]="true"
+    [(nzPageIndex)]="pagination.page"
+    [(nzTotal)]="pagination.total"
+    [(nzPageSize)]="pagination.limit"
+    [nzShowTotal]="rangeTemplate"
+    (nzPageIndexChange)="loadArticles()"
+  ></nz-pagination>
+  <ng-template #rangeTemplate let-range="range" let-total>
+    {{ range[0] }}-{{ range[1] }} de {{ total }} artículos
+  </ng-template>
 </app-catalog>
