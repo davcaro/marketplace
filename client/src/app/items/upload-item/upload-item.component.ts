@@ -6,8 +6,9 @@ import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable, Observer } from 'rxjs';
 import { Category } from 'src/app/shared/category.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ItemsService } from '../items.service';
+import { Item } from '../item.model';
 
 @Component({
   selector: 'app-upload-item',
@@ -18,6 +19,7 @@ export class UploadItemComponent implements OnInit {
   apiUrl: string;
   form: FormGroup;
   categories: Category[] | null;
+  editItem: Item;
   formUnknownError: boolean;
   imagesUnknownError: boolean;
   imagesRequiredErr: boolean;
@@ -34,18 +36,44 @@ export class UploadItemComponent implements OnInit {
     private http: HttpClient,
     private itemsService: ItemsService,
     private msg: NzMessageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.apiUrl = environment.apiUrl;
+    this.editItem = this.route.snapshot.data.item;
 
     this.form = new FormGroup({
-      categoryId: new FormControl(null, [Validators.required]),
-      price: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(999999.99)]),
-      title: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
-      condition: new FormControl(null, [Validators.required]),
-      description: new FormControl(null, [Validators.required, Validators.maxLength(650)]),
-      location: new FormControl(null, [Validators.required, Validators.maxLength(255)])
+      categoryId: new FormControl(this.editItem ? this.editItem.category.id : null, [Validators.required]),
+      price: new FormControl(this.editItem ? this.editItem.price : 1, [
+        Validators.required,
+        Validators.min(1),
+        Validators.max(999999.99)
+      ]),
+      title: new FormControl(this.editItem ? this.editItem.title : null, [
+        Validators.required,
+        Validators.maxLength(50)
+      ]),
+      condition: new FormControl(this.editItem ? this.editItem.condition : null, [Validators.required]),
+      description: new FormControl(this.editItem ? this.editItem.description : null, [
+        Validators.required,
+        Validators.maxLength(650)
+      ]),
+      location: new FormControl(this.editItem ? this.editItem.location : null, [
+        Validators.required,
+        Validators.maxLength(255)
+      ])
     });
+
+    if (this.editItem) {
+      this.imagesList = this.editItem.images.map(image => {
+        return {
+          uid: image.image,
+          name: image.image,
+          status: 'done',
+          url: `${this.apiUrl}/images/items/${image.image}`
+        };
+      });
+    }
   }
 
   ngOnInit() {
@@ -77,11 +105,18 @@ export class UploadItemComponent implements OnInit {
     }
 
     if (this.form.valid) {
-      const images = this.imagesList.map(image => image.response.image);
       const data = this.form.value;
+
+      const images = this.imagesList.map(image => {
+        if (image.response) {
+          return image.response.image;
+        } else {
+          return image.name;
+        }
+      });
       data.images = images;
 
-      this.uploadItem(data);
+      this.editItem ? this.updateItem(data) : this.uploadItem(data);
     }
   }
 
@@ -103,6 +138,28 @@ export class UploadItemComponent implements OnInit {
       .subscribe(
         res => {
           this.router.navigate(['item', res.id]);
+        },
+        err => {
+          this.formUnknownError = true;
+        }
+      );
+  }
+
+  updateItem(data): void {
+    this.http
+      .patch<any>(`${this.apiUrl}/api/items/${this.editItem.id}`, data)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          if (err.error) {
+            return throwError(err.error);
+          } else {
+            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+          }
+        })
+      )
+      .subscribe(
+        res => {
+          this.router.navigate(['item', this.editItem.id]);
         },
         err => {
           this.formUnknownError = true;

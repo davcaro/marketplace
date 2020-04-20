@@ -216,6 +216,11 @@
     [disabled]="!form.valid || !imagesList.length"
     (click)="submitForm()"
   >
-    Subir artículo
+    <ng-container *ngIf="editItem">
+      Actualizar artículo
+    </ng-container>
+    <ng-container *ngIf="!editItem">
+      Subir artículo
+    </ng-container>
   </button>
 </app-sider>

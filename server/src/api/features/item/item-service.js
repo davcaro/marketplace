@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define,default-case,no-fallthrough */
+/* eslint-disable no-use-before-define,default-case,no-fallthrough,no-restricted-syntax */
 
 const { Op } = require('sequelize');
 const itemDAL = require('./item-dal');
@@ -69,6 +69,10 @@ const updateItem = async (id, body) => {
   }
 
   try {
+    await itemDAL.removeImagesNotIn(id, body.images);
+    for await (const image of body.images) {
+      itemDAL.findOrCreateImage(id, image);
+    }
     return await itemDAL.updateById(id, body);
   } catch (e) {
     throw new AppError(500, e.message);

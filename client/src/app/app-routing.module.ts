@@ -29,7 +29,8 @@ const routes: Routes = [
     children: [
       { path: 'upload', component: UploadItemComponent },
       { path: 'items', component: CatalogComponent, data: { itemsStatus: '' } },
-      { path: 'sold', component: CatalogComponent, data: { itemsStatus: 'sold' } }
+      { path: 'sold', component: CatalogComponent, data: { itemsStatus: 'sold' } },
+      { path: 'edit/:id', component: UploadItemComponent, resolve: { item: ItemResolverService } }
     ]
   },
   { path: 'search', component: SearchItemsComponent },
