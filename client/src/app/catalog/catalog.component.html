@@ -17,11 +17,13 @@
     </nz-tabset>
     <ng-template #extraTpl>
       <div class="items-count">
-        <span class="items-total" nz-text><strong>0</strong></span>
+        <span class="items-total" nz-text>
+          <strong>{{ itemsCount }}</strong>
+        </span>
         <p>artículos</p>
       </div>
     </ng-template>
 
-    <ng-content></ng-content>
+    <app-items-catalog (itemsCount)="updateItemsCount($event)"></app-items-catalog>
   </div>
 </app-sider>

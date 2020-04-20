@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ItemsService } from 'src/app/items/items.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Item } from 'src/app/items/item.model';
@@ -12,11 +12,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ItemsCatalogComponent implements OnInit {
   apiUrl: string;
+  loading: boolean;
   items: Item[];
   itemsStatus: string;
   itemTooltipOpen: Item;
   itemConfirmOpen: Item;
   pagination: { page: number; limit: number; offset: number; total: number };
+  @Output() itemsCount: EventEmitter<number>;
 
   constructor(
     private itemsService: ItemsService,
@@ -25,11 +27,14 @@ export class ItemsCatalogComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.apiUrl = environment.apiUrl;
+    this.loading = true;
     this.items = [];
     this.itemsStatus = this.route.snapshot.data.itemsStatus;
 
     const page = +this.route.snapshot.queryParams.page;
     this.pagination = { page: page ? page : 1, limit: 30, offset: 0, total: null };
+
+    this.itemsCount = new EventEmitter<number>();
   }
 
   ngOnInit(): void {
@@ -43,10 +48,13 @@ export class ItemsCatalogComponent implements OnInit {
     };
 
     this.itemsService.getUserItems(query, this.authService.user.value, this.itemsStatus).subscribe(res => {
+      this.loading = false;
       this.items = res.data.map((item: Item) => Object.assign(new Item(), item));
 
       this.pagination = { page: res.pagination.offset / res.pagination.limit + 1, ...res.pagination };
       this.router.navigate([], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
+
+      this.itemsCount.emit(res.pagination.total);
     });
   }
 

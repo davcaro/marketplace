@@ -9,7 +9,7 @@ import { UploadItemComponent } from './items/upload-item/upload-item.component';
 import { ViewItemComponent } from './items/view-item/view-item.component';
 import { ItemResolverService } from './items/item-resolver.service';
 import { SearchItemsComponent } from './items/search-items/search-items.component';
-import { ItemsCatalogComponent } from './catalog/items-catalog/items-catalog.component';
+import { CatalogComponent } from './catalog/catalog.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -28,8 +28,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'upload', component: UploadItemComponent },
-      { path: 'items', component: ItemsCatalogComponent, data: { itemsStatus: '' } },
-      { path: 'sold', component: ItemsCatalogComponent, data: { itemsStatus: 'sold' } }
+      { path: 'items', component: CatalogComponent, data: { itemsStatus: '' } },
+      { path: 'sold', component: CatalogComponent, data: { itemsStatus: 'sold' } }
     ]
   },
   { path: 'search', component: SearchItemsComponent },
