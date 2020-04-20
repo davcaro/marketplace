@@ -123,48 +123,26 @@ export class UploadItemComponent implements OnInit {
   formatterEuro = (value: number) => `${value} €`;
   parserEuro = (value: string) => value.replace(' €', '');
 
-  uploadItem(data): void {
-    this.http
-      .post<any>(`${this.apiUrl}/api/items`, data)
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.error) {
-            return throwError(err.error);
-          } else {
-            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
-          }
-        })
-      )
-      .subscribe(
-        res => {
-          this.router.navigate(['item', res.id]);
-        },
-        err => {
-          this.formUnknownError = true;
-        }
-      );
+  uploadItem(data: object): void {
+    this.itemsService.createItem(data).subscribe(
+      res => {
+        this.router.navigate(['item', res.id]);
+      },
+      err => {
+        this.formUnknownError = true;
+      }
+    );
   }
 
-  updateItem(data): void {
-    this.http
-      .patch<any>(`${this.apiUrl}/api/items/${this.editItem.id}`, data)
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.error) {
-            return throwError(err.error);
-          } else {
-            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
-          }
-        })
-      )
-      .subscribe(
-        res => {
-          this.router.navigate(['item', this.editItem.id]);
-        },
-        err => {
-          this.formUnknownError = true;
-        }
-      );
+  updateItem(data: object): void {
+    this.itemsService.updateItem(this.editItem.id, data).subscribe(
+      res => {
+        this.router.navigate(['item', this.editItem.id]);
+      },
+      err => {
+        this.formUnknownError = true;
+      }
+    );
   }
 
   handlePreview = (file: UploadFile) => {

@@ -55,12 +55,6 @@ export class AuthService {
       );
   }
 
-  checkAvailable(email: string) {
-    return this.http
-      .post<any>(`${this.apiUrl}/api/auth/check`, { email })
-      .pipe(catchError(this.handleError));
-  }
-
   autoLogin() {
     const userData: {
       _id: number;
@@ -95,6 +89,29 @@ export class AuthService {
     }
   }
 
+  logout(): void {
+    this.user.next(null);
+    this.router.navigate(['/']);
+    localStorage.removeItem('userData');
+    clearTimeout(this.tokenExpirationTimer);
+  }
+
+  autoLogout(expirationDuration: number): void {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+  }
+
+  saveToLocalStorage(): void {
+    localStorage.setItem('userData', JSON.stringify(this.user.value));
+  }
+
+  checkAvailable(email: string) {
+    return this.http
+      .post<any>(`${this.apiUrl}/api/auth/check`, { email })
+      .pipe(catchError(this.handleError));
+  }
+
   reloadUser() {
     const userData = this.http
       .get<any>(`${this.apiUrl}/api/me`)
@@ -125,21 +142,28 @@ export class AuthService {
     return userData;
   }
 
-  logout(): void {
-    this.user.next(null);
-    this.router.navigate(['/']);
-    localStorage.removeItem('userData');
-    clearTimeout(this.tokenExpirationTimer);
+  updateUser(data: object) {
+    return this.http.patch<any>(`${this.apiUrl}/api/me`, data).pipe(
+      catchError((err: HttpErrorResponse) => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
   }
 
-  autoLogout(expirationDuration: number): void {
-    this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
-    }, expirationDuration);
-  }
-
-  saveToLocalStorage(): void {
-    localStorage.setItem('userData', JSON.stringify(this.user.value));
+  deleteUser() {
+    return this.http.delete<any>(`${this.apiUrl}/api/me`).pipe(
+      catchError((err: HttpErrorResponse) => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
   }
 
   private handleAuthentication(data: AuthResponseData): void {

@@ -66,53 +66,31 @@ export class ProfileAccountComponent implements OnInit {
     }
   }
 
-  updateUser(data): void {
-    this.http
-      .patch<any>(`${this.apiUrl}/api/me`, data)
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.error) {
-            return throwError(err.error);
-          } else {
-            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
-          }
-        })
-      )
-      .subscribe(
-        res => {
-          this.closePasswordModal();
-          this.form.reset();
-        },
-        err => {
-          if (err.statusCode === 401) {
-            this.form.controls.currentPassword.setErrors({ wrong: true });
-          } else {
-            this.passUnknownError = true;
-          }
+  updateUser(data: object): void {
+    this.authService.updateUser(data).subscribe(
+      res => {
+        this.closePasswordModal();
+        this.form.reset();
+      },
+      err => {
+        if (err.statusCode === 401) {
+          this.form.controls.currentPassword.setErrors({ wrong: true });
+        } else {
+          this.passUnknownError = true;
         }
-      );
+      }
+    );
   }
 
   deleteUser(): void {
-    this.http
-      .delete<any>(`${this.apiUrl}/api/me`)
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.error) {
-            return throwError(err.error);
-          } else {
-            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
-          }
-        })
-      )
-      .subscribe(
-        res => {
-          this.authService.logout();
-        },
-        err => {
-          this.delAccUnknownError = true;
-        }
-      );
+    this.authService.deleteUser().subscribe(
+      res => {
+        this.authService.logout();
+      },
+      err => {
+        this.delAccUnknownError = true;
+      }
+    );
   }
 
   onDelAccount(): void {

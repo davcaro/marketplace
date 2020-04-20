@@ -53,34 +53,23 @@ export class ProfileInfoComponent implements OnInit {
     }
   }
 
-  updateUser(data): void {
-    this.http
-      .patch<any>(`${this.apiUrl}/api/me`, data)
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.error) {
-            return throwError(err.error);
-          } else {
-            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
-          }
-        })
-      )
-      .subscribe(
-        res => {
-          this.user.name = data.name;
-          this.user.location = data.location;
+  updateUser(data: { name: string; location: string }): void {
+    this.authService.updateUser(data).subscribe(
+      res => {
+        this.user.name = data.name;
+        this.user.location = data.location;
 
-          this.authService.saveToLocalStorage();
+        this.authService.saveToLocalStorage();
 
-          this.form.reset({
-            name: this.user.name,
-            location: this.user.location
-          });
-        },
-        err => {
-          this.infoUnknownError = true;
-        }
-      );
+        this.form.reset({
+          name: this.user.name,
+          location: this.user.location
+        });
+      },
+      err => {
+        this.infoUnknownError = true;
+      }
+    );
   }
 
   beforeUpload = (file: File) => {

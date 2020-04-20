@@ -77,6 +77,18 @@ export class ItemsService {
     );
   }
 
+  createItem(data: object) {
+    return this.http.post<any>(`${this.apiUrl}/api/items`, data).pipe(
+      catchError(err => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
+  }
+
   updateItem(id: number, changes: object): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/api/items/${id}`, changes).pipe(
       catchError(err => {
