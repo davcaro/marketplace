@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ItemsService } from '../items.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/shared/category.model';
 import { FilterItemsService, Filters, Order, PublicationDate } from '../filter-items.service';
@@ -31,7 +31,10 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadQuery(this.route.snapshot.queryParams);
     this.filtersService.filters.next(this.filters);
-    this.filtersService.requestItems.next(false);
+
+    this.filtersSubscription = this.filtersService.filters.subscribe(filters => {
+      this.filters = filters;
+    });
 
     this.categoriesSubscription = this.itemsService.categories.subscribe(categories => {
       this.categories = categories;
@@ -40,10 +43,8 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
       this.filters.category.selected =
         this.categories.find(category => category.id === +this.route.snapshot.queryParams.category) ||
         this.categories[0];
-    });
 
-    this.filtersSubscription = this.filtersService.filters.subscribe(filters => {
-      this.filters = filters;
+      this.filtersService.requestItems.next(false);
     });
   }
 
@@ -115,7 +116,7 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
     return price >= this.filters.price.limits[0] && price <= this.filters.price.limits[1];
   }
 
-  private loadQuery(params) {
+  private loadQuery(params: Params) {
     this.filters.category.isApplied = !!params.category;
     this.filters.price.isApplied = !!params.min_price || !!params.max_price;
     this.filters.publicationDate.isApplied = !!params.published;
