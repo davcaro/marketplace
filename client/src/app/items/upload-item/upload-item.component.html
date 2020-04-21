@@ -208,6 +208,24 @@
   </div>
 
   <button
+    class="delete-btn"
+    nz-button
+    nzType="default"
+    nzSize="large"
+    nzShape="round"
+    nz-popconfirm
+    nzPopconfirmTitle="¿Seguro que quieres eliminar este artículo?"
+    nzPopconfirmPlacement="bottom"
+    nzOkText="Eliminar"
+    nzCancelText="Cancelar"
+    (nzOnConfirm)="onDeleteItem()"
+    *ngIf="editItem"
+  >
+    <i class="icon-bin"></i>
+    Eliminar artículo
+  </button>
+
+  <button
     nz-button
     class="upload-btn"
     nzType="primary"

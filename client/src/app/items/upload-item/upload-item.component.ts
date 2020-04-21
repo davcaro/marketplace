@@ -145,6 +145,12 @@ export class UploadItemComponent implements OnInit {
     );
   }
 
+  onDeleteItem() {
+    this.itemsService.deleteItem(this.editItem.id).subscribe(res => {
+      this.router.navigate(['/', 'catalog', 'items']);
+    });
+  }
+
   handlePreview = (file: UploadFile) => {
     this.previewImage = file.url || file.thumbUrl;
     this.previewVisible = true;
