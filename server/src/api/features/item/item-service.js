@@ -69,10 +69,13 @@ const updateItem = async (id, body) => {
   }
 
   try {
-    await itemDAL.removeImagesNotIn(id, body.images);
-    for await (const image of body.images) {
-      itemDAL.findOrCreateImage(id, image);
+    if (body.images) {
+      await itemDAL.removeImagesNotIn(id, body.images);
+      for await (const image of body.images) {
+        itemDAL.findOrCreateImage(id, image);
+      }
     }
+
     return await itemDAL.updateById(id, body);
   } catch (e) {
     throw new AppError(500, e.message);

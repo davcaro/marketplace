@@ -17,7 +17,7 @@ const login = async (req, res, next) => {
         }
 
         const body = {
-          _id: user.id,
+          id: user.id,
           user: user.email
         };
 
@@ -28,7 +28,7 @@ const login = async (req, res, next) => {
         const token = jwt.sign(body, config.ENV.JWT_KEY, { expiresIn });
 
         return res.json({
-          _id: user.id,
+          id: user.id,
           email: user.email,
           name: user.name,
           avatar: user.avatar,
@@ -62,7 +62,7 @@ const signUp = async (req, res, next) => {
         }
 
         const body = {
-          _id: user.id,
+          id: user.id,
           user: user.email
         };
 
@@ -73,7 +73,7 @@ const signUp = async (req, res, next) => {
         const token = jwt.sign(body, config.ENV.JWT_KEY, { expiresIn });
 
         return res.json({
-          _id: user.id,
+          id: user.id,
           email: user.email,
           name: user.name,
           avatar: user.avatar,

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable, Observer, throwError } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import { UploadFile, NzMessageService, UploadXHRArgs } from 'ng-zorro-antd';
 import { AuthService } from 'src/app/auth/auth.service';
-import { User } from 'src/app/auth/user.model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { User } from 'src/app/users/user.model';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Component({

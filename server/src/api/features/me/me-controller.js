@@ -24,7 +24,7 @@ const updateUser = async (req, res, next) => {
 
     const { id, email, name, location } = req.user;
     return res.send({
-      _id: id,
+      id,
       email,
       name,
       avatar: req.file ? req.file.filename : req.user.avatar,

@@ -3,11 +3,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 import { environment } from 'src/environments/environment';
 
 export interface AuthResponseData {
-  _id: number;
+  id: number;
   email: string;
   name: string;
   avatar: string;
@@ -57,7 +57,7 @@ export class AuthService {
 
   autoLogin() {
     const userData: {
-      _id: number;
+      id: number;
       email: string;
       name: string;
       avatar: string;
@@ -71,7 +71,7 @@ export class AuthService {
     }
 
     const loadedUser = new User(
-      userData._id,
+      userData.id,
       userData.email,
       userData.name,
       userData.avatar,
@@ -126,7 +126,7 @@ export class AuthService {
       )
       .subscribe(
         res => {
-          this.user.value._id = res.id;
+          this.user.value.id = res.id;
           this.user.value.email = res.email;
           this.user.value.name = res.name;
           this.user.value.avatar = res.avatar;
@@ -168,7 +168,7 @@ export class AuthService {
 
   private handleAuthentication(data: AuthResponseData): void {
     const expirationDate = new Date(new Date().getTime() + data.token_ttl * 1000);
-    const user = new User(data._id, data.email, data.name, data.avatar, data.location, data.token, expirationDate);
+    const user = new User(data.id, data.email, data.name, data.avatar, data.location, data.token, expirationDate);
     this.user.next(user);
     this.autoLogout(data.token_ttl * 1000);
     this.saveToLocalStorage();
