@@ -1,9 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ItemsService } from 'src/app/items/items.service';
-import { AuthService } from 'src/app/auth/auth.service';
 import { Item } from 'src/app/items/item.model';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from 'src/app/users/user.model';
 
 @Component({
   selector: 'app-items-catalog',
@@ -14,24 +14,21 @@ export class ItemsCatalogComponent implements OnInit {
   apiUrl: string;
   loading: boolean;
   items: Item[];
-  itemsStatus: string;
   itemTooltipOpen: Item;
   itemConfirmOpen: Item;
   pagination: { page: number; limit: number; offset: number; total: number };
+
+  @Input() user: User;
+  @Input() editMode: boolean;
+  @Input() itemsStatus: string;
   @Output() itemsCount: EventEmitter<number>;
 
-  constructor(
-    private itemsService: ItemsService,
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  constructor(private itemsService: ItemsService, private router: Router, private route: ActivatedRoute) {
     this.apiUrl = environment.apiUrl;
     this.loading = true;
     this.items = [];
-    this.itemsStatus = this.route.snapshot.data.itemsStatus;
 
-    const page = +this.route.snapshot.queryParams.page;
+    const page = this.editMode ? +this.route.snapshot.queryParams.page : 1;
     this.pagination = { page: page ? page : 1, limit: 30, offset: 0, total: null };
 
     this.itemsCount = new EventEmitter<number>();
@@ -47,12 +44,15 @@ export class ItemsCatalogComponent implements OnInit {
       offset: (this.pagination.page - 1) * this.pagination.limit
     };
 
-    this.itemsService.getUserItems(query, this.authService.user.value, this.itemsStatus).subscribe(res => {
+    this.itemsService.getUserItems(query, this.user.id, this.itemsStatus).subscribe(res => {
       this.loading = false;
       this.items = res.data.map((item: Item) => Object.assign(new Item(), item));
 
       this.pagination = { page: res.pagination.offset / res.pagination.limit + 1, ...res.pagination };
-      this.router.navigate([], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
+
+      if (this.editMode) {
+        this.router.navigate([], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
+      }
 
       this.itemsCount.emit(res.pagination.total);
     });

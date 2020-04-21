@@ -7,21 +7,25 @@
     <span>No se encontraron artículos.</span>
   </ng-template>
   <ng-template #emptyFooterTpl>
-    <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'upload']" *ngIf="itemsStatus !== 'sold'">
-      Subir artículo
-    </button>
-    <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'items']" *ngIf="itemsStatus === 'sold'">
-      Ver artículos a la venta
-    </button>
+    <ng-container *ngIf="editMode">
+      <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'upload']" *ngIf="itemsStatus !== 'sold'">
+        Subir artículo
+      </button>
+
+      <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'items']" *ngIf="itemsStatus === 'sold'">
+        Ver artículos a la venta
+      </button>
+    </ng-container>
   </ng-template>
 </nz-empty>
 
 <div nz-row [nzGutter]="16" *ngIf="items.length">
-  <div class="item" nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXl]="6" *ngFor="let item of items">
+  <div class="item" [class.edit]="editMode" nz-col [nzSm]="12" [nzLg]="8" [nzXl]="6" *ngFor="let item of items">
     <a [routerLink]="['/', 'item', item.id]">
       <nz-card
         class="item-card"
         [class.tooltip-open]="itemTooltipOpen === item || itemConfirmOpen === item"
+        [nzHoverable]="true"
         [nzCover]="coverTemplate"
         [nzActions]="
           itemsStatus === 'sold'
@@ -32,12 +36,18 @@
         <nz-card-meta nzTitle="{{ item.price | currency: 'EUR' }}" nzDescription="{{ item.title }}"></nz-card-meta>
 
         <div class="item-body">
-          <span><i class="icon-calendar"></i> {{ item.creationDate }}</span>
+          <ng-container *ngIf="editMode">
+            <span><i class="icon-calendar"></i> {{ item.creationDate }}</span>
 
-          <div>
-            <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
-            <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
-          </div>
+            <div>
+              <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
+              <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!editMode">
+            <p class="item-description">{{ item.description }}</p>
+          </ng-container>
         </div>
       </nz-card>
     </a>

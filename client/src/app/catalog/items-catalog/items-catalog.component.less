@@ -30,12 +30,17 @@
   border-radius: 10px 10px 0 0;
 }
 
-:host ::ng-deep .ant-card-meta-description {
-  height: 42px;
+:host ::ng-deep .ant-card-meta-description,
+.item-description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
+}
+
+:host ::ng-deep .ant-card-meta-description {
+  height: 42px;
+  margin-bottom: 0.3rem;
+  -webkit-line-clamp: 2;
 }
 
 .item-body {
@@ -46,8 +51,12 @@
   align-items: flex-end;
 }
 
-.item-card:hover .item-body,
-.item-card.tooltip-open .item-body {
+.item-description {
+  -webkit-line-clamp: 3;
+}
+
+.item.edit .item-card:hover .item-body,
+.item.edit .item-card.tooltip-open .item-body {
   display: none;
 }
 
@@ -56,7 +65,7 @@
   border-radius: 0 0 10px 10px;
 }
 
-:host ::ng-deep .item-card:hover .ant-card-actions,
-:host ::ng-deep .item-card.tooltip-open .ant-card-actions {
+:host ::ng-deep .item.edit .item-card:hover .ant-card-actions,
+:host ::ng-deep .item.edit .item-card.tooltip-open .ant-card-actions {
   display: block;
 }

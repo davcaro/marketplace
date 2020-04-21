@@ -26,6 +26,7 @@ import { SearchItemsComponent } from './items/search-items/search-items.componen
 import { FilterItemsComponent } from './items/filter-items/filter-items.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { ItemsCatalogComponent } from './catalog/items-catalog/items-catalog.component';
+import { ViewUserComponent } from './users/view-user/view-user.component';
 
 registerLocaleData(es);
 
@@ -47,7 +48,8 @@ registerLocaleData(es);
     SearchItemsComponent,
     FilterItemsComponent,
     CatalogComponent,
-    ItemsCatalogComponent
+    ItemsCatalogComponent,
+    ViewUserComponent
   ],
   imports: [
     BrowserModule,

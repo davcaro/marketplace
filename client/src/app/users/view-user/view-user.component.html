@@ -1,0 +1,93 @@
+<nz-content>
+  <div nz-row [nzGutter]="32">
+    <div nz-col [nzMd]="14" [nzLg]="16" [nzXl]="18">
+      <nz-tabset [nzTabBarGutter]="5">
+        <nz-tab [nzTitle]="forSaleItemsCount + ' Artículos'">
+          <app-items-catalog
+            [user]="user"
+            [editMode]="false"
+            [itemsStatus]="''"
+            (itemsCount)="updateForSaleItemsCount($event)"
+          ></app-items-catalog>
+        </nz-tab>
+
+        <nz-tab [nzTitle]="soldItemsCount + ' Ventas'">
+          <app-items-catalog
+            [user]="user"
+            [editMode]="false"
+            [itemsStatus]="'sold'"
+            (itemsCount)="updateSoldItemsCount($event)"
+          ></app-items-catalog>
+        </nz-tab>
+
+        <nz-tab [nzTitle]="reviewsCount + ' Opiniones'">
+          Opiniones
+        </nz-tab>
+
+        <nz-tab nzTitle="Info">
+          <div nz-row [nzGutter]="16">
+            <div nz-col [nzSm]="12">
+              <ng-container [ngTemplateOutlet]="userCardTpl"></ng-container>
+            </div>
+
+            <div nz-col [nzSm]="12">
+              <ng-container [ngTemplateOutlet]="statsCardTpl"></ng-container>
+            </div>
+
+            <div nz-col [nzSpan]="24">
+              <ng-container [ngTemplateOutlet]="locationCardTpl"></ng-container>
+            </div>
+          </div>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+
+    <div nz-col [nzXs]="0" [nzMd]="10" [nzLg]="8" [nzXl]="6">
+      <ng-container [ngTemplateOutlet]="userCardTpl"></ng-container>
+      <ng-container [ngTemplateOutlet]="statsCardTpl"></ng-container>
+      <ng-container [ngTemplateOutlet]="locationCardTpl"></ng-container>
+    </div>
+  </div>
+
+  <ng-template #userCardTpl>
+    <nz-card class="user-card">
+      <div class="card-body">
+        <nz-avatar nzIcon="user" [nzSize]="64" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>
+        <div class="user-info">
+          <span nz-text>
+            <strong>{{ user.name | truncate: 17 }}</strong>
+          </span>
+
+          <nz-rate [ngModel]="4" nzDisabled></nz-rate>
+        </div>
+      </div>
+    </nz-card>
+  </ng-template>
+
+  <ng-template #statsCardTpl>
+    <nz-card class="stats-card">
+      <div class="card-body">
+        <i class="icon-stats-bars"></i>
+        <span>{{ soldItemsCount }} Ventas</span>
+        <span>3 Compras</span>
+      </div>
+    </nz-card>
+  </ng-template>
+
+  <ng-template #locationCardTpl>
+    <nz-card class="location-card" [nzCover]="locationMapTpl" *ngIf="user.location">
+      <div class="card-body">
+        <p>
+          <i class="icon-location"></i>
+          {{ user.location }}
+        </p>
+      </div>
+
+      <ng-template #locationMapTpl>
+        <div class="location-map" style="display: flex; justify-content: center; align-items: center; height: 75px;">
+          <span>[MAPA DE UBICACIÓN]</span>
+        </div>
+      </ng-template>
+    </nz-card>
+  </ng-template>
+</nz-content>

@@ -24,6 +24,11 @@
       </div>
     </ng-template>
 
-    <app-items-catalog (itemsCount)="updateItemsCount($event)"></app-items-catalog>
+    <app-items-catalog
+      (itemsCount)="updateItemsCount($event)"
+      [user]="user"
+      [editMode]="true"
+      [itemsStatus]="itemsStatus"
+    ></app-items-catalog>
   </div>
 </app-sider>

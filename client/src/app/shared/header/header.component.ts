@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthModalService } from './auth-modal.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { User } from 'src/app/auth/user.model';
+import { User } from 'src/app/users/user.model';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';

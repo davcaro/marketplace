@@ -1,0 +1,63 @@
+@import '../../../custom-styles.less';
+
+nz-content {
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.user-card .card-body {
+  display: flex;
+  align-items: center;
+}
+
+.user-card nz-avatar {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+}
+
+.user-card span {
+  font-size: 20px;
+}
+
+.user-card nz-rate {
+  display: block;
+}
+
+:host ::ng-deep .user-card nz-rate i {
+  font-size: 15px;
+}
+
+.stats-card span {
+  margin-left: 0.5rem;
+}
+
+nz-card {
+  margin-bottom: 1rem;
+  border-radius: @border-radius;
+}
+
+p {
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  nz-content {
+    width: 95%;
+  }
+
+  :host ::ng-deep .ant-tabs-tab[nz-tab-label]:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) {
+  nz-content {
+    width: 90%;
+  }
+}
+
+@media (min-width: 1600px) {
+  nz-content {
+    width: 80%;
+  }
+}

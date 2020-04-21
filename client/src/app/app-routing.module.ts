@@ -10,6 +10,8 @@ import { ViewItemComponent } from './items/view-item/view-item.component';
 import { ItemResolverService } from './items/item-resolver.service';
 import { SearchItemsComponent } from './items/search-items/search-items.component';
 import { CatalogComponent } from './catalog/catalog.component';
+import { ViewUserComponent } from './users/view-user/view-user.component';
+import { UserResolverService } from './users/user-resolver.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -34,7 +36,8 @@ const routes: Routes = [
     ]
   },
   { path: 'search', component: SearchItemsComponent },
-  { path: 'item/:id', component: ViewItemComponent, resolve: { item: ItemResolverService } }
+  { path: 'item/:id', component: ViewItemComponent, resolve: { item: ItemResolverService } },
+  { path: 'user/:id', component: ViewUserComponent, resolve: { user: UserResolverService } }
 ];
 
 @NgModule({

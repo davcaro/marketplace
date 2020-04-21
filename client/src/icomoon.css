@@ -123,6 +123,9 @@ i {
 .icon-coin-euro:before {
   content: '\e93c';
 }
+.icon-location:before {
+  content: '\e947';
+}
 .icon-clock:before {
   content: '\e94e';
 }
