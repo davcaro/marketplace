@@ -35,6 +35,13 @@ nz-content {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: -0.5rem;
+}
+
+.header-user,
+.header-rate,
+.header-buttons {
+  margin-top: 0.5rem;
 }
 
 .header-user {
@@ -52,6 +59,10 @@ nz-content {
 .rate-text {
   display: block;
   text-align: center;
+}
+
+.edit-text {
+  margin-left: 0.5rem;
 }
 
 p,
@@ -124,23 +135,6 @@ nz-divider {
 
 @media (max-width: 575.98px) {
   .header-rate {
-    flex: 0 0 80%;
-    order: 2;
-  }
-
-  .rate-text {
-    text-align: left;
-  }
-}
-
-@media (max-width: 440px) {
-  .card-header {
-    flex-direction: column;
-    align-content: flex-start;
-    align-items: flex-start;
-  }
-
-  .header-rate {
-    order: 0;
+    display: none;
   }
 }

@@ -2,10 +2,10 @@
   <div class="breadcrumb">
     <nz-breadcrumb>
       <nz-breadcrumb-item>
-        <a>Inicio</a>
+        <a [routerLink]="['/']">Inicio</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
-        <a>{{ item.category.name }}</a>
+        <a [routerLink]="['/', 'search']" [queryParams]="{ category: item.category.id }">{{ item.category.name }}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         {{ item.title }}
@@ -16,24 +16,37 @@
   <nz-card class="item-card" [nzTitle]="titleTpl" [nzType]="'inner'">
     <ng-template #titleTpl>
       <div class="card-header">
-        <div class="header-user">
+        <a class="header-user" [routerLink]="['/', 'user', item.user.id]">
           <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + item.user.avatar"></nz-avatar>
+
           <div class="user-info">
             <span nz-text>{{ item.user.name | truncate: 17 }}</span>
             <span nz-text nzType="secondary">5 Productos</span>
           </div>
-        </div>
+        </a>
+
         <div class="header-rate">
           <nz-rate [ngModel]="4" nzDisabled></nz-rate>
           <span nz-text class="rate-text">50 valoraciones</span>
         </div>
+
         <div class="header-buttons">
-          <button nz-button nzType="default" nzShape="round">
-            <i nz-icon nzType="heart" nzTheme="twotone" nzTwotoneColor="#F44336"></i>
-          </button>
-          <button nz-button nzType="primary" nzShape="round" style="margin-left: 4px;">
-            Contactar
-          </button>
+          <ng-container *ngIf="user && user.id === item.user.id">
+            <button nz-button nzType="default" nzShape="round" [routerLink]="['/', 'catalog', 'edit', item.id]">
+              <i class="icon-pencil"></i>
+              <span class="edit-text">Editar</span>
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="!user || user.id !== item.user.id">
+            <button nz-button nzType="default" nzShape="round">
+              <i nz-icon nzType="heart" nzTheme="twotone" nzTwotoneColor="#F44336"></i>
+            </button>
+
+            <button nz-button nzType="primary" nzShape="round" style="margin-left: 4px;">
+              Contactar
+            </button>
+          </ng-container>
         </div>
       </div>
     </ng-template>

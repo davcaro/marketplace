@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Item } from '../item.model';
 import { environment } from 'src/environments/environment';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/users/user.model';
 
 @Component({
   selector: 'app-view-item',
@@ -11,9 +13,12 @@ import { environment } from 'src/environments/environment';
 export class ViewItemComponent implements OnInit {
   apiUrl: string;
   item: Item;
+  user: User;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private authService: AuthService, private route: ActivatedRoute) {
     this.apiUrl = environment.apiUrl;
+
+    this.user = this.authService.user.value;
   }
 
   ngOnInit(): void {
