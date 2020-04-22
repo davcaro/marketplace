@@ -114,6 +114,54 @@ const removeImage = async (id, itemId) => {
   }
 };
 
+const readFavorites = async id => {
+  let item;
+
+  try {
+    item = await itemDAL.count(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!item) {
+    throw new AppError(404, 'Item not found');
+  }
+
+  try {
+    return await itemDAL.findFavorites(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
+const addFavorite = async (id, user) => {
+  let item;
+
+  try {
+    item = await itemDAL.count(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!item) {
+    throw new AppError(404, 'Item not found');
+  }
+
+  try {
+    return await itemDAL.addFavorite(user.id, id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
+const removeFavorite = async (id, user) => {
+  try {
+    return await itemDAL.removeFavorite(user.id, id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 const getQuery = params => {
   const where = {};
   let order = null;
@@ -224,5 +272,8 @@ module.exports = {
   updateItem,
   addImage,
   deleteItem,
-  removeImage
+  removeImage,
+  readFavorites,
+  addFavorite,
+  removeFavorite
 };

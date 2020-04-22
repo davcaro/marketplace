@@ -90,6 +90,42 @@ const removeImage = async (req, res, next) => {
   }
 };
 
+const getFavorites = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const favorites = await itemService.readFavorites(id);
+
+    return res.json(favorites);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const addFavorite = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await itemService.addFavorite(id, req.user);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const removeFavorite = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await itemService.removeFavorite(id, req.user);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const hasPermission = async (req, res, next) => {
   const { id } = req.params;
 
@@ -117,5 +153,8 @@ module.exports = {
   addImage,
   deleteItem,
   removeImage,
+  getFavorites,
+  addFavorite,
+  removeFavorite,
   hasPermission
 };

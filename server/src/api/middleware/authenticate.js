@@ -18,7 +18,8 @@ const SUBJECTS = {
   SELF_USER: 'self_user',
   USER: 'User',
   CATEGORY: 'Category',
-  ITEM: 'Item'
+  ITEM: 'Item',
+  FAVORITE: 'Favorite'
 };
 
 function defineAbilitiesFor(user) {
@@ -35,11 +36,13 @@ function defineAbilitiesFor(user) {
       allow(ACTIONS.DELETE, SUBJECTS.SELF_USER);
 
       allow(ACTIONS.CRUD, SUBJECTS.ITEM);
+      allow(ACTIONS.CRUD, SUBJECTS.FAVORITE);
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);
     allow(ACTIONS.READ, SUBJECTS.USER);
     allow(ACTIONS.READ, SUBJECTS.ITEM);
+    allow(ACTIONS.READ, SUBJECTS.FAVORITE);
   }
 
   return new Ability(rules);

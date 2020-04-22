@@ -63,4 +63,21 @@ module.exports = app => {
     itemController.hasPermission,
     itemController.removeImage
   );
+  route.get(
+    '/:id/favorites',
+    hasPermission(ACTIONS.READ, SUBJECTS.FAVORITE),
+    itemController.getFavorites
+  );
+  route.post(
+    '/:id/favorites',
+    isAuthorized,
+    hasPermission(ACTIONS.CREATE, SUBJECTS.FAVORITE),
+    itemController.addFavorite
+  );
+  route.delete(
+    '/:id/favorites',
+    isAuthorized,
+    hasPermission(ACTIONS.DELETE, SUBJECTS.FAVORITE),
+    itemController.removeFavorite
+  );
 };
