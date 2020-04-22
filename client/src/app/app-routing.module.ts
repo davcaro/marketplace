@@ -32,7 +32,12 @@ const routes: Routes = [
       { path: 'upload', component: UploadItemComponent },
       { path: 'items', component: CatalogComponent, data: { itemsStatus: '' } },
       { path: 'sold', component: CatalogComponent, data: { itemsStatus: 'sold' } },
-      { path: 'edit/:id', component: UploadItemComponent, resolve: { item: ItemResolverService } }
+      {
+        path: 'edit/:id',
+        component: UploadItemComponent,
+        resolve: { item: ItemResolverService },
+        data: { resolverCanEdit: true }
+      }
     ]
   },
   { path: 'search', component: SearchItemsComponent },
