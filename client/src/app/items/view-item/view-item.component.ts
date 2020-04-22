@@ -4,6 +4,7 @@ import { Item } from '../item.model';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/users/user.model';
+import { ItemsService } from '../items.service';
 
 @Component({
   selector: 'app-view-item',
@@ -12,10 +13,11 @@ import { User } from 'src/app/users/user.model';
 })
 export class ViewItemComponent implements OnInit {
   apiUrl: string;
-  item: Item;
   user: User;
+  item: Item;
+  isFavorited: boolean;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute) {
+  constructor(private authService: AuthService, private itemsService: ItemsService, private route: ActivatedRoute) {
     this.apiUrl = environment.apiUrl;
 
     this.user = this.authService.user.value;
@@ -23,5 +25,21 @@ export class ViewItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.item = Object.assign(new Item(), this.route.snapshot.data.item);
+
+    this.itemsService.getItemFavorites(this.item.id).subscribe(res => {
+      this.isFavorited = !!res.find(favorite => favorite.userId === this.user.id);
+    });
+  }
+
+  onMarkAsFavorite() {
+    if (this.isFavorited) {
+      this.itemsService.removeFavorite(this.item.id).subscribe(res => {
+        this.isFavorited = !this.isFavorited;
+      });
+    } else {
+      this.itemsService.addFavorite(this.item.id).subscribe(res => {
+        this.isFavorited = !this.isFavorited;
+      });
+    }
   }
 }

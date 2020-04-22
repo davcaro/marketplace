@@ -79,8 +79,32 @@ export class ItemsService {
     );
   }
 
-  createItem(data: object) {
-    return this.http.post<any>(`${this.apiUrl}/api/items`, data).pipe(
+  getItemFavorites(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/items/${id}/favorites`).pipe(
+      catchError(err => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
+  }
+
+  createItem(data: object): Observable<Item> {
+    return this.http.post<Item>(`${this.apiUrl}/api/items`, data).pipe(
+      catchError(err => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
+  }
+
+  addFavorite(id: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/items/${id}/favorites`, {}).pipe(
       catchError(err => {
         if (err.error) {
           return throwError(err.error);
@@ -105,6 +129,18 @@ export class ItemsService {
 
   deleteItem(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/api/items/${id}`).pipe(
+      catchError(err => {
+        if (err.error) {
+          return throwError(err.error);
+        } else {
+          return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+        }
+      })
+    );
+  }
+
+  removeFavorite(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/api/items/${id}/favorites`).pipe(
       catchError(err => {
         if (err.error) {
           return throwError(err.error);

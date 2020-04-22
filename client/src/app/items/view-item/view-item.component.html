@@ -39,8 +39,14 @@
           </ng-container>
 
           <ng-container *ngIf="!user || user.id !== item.user.id">
-            <button nz-button nzType="default" nzShape="round">
-              <i nz-icon nzType="heart" nzTheme="twotone" nzTwotoneColor="#F44336"></i>
+            <button nz-button nzType="default" nzShape="round" (click)="onMarkAsFavorite()">
+              <i
+                nz-icon
+                nzType="heart"
+                [nzTheme]="isFavorited ? 'fill' : 'twotone'"
+                nzTwotoneColor="#F44336"
+                style="color: #f44336;"
+              ></i>
             </button>
 
             <button nz-button nzType="primary" nzShape="round" style="margin-left: 4px;">
@@ -126,8 +132,8 @@
         <div class="item-stats">
           <span>{{ item.creationDate }}</span>
           <span>
-            <span><i class="icon-eye"></i> 250</span>
-            <span style="margin-left: 6px;"><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
+            <span><i nz-icon nzType="heart" nzTheme="outline"></i> {{ item.favorites }}</span>
+            <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
           </span>
         </div>
 

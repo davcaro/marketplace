@@ -8,6 +8,7 @@ export class Item {
   public condition: string;
   public createdAt: string;
   public updatedAt: string;
+  public favorites: number;
   public user: { id: number; name: string; avatar: string };
   public category: { id: number; name: string; icon: string };
   public images: { id: number; image: string }[];
