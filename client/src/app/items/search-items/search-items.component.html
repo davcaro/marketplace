@@ -16,62 +16,64 @@
 
   <div class="items-wall" nz-row [nzGutter]="24" [class.loading]="loading">
     <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXXl]="6" *ngFor="let item of items">
-      <nz-card class="item-card" nzHoverable [nzCover]="coverTpl" [routerLink]="'/item/' + item.id">
-        <ng-template #coverTpl>
-          <nz-badge class="status-badge" [nzCount]="soldIconTpl" *ngIf="item.status === 'sold'"></nz-badge>
-          <ng-template #soldIconTpl>
-            <i class="icon-handshake-o"></i>
+      <a [routerLink]="['/', 'item', item.id]">
+        <nz-card class="item-card" nzHoverable [nzCover]="coverTpl">
+          <ng-template #coverTpl>
+            <nz-badge class="status-badge" [nzCount]="soldIconTpl" *ngIf="item.status === 'sold'"></nz-badge>
+            <ng-template #soldIconTpl>
+              <i class="icon-handshake-o"></i>
+            </ng-template>
+
+            <nz-badge class="status-badge" [nzCount]="reservedIconTpl" *ngIf="item.status === 'reserved'"></nz-badge>
+            <ng-template #reservedIconTpl>
+              <i class="icon-bookmark"></i>
+            </ng-template>
+
+            <div class="carousel-controls" *ngIf="item.images.length > 1">
+              <div class="control-left">
+                <button
+                  nz-button
+                  nzType="default"
+                  nzShape="circle"
+                  class="carousel-arrow arrow-left"
+                  (click)="$event.stopPropagation(); carousel.pre()"
+                >
+                  <i class="icon-arrow-left2"></i>
+                </button>
+              </div>
+              <div class="control-right">
+                <button
+                  nz-button
+                  nzType="default"
+                  nzShape="circle"
+                  class="carousel-arrow arrow-right"
+                  (click)="$event.stopPropagation(); carousel.next()"
+                >
+                  <i class="icon-arrow-right2"></i>
+                </button>
+              </div>
+            </div>
+            <nz-carousel [nzDots]="false" [nzEnableSwipe]="false" #carousel>
+              <div nz-carousel-content *ngFor="let image of item.images">
+                <img [src]="apiUrl + '/images/items/' + image.image" />
+              </div>
+            </nz-carousel>
           </ng-template>
 
-          <nz-badge class="status-badge" [nzCount]="reservedIconTpl" *ngIf="item.status === 'reserved'"></nz-badge>
-          <ng-template #reservedIconTpl>
-            <i class="icon-bookmark"></i>
-          </ng-template>
-
-          <div class="carousel-controls" *ngIf="item.images.length > 1">
-            <div class="control-left">
-              <button
-                nz-button
-                nzType="default"
-                nzShape="circle"
-                class="carousel-arrow arrow-left"
-                (click)="$event.stopPropagation(); carousel.pre()"
-              >
-                <i class="icon-arrow-left2"></i>
-              </button>
-            </div>
-            <div class="control-right">
-              <button
-                nz-button
-                nzType="default"
-                nzShape="circle"
-                class="carousel-arrow arrow-right"
-                (click)="$event.stopPropagation(); carousel.next()"
-              >
-                <i class="icon-arrow-right2"></i>
-              </button>
-            </div>
+          <div class="card-header">
+            <p nz-text>
+              <strong>{{ item.price | currency: 'EUR' }}</strong>
+            </p>
+            <p nz-text>
+              <strong>{{ item.title }}</strong>
+            </p>
           </div>
-          <nz-carousel [nzDots]="false" [nzEnableSwipe]="false" #carousel>
-            <div nz-carousel-content *ngFor="let image of item.images">
-              <img [src]="apiUrl + '/images/items/' + image.image" />
-            </div>
-          </nz-carousel>
-        </ng-template>
 
-        <div class="card-header">
-          <p nz-text>
-            <strong>{{ item.price | currency: 'EUR' }}</strong>
-          </p>
-          <p nz-text>
-            <strong>{{ item.title }}</strong>
-          </p>
-        </div>
-
-        <div class="card-body">
-          <p class="item-description" nz-text nzType="secondary">{{ item.description }}</p>
-        </div>
-      </nz-card>
+          <div class="card-body">
+            <p class="item-description" nz-text nzType="secondary">{{ item.description }}</p>
+          </div>
+        </nz-card>
+      </a>
     </div>
   </div>
 

@@ -105,7 +105,16 @@
       </div>
 
       <div nz-col [nzXs]="24" [nzMd]="12">
-        <h3 nz-title class="item-price">{{ item.price | currency: 'EUR' }}</h3>
+        <h3 nz-title class="item-price">
+          {{ item.price | currency: 'EUR' }}
+
+          <nz-tag [nzColor]="'#29bf12'" *ngIf="item.condition === 'new'">Nuevo</nz-tag>
+          <nz-tag [nzColor]="'#62a43f'" *ngIf="item.condition === 'like_new'">Como nuevo</nz-tag>
+          <nz-tag [nzColor]="'#08BDBD'" *ngIf="item.condition === 'good'">Bueno</nz-tag>
+          <nz-tag [nzColor]="'#ff9914'" *ngIf="item.condition === 'fair'">Aceptable</nz-tag>
+          <nz-tag [nzColor]="'#FF5714'" *ngIf="item.condition === 'poor'">Malo</nz-tag>
+        </h3>
+
         <h4 nz-title class="item-title">{{ item.title }}</h4>
 
         <nz-divider></nz-divider>
