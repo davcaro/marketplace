@@ -29,6 +29,10 @@ export class ViewItemComponent implements OnInit {
     this.itemsService.getItemFavorites(this.item.id).subscribe(res => {
       this.isFavorited = !!res.find(favorite => favorite.userId === this.user.id);
     });
+
+    if (this.user) {
+      this.itemsService.addView(this.item.id).subscribe();
+    }
   }
 
   onMarkAsFavorite() {
