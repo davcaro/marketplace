@@ -2,10 +2,12 @@ const { Op } = require('sequelize');
 const { Item } = require('../../../db/models');
 const { ItemImage } = require('../../../db/models');
 const { ItemFavorite } = require('../../../db/models');
+const { ItemView } = require('../../../db/models');
 
-const countFavorites = ({ dataValues: item }) => ({
+const countLengths = ({ dataValues: item }) => ({
   ...item,
-  favorites: item.favorites.length
+  favorites: item.favorites.length,
+  views: item.views.length
 });
 
 const count = id => Item.count({ where: { id } });
@@ -17,7 +19,7 @@ const findAndPaginate = async query => {
     ...query
   });
 
-  items.rows = items.rows.map(countFavorites);
+  items.rows = items.rows.map(countLengths);
 
   return items;
 };
@@ -25,7 +27,7 @@ const findAndPaginate = async query => {
 const findById = async id => {
   const item = await Item.scope('full').findOne({ where: { id } });
 
-  return countFavorites(item);
+  return countLengths(item);
 };
 
 const findFavorites = id => ItemFavorite.findAll({ where: { itemId: id } });
@@ -38,6 +40,8 @@ const addImage = (itemId, image) => ItemImage.create({ itemId, image });
 
 const addFavorite = (userId, itemId) =>
   ItemFavorite.findOrCreate({ where: { userId, itemId } });
+
+const addView = (userId, itemId) => ItemView.create({ userId, itemId });
 
 const findOrCreateImage = (itemId, image) =>
   ItemImage.findCreateFind({ where: { itemId, image } });
@@ -65,6 +69,7 @@ module.exports = {
   addImages,
   addImage,
   addFavorite,
+  addView,
   findOrCreateImage,
   updateById,
   deleteById,

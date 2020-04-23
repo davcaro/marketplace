@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       paranoid: true,
       scopes: {
         full: {
-          include: ['user', 'category', 'images', 'favorites']
+          include: ['user', 'category', 'images', 'favorites', 'views']
         }
       }
     }
@@ -67,6 +67,11 @@ module.exports = (sequelize, DataTypes) => {
     Item.hasMany(models.ItemFavorite, {
       foreignKey: 'itemId',
       as: 'favorites'
+    });
+
+    Item.hasMany(models.ItemView, {
+      foreignKey: 'itemId',
+      as: 'views'
     });
   };
 

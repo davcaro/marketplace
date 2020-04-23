@@ -80,4 +80,10 @@ module.exports = app => {
     hasPermission(ACTIONS.DELETE, SUBJECTS.FAVORITE),
     itemController.removeFavorite
   );
+  route.post(
+    '/:id/views',
+    isAuthorized,
+    hasPermission(ACTIONS.CREATE, SUBJECTS.VIEW),
+    itemController.addView
+  );
 };

@@ -162,6 +162,26 @@ const removeFavorite = async (id, user) => {
   }
 };
 
+const addView = async (id, user) => {
+  let item;
+
+  try {
+    item = await itemDAL.count(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!item) {
+    throw new AppError(404, 'Item not found');
+  }
+
+  try {
+    return await itemDAL.addView(user.id, id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 const getQuery = params => {
   const where = {};
   let order = null;
@@ -275,5 +295,6 @@ module.exports = {
   removeImage,
   readFavorites,
   addFavorite,
-  removeFavorite
+  removeFavorite,
+  addView
 };

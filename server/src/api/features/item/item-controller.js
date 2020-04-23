@@ -126,6 +126,18 @@ const removeFavorite = async (req, res, next) => {
   }
 };
 
+const addView = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await itemService.addView(id, req.user);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const hasPermission = async (req, res, next) => {
   const { id } = req.params;
 
@@ -156,5 +168,6 @@ module.exports = {
   getFavorites,
   addFavorite,
   removeFavorite,
+  addView,
   hasPermission
 };
