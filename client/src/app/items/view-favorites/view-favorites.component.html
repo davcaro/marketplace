@@ -1,0 +1,19 @@
+<app-sider>
+  <div class="main-content">
+    <div class="header">
+      <div class="header-info">
+        <h3 nz-title>Tus favoritos</h3>
+        <span nz-text>Estos son los artículos que más te gustan</span>
+      </div>
+
+      <div class="items-count">
+        <span class="items-total" nz-text>
+          <strong>{{ itemsCount }}</strong>
+        </span>
+        <p>artículos</p>
+      </div>
+    </div>
+
+    <app-items-catalog (itemsCount)="updateItemsCount($event)" [mode]="'favorites'"></app-items-catalog>
+  </div>
+</app-sider>

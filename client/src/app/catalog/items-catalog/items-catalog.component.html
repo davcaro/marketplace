@@ -7,7 +7,7 @@
     <span>No se encontraron artículos.</span>
   </ng-template>
   <ng-template #emptyFooterTpl>
-    <ng-container *ngIf="editMode">
+    <ng-container *ngIf="mode === 'edit'">
       <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'upload']" *ngIf="itemsStatus !== 'sold'">
         Subir artículo
       </button>
@@ -20,7 +20,15 @@
 </nz-empty>
 
 <div nz-row [nzGutter]="16" *ngIf="items.length">
-  <div class="item" [class.edit]="editMode" nz-col [nzSm]="12" [nzLg]="8" [nzXl]="6" *ngFor="let item of items">
+  <div
+    class="item"
+    [class.actions]="mode === 'edit' || mode === 'favorites'"
+    nz-col
+    [nzSm]="12"
+    [nzLg]="8"
+    [nzXl]="6"
+    *ngFor="let item of items"
+  >
     <a [routerLink]="['/', 'item', item.id]">
       <nz-card
         class="item-card"
@@ -28,25 +36,29 @@
         [nzHoverable]="true"
         [nzCover]="coverTemplate"
         [nzActions]="
-          itemsStatus === 'sold'
+          mode === 'edit' && itemsStatus === ''
+            ? [markAsReserved, markAsSold, actionEdit, actionDelete]
+            : mode === 'edit' && itemsStatus === 'sold'
             ? [markAsForSale, actionEdit, actionDelete]
-            : [markAsReserved, markAsSold, actionEdit, actionDelete]
+            : mode === 'favorites'
+            ? [removeFavorite]
+            : []
         "
       >
         <nz-card-meta nzTitle="{{ item.price | currency: 'EUR' }}" nzDescription="{{ item.title }}"></nz-card-meta>
 
         <div class="item-body">
-          <ng-container *ngIf="editMode">
+          <ng-container *ngIf="mode === 'default' || mode === 'favorites'">
+            <p class="item-description">{{ item.description }}</p>
+          </ng-container>
+
+          <ng-container *ngIf="mode === 'edit'">
             <span><i class="icon-calendar"></i> {{ item.creationDate }}</span>
 
             <div>
               <span><i nz-icon nzType="heart" nzTheme="outline"></i> {{ item.favorites }}</span>
               <span style="margin-left: 6px;"><i class="icon-eye"></i> 250</span>
             </div>
-          </ng-container>
-
-          <ng-container *ngIf="!editMode">
-            <p class="item-description">{{ item.description }}</p>
           </ng-container>
         </div>
       </nz-card>
@@ -130,6 +142,12 @@
         </span>
       </span>
     </ng-template>
+    <ng-template #removeFavorite>
+      <span class="remove-favorite" (click)="$event.preventDefault(); $event.stopPropagation(); onRemoveFavorite(item)">
+        <i nz-icon nzType="heart" nzTheme="twotone" nzTwotoneColor="#F44336"></i>
+        Quitar de favoritos
+      </span>
+    </ng-template>
   </div>
 </div>
 
@@ -139,7 +157,7 @@
   [(nzTotal)]="pagination.total"
   [(nzPageSize)]="pagination.limit"
   [nzShowTotal]="rangeTemplate"
-  (nzPageIndexChange)="loadItems()"
+  (nzPageIndexChange)="mode === 'favorites' ? loadFavorites() : loadItems()"
 ></nz-pagination>
 <ng-template #rangeTemplate let-range="range" let-total>
   {{ range[0] }}-{{ range[1] }} de {{ total }} artículos

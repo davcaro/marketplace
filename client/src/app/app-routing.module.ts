@@ -12,6 +12,7 @@ import { SearchItemsComponent } from './items/search-items/search-items.componen
 import { CatalogComponent } from './catalog/catalog.component';
 import { ViewUserComponent } from './users/view-user/view-user.component';
 import { UserResolverService } from './users/user-resolver.service';
+import { ViewFavoritesComponent } from './items/view-favorites/view-favorites.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -40,6 +41,7 @@ const routes: Routes = [
       }
     ]
   },
+  { path: 'favorites', component: ViewFavoritesComponent },
   { path: 'search', component: SearchItemsComponent },
   { path: 'item/:id', component: ViewItemComponent, resolve: { item: ItemResolverService } },
   { path: 'user/:id', component: ViewUserComponent, resolve: { user: UserResolverService } }

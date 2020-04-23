@@ -70,6 +70,20 @@ export class ItemsService {
       );
   }
 
+  getUserFavorites(pagination: { limit: any; offset: any }): Observable<Item> {
+    return this.http
+      .get<Item>(`${this.apiUrl}/api/me/favorites`, { params: pagination })
+      .pipe(
+        catchError(err => {
+          if (err.error) {
+            return throwError(err.error);
+          } else {
+            return throwError({ error: 'Unknown', message: 'An unknown error occurred' });
+          }
+        })
+      );
+  }
+
   getItem(id: number): Observable<Item> {
     return this.http.get<Item>(`${this.apiUrl}/api/items/${id}`).pipe(
       catchError(err => {

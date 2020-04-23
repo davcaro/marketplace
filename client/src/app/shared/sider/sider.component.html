@@ -25,9 +25,11 @@
         <i class="icon-commenting"></i>
         <span [ngStyle]="{ opacity: isCollapsed ? 0 : 1 }">Mensajes</span>
       </li>
-      <li nz-menu-item>
-        <i class="icon-heart"></i>
-        <span [ngStyle]="{ opacity: isCollapsed ? 0 : 1 }">Favoritos</span>
+      <li nz-menu-item nzMatchRouter>
+        <a [routerLink]="['/', 'favorites']">
+          <i class="icon-heart"></i>
+          <span [ngStyle]="{ opacity: isCollapsed ? 0 : 1 }">Favoritos</span>
+        </a>
       </li>
       <li nz-menu-item>
         <i class="icon-star-full"></i>

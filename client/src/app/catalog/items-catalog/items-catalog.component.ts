@@ -19,7 +19,7 @@ export class ItemsCatalogComponent implements OnInit {
   pagination: { page: number; limit: number; offset: number; total: number };
 
   @Input() user: User;
-  @Input() editMode: boolean;
+  @Input() mode: string;
   @Input() itemsStatus: string;
   @Output() itemsCount: EventEmitter<number>;
 
@@ -28,34 +28,55 @@ export class ItemsCatalogComponent implements OnInit {
     this.loading = true;
     this.items = [];
 
-    const page = this.editMode ? +this.route.snapshot.queryParams.page : 1;
-    this.pagination = { page: page ? page : 1, limit: 30, offset: 0, total: null };
+    this.pagination = { page: 1, limit: 30, offset: 0, total: null };
 
     this.itemsCount = new EventEmitter<number>();
   }
 
   ngOnInit(): void {
-    this.loadItems();
+    if (this.mode === 'edit' || this.mode === 'favorites') {
+      this.pagination.page = +this.route.snapshot.queryParams.page || 1;
+    }
+
+    if (this.mode === 'favorites') {
+      this.loadFavorites();
+    } else {
+      this.loadItems();
+    }
   }
 
   loadItems() {
-    const query = {
+    const pagination = this.getPaginationQuery();
+
+    this.itemsService
+      .getUserItems(pagination, this.user.id, this.itemsStatus)
+      .subscribe(this.handleItemsResponse.bind(this));
+  }
+
+  loadFavorites() {
+    const pagination = this.getPaginationQuery();
+
+    this.itemsService.getUserFavorites(pagination).subscribe(this.handleItemsResponse.bind(this));
+  }
+
+  getPaginationQuery(): { limit: number; offset: number } {
+    return {
       limit: this.pagination.limit,
       offset: (this.pagination.page - 1) * this.pagination.limit
     };
+  }
 
-    this.itemsService.getUserItems(query, this.user.id, this.itemsStatus).subscribe(res => {
-      this.loading = false;
-      this.items = res.data.map((item: Item) => Object.assign(new Item(), item));
+  handleItemsResponse(res): void {
+    this.loading = false;
+    this.items = res.data.map((item: Item) => Object.assign(new Item(), item));
 
-      this.pagination = { page: res.pagination.offset / res.pagination.limit + 1, ...res.pagination };
+    this.pagination = { page: res.pagination.offset / res.pagination.limit + 1, ...res.pagination };
 
-      if (this.editMode) {
-        this.router.navigate([], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
-      }
+    if (this.mode === 'edit' || this.mode === 'favorites') {
+      this.router.navigate([], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
+    }
 
-      this.itemsCount.emit(res.pagination.total);
-    });
+    this.itemsCount.emit(res.pagination.total);
   }
 
   onMarkAsForSale(item: Item) {
@@ -94,5 +115,11 @@ export class ItemsCatalogComponent implements OnInit {
 
   onConfirmChange(isOpen: boolean, item: Item) {
     this.itemConfirmOpen = isOpen ? item : null;
+  }
+
+  onRemoveFavorite(item: Item) {
+    this.itemsService.removeFavorite(item.id).subscribe(() => {
+      this.loadFavorites();
+    });
   }
 }

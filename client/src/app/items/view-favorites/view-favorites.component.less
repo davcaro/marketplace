@@ -1,0 +1,32 @@
+.main-content {
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.items-count {
+  text-align: center;
+  align-self: flex-end;
+  margin-right: 1rem;
+}
+
+.items-count .items-total {
+  font-size: 1.15rem;
+}
+
+@media (max-width: 767.98px) {
+  .items-count {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-content {
+    width: 85%;
+    max-width: 1200px;
+  }
+}

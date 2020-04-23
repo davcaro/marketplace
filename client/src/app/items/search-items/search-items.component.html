@@ -36,7 +36,7 @@
                   nzType="default"
                   nzShape="circle"
                   class="carousel-arrow arrow-left"
-                  (click)="$event.stopPropagation(); carousel.pre()"
+                  (click)="$event.preventDefault(); $event.stopPropagation(); carousel.pre()"
                 >
                   <i class="icon-arrow-left2"></i>
                 </button>
@@ -47,7 +47,7 @@
                   nzType="default"
                   nzShape="circle"
                   class="carousel-arrow arrow-right"
-                  (click)="$event.stopPropagation(); carousel.next()"
+                  (click)="$event.preventDefault(); $event.stopPropagation(); carousel.next()"
                 >
                   <i class="icon-arrow-right2"></i>
                 </button>
@@ -64,7 +64,7 @@
             <p nz-text>
               <strong>{{ item.price | currency: 'EUR' }}</strong>
             </p>
-            <p nz-text>
+            <p class="item-title" nz-text>
               <strong>{{ item.title }}</strong>
             </p>
           </div>

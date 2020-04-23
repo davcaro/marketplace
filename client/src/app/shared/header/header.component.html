@@ -42,7 +42,9 @@
             <a [routerLink]="['/', 'catalog', 'items']">Artículos</a>
           </li>
           <li nz-menu-item>Mensajes</li>
-          <li nz-menu-item>Favoritos</li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'favorites']">Favoritos</a>
+          </li>
 
           <li nz-menu-divider></li>
 
@@ -96,9 +98,13 @@
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="['/', 'profile', 'info']">Mi perfil</a>
           </li>
-          <li nz-menu-item>Artículos</li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'catalog', 'items']">Artículos</a>
+          </li>
           <li nz-menu-item>Mensajes</li>
-          <li nz-menu-item>Favoritos</li>
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="['/', 'favorites']">Favoritos</a>
+          </li>
 
           <li nz-menu-divider></li>
 

@@ -55,8 +55,8 @@
   -webkit-line-clamp: 3;
 }
 
-.item.edit .item-card:hover .item-body,
-.item.edit .item-card.tooltip-open .item-body {
+.item.actions .item-card:hover .item-body,
+.item.actions .item-card.tooltip-open .item-body {
   display: none;
 }
 
@@ -65,7 +65,11 @@
   border-radius: 0 0 10px 10px;
 }
 
-:host ::ng-deep .item.edit .item-card:hover .ant-card-actions,
-:host ::ng-deep .item.edit .item-card.tooltip-open .ant-card-actions {
+:host ::ng-deep .item.actions .item-card:hover .ant-card-actions,
+:host ::ng-deep .item.actions .item-card.tooltip-open .ant-card-actions {
   display: block;
+}
+
+.remove-favorite {
+  color: @color-primary;
 }

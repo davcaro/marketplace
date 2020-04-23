@@ -5,7 +5,7 @@
         <nz-tab [nzTitle]="forSaleItemsCount + ' Artículos'">
           <app-items-catalog
             [user]="user"
-            [editMode]="false"
+            [mode]="'default'"
             [itemsStatus]="''"
             (itemsCount)="updateForSaleItemsCount($event)"
           ></app-items-catalog>
@@ -14,7 +14,7 @@
         <nz-tab [nzTitle]="soldItemsCount + ' Ventas'">
           <app-items-catalog
             [user]="user"
-            [editMode]="false"
+            [mode]="'default'"
             [itemsStatus]="'sold'"
             (itemsCount)="updateSoldItemsCount($event)"
           ></app-items-catalog>

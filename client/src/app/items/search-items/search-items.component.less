@@ -19,13 +19,22 @@ nz-content {
   margin-bottom: 0.75rem;
 }
 
+.item-title,
 .item-description {
-  height: 105px; // 5 lines
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
   word-break: break-word;
   overflow: hidden;
+}
+
+.item-title {
+  height: 42px;
+  -webkit-line-clamp: 2;
+}
+
+.item-description {
+  height: 105px; // 5 lines
+  -webkit-line-clamp: 5;
 }
 
 nz-carousel {

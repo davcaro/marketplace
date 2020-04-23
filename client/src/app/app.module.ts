@@ -27,6 +27,7 @@ import { FilterItemsComponent } from './items/filter-items/filter-items.componen
 import { CatalogComponent } from './catalog/catalog.component';
 import { ItemsCatalogComponent } from './catalog/items-catalog/items-catalog.component';
 import { ViewUserComponent } from './users/view-user/view-user.component';
+import { ViewFavoritesComponent } from './items/view-favorites/view-favorites.component';
 
 registerLocaleData(es);
 
@@ -49,7 +50,8 @@ registerLocaleData(es);
     FilterItemsComponent,
     CatalogComponent,
     ItemsCatalogComponent,
-    ViewUserComponent
+    ViewUserComponent,
+    ViewFavoritesComponent
   ],
   imports: [
     BrowserModule,
