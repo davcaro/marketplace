@@ -47,8 +47,21 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const getFavorites = async (req, res, next) => {
+  const { id } = req.user;
+
+  try {
+    const favorites = await meService.readFavorites(id, req.query);
+
+    return res.json(favorites);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 module.exports = {
   getUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getFavorites
 };

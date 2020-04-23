@@ -34,4 +34,9 @@ module.exports = app => {
     hasPermission(ACTIONS.DELETE, SUBJECTS.SELF_USER),
     meController.deleteUser
   );
+  route.get(
+    '/favorites',
+    hasPermission(ACTIONS.READ, SUBJECTS.SELF_USER),
+    meController.getFavorites
+  );
 };
