@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://127.0.0.1:3000'
+  apiUrl: 'http://127.0.0.1:3000',
+  mapbox: {
+    accessToken: 'pk.eyJ1IjoicGFxdWl0b3N0ZXN0aW5nIiwiYSI6ImNrOWR3b2RrcTA1enozcGxtb2h4ZjVnZ20ifQ.9MjbbOux_kDKoOhrS773Jg'
+  }
 };
 
 /*

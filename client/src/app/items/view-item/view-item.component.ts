@@ -26,11 +26,11 @@ export class ViewItemComponent implements OnInit {
   ngOnInit(): void {
     this.item = Object.assign(new Item(), this.route.snapshot.data.item);
 
-    this.itemsService.getItemFavorites(this.item.id).subscribe(res => {
-      this.isFavorited = !!res.find(favorite => favorite.userId === this.user.id);
-    });
-
     if (this.user) {
+      this.itemsService.getItemFavorites(this.item.id).subscribe(res => {
+        this.isFavorited = !!res.find(favorite => favorite.userId === this.user.id);
+      });
+
       this.itemsService.addView(this.item.id).subscribe();
     }
   }
