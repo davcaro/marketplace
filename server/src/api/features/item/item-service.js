@@ -36,17 +36,20 @@ const readItem = async id => {
 };
 
 const createItem = async body => {
-  const { categoryId } = body;
-  const categoryExists = (await categoryDAL.count(categoryId)) > 0;
+  const payload = { ...body };
 
+  const categoryExists = (await categoryDAL.count(payload.categoryId)) > 0;
   if (!categoryExists) {
     throw new AppError(400, 'Bad Request');
   }
 
   try {
-    const item = await itemDAL.create(body);
+    const location = await itemDAL.createLocation(payload.location);
+    payload.locationId = location.id;
 
-    const images = body.images.map(image => {
+    const item = await itemDAL.create(payload);
+
+    const images = payload.images.map(image => {
       return { itemId: item.id, image };
     });
     await itemDAL.addImages(images);
@@ -74,6 +77,10 @@ const updateItem = async (id, body) => {
       for await (const image of body.images) {
         itemDAL.findOrCreateImage(id, image);
       }
+    }
+
+    if (body.location) {
+      await itemDAL.updateLocation(id, body.location);
     }
 
     return await itemDAL.updateById(id, body);

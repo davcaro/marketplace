@@ -73,15 +73,20 @@ const readUserItems = async (id, query) => {
 };
 
 const createUser = async body => {
-  const { email } = body;
-  const userExists = (await userDAL.countByEmail(email)) > 0;
+  const payload = { ...body };
 
+  const userExists = (await userDAL.countByEmail(payload.email)) > 0;
   if (userExists) {
     throw new AppError(409, 'User already registered');
   }
 
   try {
-    const user = await userDAL.create(body);
+    if (payload.location) {
+      const location = await userDAL.createLocation(payload);
+      payload.locationId = location.id;
+    }
+
+    const user = await userDAL.create(payload);
 
     return {
       id: user.id,
@@ -99,6 +104,10 @@ const updateUser = async (id, body) => {
   let updatedRows;
 
   try {
+    if (body.location) {
+      await userDAL.updateLocation(id, body.location);
+    }
+
     updatedRows = await userDAL.updateById(id, body);
   } catch (e) {
     throw new AppError(500, e.message);

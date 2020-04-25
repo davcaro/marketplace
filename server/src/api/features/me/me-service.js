@@ -23,6 +23,10 @@ const updateUser = async (user, body) => {
   }
 
   try {
+    if (body.location) {
+      await meDAL.updateLocation(user.id, body.location);
+    }
+
     updatedRows = await meDAL.updateById(user.id, payload);
   } catch (e) {
     throw new AppError(500, e.message);

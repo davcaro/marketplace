@@ -3,6 +3,8 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.import(`${__dirname}/user.js`);
+
   const Item = sequelize.define(
     'Item',
     {
@@ -26,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(8, 2),
         allowNull: false
       },
-      location: {
-        type: DataTypes.STRING,
+      locationId: {
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       status: {
@@ -44,19 +46,35 @@ module.exports = (sequelize, DataTypes) => {
       paranoid: true,
       scopes: {
         full: {
-          include: ['user', 'category', 'images', 'favorites', 'views']
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'name', 'email', 'avatar'],
+              include: ['location'],
+              as: 'user'
+            },
+            'category',
+            'location',
+            'images',
+            'favorites',
+            'views'
+          ]
         }
       }
     }
   );
 
   Item.associate = function(models) {
-    Item.belongsTo(models.User.scope('public'), {
+    Item.belongsTo(models.User, {
       as: 'user'
     });
 
     Item.belongsTo(models.Category, {
       as: 'category'
+    });
+
+    Item.belongsTo(models.Location, {
+      as: 'location'
     });
 
     Item.hasMany(models.ItemImage, {

@@ -3,6 +3,7 @@ const { Item } = require('../../../db/models');
 const { ItemImage } = require('../../../db/models');
 const { ItemFavorite } = require('../../../db/models');
 const { ItemView } = require('../../../db/models');
+const { Location } = require('../../../db/models');
 
 const countLengths = ({ dataValues: item }) => ({
   ...item,
@@ -34,6 +35,8 @@ const findFavorites = id => ItemFavorite.findAll({ where: { itemId: id } });
 
 const create = payload => Item.create(payload);
 
+const createLocation = payload => Location.create(payload);
+
 const addImages = images => ItemImage.bulkCreate(images);
 
 const addImage = (itemId, image) => ItemImage.create({ itemId, image });
@@ -48,6 +51,12 @@ const findOrCreateImage = (itemId, image) =>
 
 const updateById = (id, payload) =>
   Item.scope('full').update(payload, { where: { id } });
+
+const updateLocation = (itemId, payload) =>
+  Item.findOne({
+    where: { id: itemId },
+    include: [{ model: Location, as: 'location' }]
+  }).then(item => item.location.update(payload));
 
 const deleteById = id => Item.scope('full').destroy({ where: { id } });
 
@@ -66,12 +75,14 @@ module.exports = {
   findById,
   findFavorites,
   create,
+  createLocation,
   addImages,
   addImage,
   addFavorite,
   addView,
   findOrCreateImage,
   updateById,
+  updateLocation,
   deleteById,
   removeImage,
   removeImagesNotIn,

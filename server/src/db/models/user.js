@@ -19,14 +19,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       avatar: DataTypes.STRING,
-      location: DataTypes.STRING,
+      locationId: {
+        type: DataTypes.INTEGER
+      },
       admin: DataTypes.BOOLEAN
     },
     {
       paranoid: true,
       scopes: {
         public: {
-          attributes: ['id', 'name', 'email', 'avatar', 'location']
+          attributes: ['id', 'name', 'email', 'avatar'],
+          include: ['location']
         }
       }
     }
@@ -36,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Item, {
       foreignKey: 'userId',
       as: 'items'
+    });
+
+    User.belongsTo(models.Location, {
+      as: 'location'
     });
   };
 
