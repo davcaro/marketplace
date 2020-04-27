@@ -146,7 +146,7 @@
           >
           </nz-alert>
 
-          <div class="images-error" *ngIf="imagesRequiredErr">Debes subir almenos 1 foto</div>
+          <div class="custom-error" *ngIf="imagesRequiredErr">Debes subir almenos 1 foto</div>
 
           <nz-upload
             [nzCustomRequest]="customReq"
@@ -183,25 +183,8 @@
         </div>
 
         <div class="card-body">
-          <form nz-form nzLayout="vertical" [formGroup]="form" (ngSubmit)="submitForm()">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="locationErrorTpl">
-                <input nz-input formControlName="location" placeholder="¿Dónde?" />
-                <ng-template #locationErrorTpl let-control>
-                  <ng-container *ngIf="control.hasError('required')">
-                    Introduce la ubicación del artículo
-                  </ng-container>
-                  <ng-container *ngIf="control.hasError('maxlength')">
-                    El máximo son 255 caracteres
-                  </ng-container>
-                </ng-template>
-              </nz-form-control>
-            </nz-form-item>
-          </form>
-
-          <div style="text-align: center; margin: 3rem 0;">
-            [MAPA DE UBICACIÓN]
-          </div>
+          <div class="custom-error" *ngIf="locationRequiredErr">Debes introducir una ubicación</div>
+          <div class="map" #map></div>
         </div>
       </nz-card>
     </div>
@@ -231,7 +214,7 @@
     nzType="primary"
     nzSize="large"
     nzShape="round"
-    [disabled]="!form.valid || !imagesList.length"
+    [disabled]="!form.valid || !imagesList.length || !location"
     (click)="submitForm()"
   >
     <ng-container *ngIf="editItem">

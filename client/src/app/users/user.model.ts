@@ -1,10 +1,12 @@
+import { Location } from '../shared/location.model';
+
 export class User {
   constructor(
     public id: number,
     public email: string,
     public name: string,
     public avatar: string,
-    public location: string,
+    public location: Location,
     private _token: string,
     private _tokenExpirationDate: Date
   ) {}

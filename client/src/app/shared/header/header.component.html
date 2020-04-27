@@ -1,5 +1,7 @@
 <nz-header>
-  <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="'assets/brand-logo.png'" routerLink="/"></nz-avatar>
+  <a routerLink="/">
+    <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="'assets/brand-logo.png'"></nz-avatar>
+  </a>
 
   <div class="header-collapse">
     <form nz-form class="search-box" [nzLayout]="'inline'" [formGroup]="form" (ngSubmit)="submitForm()">

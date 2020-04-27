@@ -77,20 +77,9 @@
         </nz-form-control>
       </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="7">Ubicación</nz-form-label>
-        <nz-form-control [nzSpan]="14" nzHasFeedback [nzErrorTip]="locationErrorTpl">
-          <input nz-input formControlName="location" placeholder="Introduce la localización" type="text" />
-          <ng-template #locationErrorTpl let-control>
-            <ng-container *ngIf="control.hasError('required')">
-              Introduce tu ubicación
-            </ng-container>
-            <ng-container *ngIf="control.hasError('maxlength')">
-              El máximo son 255 caracteres
-            </ng-container>
-          </ng-template>
-        </nz-form-control>
-      </nz-form-item>
+      <p class="user-location"><i class="icon-location"></i> {{ user.location.placeName }}</p>
+
+      <div class="map" #map></div>
 
       <nz-form-item>
         <nz-form-control [nzOffset]="7" [nzSpan]="12">
