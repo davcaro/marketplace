@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      place_name: {
+      placeName: {
         type: Sequelize.STRING,
         allowNull: false
       },

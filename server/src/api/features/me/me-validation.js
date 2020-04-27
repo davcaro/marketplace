@@ -12,7 +12,7 @@ const update = {
       latitude: Joi.number().required(),
       longitude: Joi.number().required(),
       zoom: Joi.number().required(),
-      place_name: Joi.string().required()
+      placeName: Joi.string().required()
     })
   })
 };

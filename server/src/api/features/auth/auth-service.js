@@ -34,7 +34,24 @@ const checkUserExists = async email => {
   return userExists;
 };
 
+const readLocation = async locationId => {
+  let location;
+
+  try {
+    location = await authDAL.findLocationById(locationId);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!location) {
+    throw new AppError(404, 'Location not found');
+  }
+
+  return location;
+};
+
 module.exports = {
   createUser,
-  checkUserExists
+  checkUserExists,
+  readLocation
 };

@@ -19,7 +19,7 @@ const create = {
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
         zoom: Joi.number().required(),
-        place_name: Joi.string().required()
+        placeName: Joi.string().required()
       })
       .required(),
     condition: Joi.string()
@@ -44,7 +44,7 @@ const update = {
       latitude: Joi.number().required(),
       longitude: Joi.number().required(),
       zoom: Joi.number().required(),
-      place_name: Joi.string().required()
+      placeName: Joi.string().required()
     }),
     status: Joi.string().valid('for_sale', 'reserved', 'sold'),
     condition: Joi.string().valid('new', 'like_new', 'good', 'fair', 'poor'),
