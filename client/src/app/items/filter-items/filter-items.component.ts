@@ -247,7 +247,10 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
     (this.map.getSource('polygon') as any).setData(
       this.createGeoJSONCircle(this.filters.location.userLocation, distanceSelected.value).data
     );
-    this.map.easeTo({ zoom: distanceSelected.zoom });
+    this.map.easeTo({
+      center: [this.filters.location.userLocation.longitude, this.filters.location.userLocation.latitude],
+      zoom: distanceSelected.zoom
+    });
   }
 
   private updateFilter(queryParams: object) {

@@ -115,7 +115,12 @@ export class UploadItemComponent implements OnInit, AfterViewInit {
     });
 
     this.geocoder.on('result', ({ result: location }) => {
-      this.location = new Location(location.center[0], location.center[1], location.bbox ? 10 : 16, location.placeName);
+      this.location = new Location(
+        location.center[1],
+        location.center[0],
+        location.bbox ? 10 : 16,
+        location.place_name
+      );
 
       if (marker) {
         marker.remove();
