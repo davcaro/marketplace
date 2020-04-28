@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 import { UploadFile, NzMessageService, UploadXHRArgs } from 'ng-zorro-antd';
@@ -6,21 +6,28 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/users/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import * as mapboxgl from 'mapbox-gl';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { Location } from 'src/app/shared/location.model';
 
 @Component({
   selector: 'app-info',
   templateUrl: './profile-info.component.html',
   styleUrls: ['./profile-info.component.less']
 })
-export class ProfileInfoComponent implements OnInit {
+export class ProfileInfoComponent implements OnInit, AfterViewInit {
   apiUrl: string;
   user: User;
   form: FormGroup;
   infoUnknownError: boolean;
   avatarUnknownError: boolean;
-
   loading: boolean;
   avatar: string;
+  location: Location;
+  @ViewChild('map', { static: false }) mapElement: ElementRef;
+  mapbox = mapboxgl as typeof mapboxgl;
+  map: mapboxgl.Map;
+  geocoder: MapboxGeocoder;
 
   constructor(private http: HttpClient, private authService: AuthService, private msg: NzMessageService) {
     this.apiUrl = environment.apiUrl;
@@ -31,9 +38,51 @@ export class ProfileInfoComponent implements OnInit {
     this.avatar = this.user.avatar;
 
     this.form = new FormGroup({
-      name: new FormControl(this.user.name, [Validators.required, Validators.maxLength(255)]),
-      location: new FormControl(this.user.location, [Validators.required, Validators.maxLength(255)])
+      name: new FormControl(this.user.name, [Validators.required, Validators.maxLength(255)])
     });
+  }
+
+  ngAfterViewInit() {
+    let marker: mapboxgl.Marker;
+
+    this.mapbox.accessToken = environment.mapbox.accessToken;
+
+    this.geocoder = new MapboxGeocoder({
+      accessToken: environment.mapbox.accessToken,
+      mapboxgl: this.mapbox,
+      placeholder: '¿Dónde?'
+    });
+
+    this.geocoder.on('result', ({ result: location }) => {
+      this.location = new Location(
+        location.center[1],
+        location.center[0],
+        location.bbox ? 10 : 16,
+        location.place_name
+      );
+
+      if (marker) {
+        marker.remove();
+      }
+    });
+
+    this.map = new mapboxgl.Map({
+      container: this.mapElement.nativeElement,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: this.user.location ? [this.user.location.longitude, this.user.location.latitude] : [-6.94, 37.27], // Huelva, Spain
+      zoom: this.user.location ? this.user.location.zoom : 12
+    });
+
+    this.map.addControl(this.geocoder);
+    this.map.addControl(new mapboxgl.NavigationControl());
+
+    if (this.user.location) {
+      marker = new mapboxgl.Marker()
+        .setLngLat([this.user.location.longitude, this.user.location.latitude])
+        .addTo(this.map);
+
+      this.geocoder.setInput(this.user.location.placeName);
+    }
   }
 
   submitForm(): void {
@@ -48,22 +97,25 @@ export class ProfileInfoComponent implements OnInit {
     if (this.form.valid) {
       this.infoUnknownError = false;
 
-      this.updateUser(this.form.value);
+      const data = { ...this.form.value };
+      if (this.location) {
+        data.location = this.location;
+      }
+
+      this.updateUser(data);
     }
   }
 
-  updateUser(data: { name: string; location: string }): void {
+  updateUser(data: { name: string; location: Location }): void {
     this.authService.updateUser(data).subscribe(
       res => {
         this.user.name = data.name;
         this.user.location = data.location;
 
+        this.authService.user.next(this.user);
         this.authService.saveToLocalStorage();
 
-        this.form.reset({
-          name: this.user.name,
-          location: this.user.location
-        });
+        this.form.reset({ name: this.user.name });
       },
       err => {
         this.infoUnknownError = true;

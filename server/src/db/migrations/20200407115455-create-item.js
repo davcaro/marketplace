@@ -39,9 +39,13 @@ module.exports = {
         type: Sequelize.DECIMAL(8, 2),
         allowNull: false
       },
-      location: {
-        type: Sequelize.STRING,
-        allowNull: false
+      locationId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Locations',
+          key: 'id'
+        }
       },
       status: {
         type: Sequelize.STRING,
@@ -65,6 +69,7 @@ module.exports = {
       }
     });
   },
+
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Items');
   }

@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define,default-case,no-fallthrough,no-restricted-syntax */
 
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+const { Location } = require('../../../db/models');
 const itemDAL = require('./item-dal');
 const categoryDAL = require('../category/category-dal');
 const AppError = require('../../utils/app-error');
@@ -36,17 +38,20 @@ const readItem = async id => {
 };
 
 const createItem = async body => {
-  const { categoryId } = body;
-  const categoryExists = (await categoryDAL.count(categoryId)) > 0;
+  const payload = { ...body };
 
+  const categoryExists = (await categoryDAL.count(payload.categoryId)) > 0;
   if (!categoryExists) {
     throw new AppError(400, 'Bad Request');
   }
 
   try {
-    const item = await itemDAL.create(body);
+    const location = await itemDAL.createLocation(payload.location);
+    payload.locationId = location.id;
 
-    const images = body.images.map(image => {
+    const item = await itemDAL.create(payload);
+
+    const images = payload.images.map(image => {
       return { itemId: item.id, image };
     });
     await itemDAL.addImages(images);
@@ -74,6 +79,10 @@ const updateItem = async (id, body) => {
       for await (const image of body.images) {
         itemDAL.findOrCreateImage(id, image);
       }
+    }
+
+    if (body.location) {
+      await itemDAL.updateLocation(id, body.location);
     }
 
     return await itemDAL.updateById(id, body);
@@ -184,6 +193,7 @@ const addView = async (id, user) => {
 
 const getQuery = params => {
   const where = {};
+  let include;
   let order = null;
 
   if (params.keywords) {
@@ -276,10 +286,33 @@ const getQuery = params => {
         break;
     }
   }
+  if (params.latitude && params.longitude) {
+    const distance = (params.distance ? +params.distance : 600) * 1000;
+
+    include = [
+      {
+        model: Location,
+        as: 'location',
+        where: Sequelize.where(
+          Sequelize.fn(
+            'ST_Distance_Sphere',
+            Sequelize.literal(
+              `point(${+params.latitude}, ${+params.longitude})`
+            ),
+            Sequelize.literal('point(location.latitude, location.longitude)')
+          ),
+          { [Op.lte]: distance }
+        )
+      }
+    ];
+  }
 
   return {
     where,
     order,
+    include,
+    distinct: true,
+    col: include ? 'id' : 'Item.id',
     limit: +params.limit || null,
     offset: +params.offset || null
   };

@@ -11,7 +11,7 @@ const login = async (req, res, next) => {
         return next(err);
       }
 
-      return req.logIn(user, { session: false }, error => {
+      return req.logIn(user, { session: false }, async error => {
         if (error) {
           return next(error);
         }
@@ -27,12 +27,17 @@ const login = async (req, res, next) => {
         // Generate the JWT token
         const token = jwt.sign(body, config.ENV.JWT_KEY, { expiresIn });
 
+        let location;
+        if (user.locationId) {
+          location = await authService.readLocation(user.locationId);
+        }
+
         return res.json({
           id: user.id,
           email: user.email,
           name: user.name,
           avatar: user.avatar,
-          location: user.location,
+          location,
           token,
           token_ttl: config.ENV.JWT_TTL
         });

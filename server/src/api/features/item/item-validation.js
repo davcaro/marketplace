@@ -14,8 +14,13 @@ const create = {
       .max(999999.99)
       .precision(2)
       .required(),
-    location: Joi.string()
-      .max(255)
+    location: Joi.object()
+      .keys({
+        latitude: Joi.number().required(),
+        longitude: Joi.number().required(),
+        zoom: Joi.number().required(),
+        placeName: Joi.string().required()
+      })
       .required(),
     condition: Joi.string()
       .valid('new', 'like_new', 'good', 'fair', 'poor')
@@ -35,7 +40,12 @@ const update = {
       .positive()
       .max(999999.99)
       .precision(2),
-    location: Joi.string().max(255),
+    location: Joi.object().keys({
+      latitude: Joi.number().required(),
+      longitude: Joi.number().required(),
+      zoom: Joi.number().required(),
+      placeName: Joi.string().required()
+    }),
     status: Joi.string().valid('for_sale', 'reserved', 'sold'),
     condition: Joi.string().valid('new', 'like_new', 'good', 'fair', 'poor'),
     images: Joi.array().items(Joi.string())

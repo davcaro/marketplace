@@ -1,9 +1,11 @@
+import { Location } from '../shared/location.model';
+
 export class Item {
   public id: number;
   public title: string;
   public description: string;
   public price: number;
-  public location: string;
+  public location: Location;
   public status: string;
   public condition: string;
   public createdAt: string;

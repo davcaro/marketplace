@@ -139,9 +139,9 @@
 
         <nz-divider></nz-divider>
 
-        <div style="text-align: center; margin-top: 2rem;">
-          [MAPA DE UBICACIÓN]
-        </div>
+        <p class="item-location"><i class="icon-location"></i> {{ item.location.placeName }}</p>
+
+        <div class="map" #map></div>
       </div>
     </div>
   </nz-card>

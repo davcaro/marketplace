@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UploadFile, UploadXHRArgs, NzMessageService } from 'ng-zorro-antd';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { catchError } from 'rxjs/operators';
-import { throwError, Observable, Observer } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import { Category } from 'src/app/shared/category.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemsService } from '../items.service';
 import { Item } from '../item.model';
+import * as mapboxgl from 'mapbox-gl';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Location } from 'src/app/shared/location.model';
 
 @Component({
   selector: 'app-upload-item',
   templateUrl: './upload-item.component.html',
   styleUrls: ['./upload-item.component.less']
 })
-export class UploadItemComponent implements OnInit {
+export class UploadItemComponent implements OnInit, AfterViewInit {
   apiUrl: string;
   form: FormGroup;
   categories: Category[] | null;
@@ -23,6 +26,7 @@ export class UploadItemComponent implements OnInit {
   formUnknownError: boolean;
   imagesUnknownError: boolean;
   imagesRequiredErr: boolean;
+  locationRequiredErr: boolean;
   showUploadList = {
     showPreviewIcon: true,
     showRemoveIcon: true,
@@ -31,16 +35,32 @@ export class UploadItemComponent implements OnInit {
   imagesList = [];
   previewImage: string | undefined = '';
   previewVisible: boolean;
+  location: Location;
+  @ViewChild('map', { static: false }) mapElement: ElementRef;
+  mapbox = mapboxgl as typeof mapboxgl;
+  map: mapboxgl.Map;
+  geocoder: MapboxGeocoder;
 
   constructor(
     private http: HttpClient,
     private itemsService: ItemsService,
+    private authService: AuthService,
     private msg: NzMessageService,
     private router: Router,
     private route: ActivatedRoute
   ) {
     this.apiUrl = environment.apiUrl;
     this.editItem = this.route.snapshot.data.item;
+    if (this.editItem) {
+      this.location = new Location(
+        this.editItem.location.latitude,
+        this.editItem.location.longitude,
+        this.editItem.location.zoom,
+        this.editItem.location.placeName
+      );
+    } else {
+      this.location = this.authService.user.value.location;
+    }
 
     this.form = new FormGroup({
       categoryId: new FormControl(this.editItem ? this.editItem.category.id : null, [Validators.required]),
@@ -57,10 +77,6 @@ export class UploadItemComponent implements OnInit {
       description: new FormControl(this.editItem ? this.editItem.description : null, [
         Validators.required,
         Validators.maxLength(650)
-      ]),
-      location: new FormControl(this.editItem ? this.editItem.location : null, [
-        Validators.required,
-        Validators.maxLength(255)
       ])
     });
 
@@ -87,7 +103,51 @@ export class UploadItemComponent implements OnInit {
     );
   }
 
+  ngAfterViewInit() {
+    let marker: mapboxgl.Marker;
+
+    this.mapbox.accessToken = environment.mapbox.accessToken;
+
+    this.geocoder = new MapboxGeocoder({
+      accessToken: environment.mapbox.accessToken,
+      mapboxgl: this.mapbox,
+      placeholder: '¿Dónde?'
+    });
+
+    this.geocoder.on('result', ({ result: location }) => {
+      this.location = new Location(
+        location.center[1],
+        location.center[0],
+        location.bbox ? 10 : 16,
+        location.place_name
+      );
+
+      if (marker) {
+        marker.remove();
+      }
+    });
+
+    this.map = new mapboxgl.Map({
+      container: this.mapElement.nativeElement,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: this.location ? [this.location.longitude, this.location.latitude] : [-6.94, 37.27], // Huelva, Spain
+      zoom: this.location ? this.location.zoom : 12
+    });
+
+    this.map.addControl(this.geocoder);
+    this.map.addControl(new mapboxgl.NavigationControl());
+
+    if (this.location) {
+      marker = new mapboxgl.Marker().setLngLat([this.location.longitude, this.location.latitude]).addTo(this.map);
+      this.geocoder.setInput(this.location.placeName);
+    }
+  }
+
   submitForm(): void {
+    this.imagesRequiredErr = false;
+    this.locationRequiredErr = false;
+    this.formUnknownError = false;
+
     // Force validation
     for (const key in this.form.controls) {
       if (this.form.controls[key]) {
@@ -96,11 +156,13 @@ export class UploadItemComponent implements OnInit {
       }
     }
 
-    this.imagesRequiredErr = false;
-    this.formUnknownError = false;
-
     if (!this.imagesList.length) {
       this.imagesRequiredErr = true;
+      return;
+    }
+
+    if (!this.location) {
+      this.locationRequiredErr = true;
       return;
     }
 
@@ -115,6 +177,7 @@ export class UploadItemComponent implements OnInit {
         }
       });
       data.images = images;
+      data.location = this.location;
 
       this.editItem ? this.updateItem(data) : this.uploadItem(data);
     }

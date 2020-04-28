@@ -5,13 +5,14 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from '../users/user.model';
 import { environment } from 'src/environments/environment';
+import { Location } from '../shared/location.model';
 
 export interface AuthResponseData {
   id: number;
   email: string;
   name: string;
   avatar: string;
-  location: string;
+  location: Location;
   token: string;
   token_ttl: number;
 }
@@ -61,7 +62,7 @@ export class AuthService {
       email: string;
       name: string;
       avatar: string;
-      location: string;
+      location: Location;
       _token: string;
       _tokenExpirationDate: string;
     } = JSON.parse(localStorage.getItem('userData'));
@@ -130,7 +131,16 @@ export class AuthService {
           this.user.value.email = res.email;
           this.user.value.name = res.name;
           this.user.value.avatar = res.avatar;
-          this.user.value.location = res.location;
+          if (res.location) {
+            this.user.value.location = new Location(
+              res.location.latitude,
+              res.location.longitude,
+              res.location.zoom,
+              res.location.placeName
+            );
+          } else {
+            this.user.value.location = null;
+          }
 
           this.saveToLocalStorage();
         },
