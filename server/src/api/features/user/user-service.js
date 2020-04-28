@@ -62,6 +62,8 @@ const readUserItems = async (id, query) => {
   try {
     items = await itemsDAL.findAndPaginate({
       where,
+      distinct: true,
+      col: 'Item.id',
       limit: +query.limit || null,
       offset: +query.offset || null
     });

@@ -14,11 +14,7 @@ const countLengths = ({ dataValues: item }) => ({
 const count = id => Item.count({ where: { id } });
 
 const findAndPaginate = async query => {
-  const items = await Item.scope('full').findAndCountAll({
-    distinct: true,
-    col: 'Item.id',
-    ...query
-  });
+  const items = await Item.scope('full').findAndCountAll(query);
 
   items.rows = items.rows.map(countLengths);
 

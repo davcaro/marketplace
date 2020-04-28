@@ -16,7 +16,7 @@ module.exports = {
         allowNull: false
       },
       longitude: {
-        type: Sequelize.DECIMAL(16, 14),
+        type: Sequelize.DECIMAL(17, 14),
         allowNull: false
       },
       zoom: {

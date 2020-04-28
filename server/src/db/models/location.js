@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       longitude: {
-        type: DataTypes.DECIMAL(16, 14),
+        type: DataTypes.DECIMAL(17, 14),
         allowNull: false
       },
       zoom: {

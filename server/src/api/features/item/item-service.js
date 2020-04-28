@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define,default-case,no-fallthrough,no-restricted-syntax */
 
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+const { Location } = require('../../../db/models');
 const itemDAL = require('./item-dal');
 const categoryDAL = require('../category/category-dal');
 const AppError = require('../../utils/app-error');
@@ -191,6 +193,7 @@ const addView = async (id, user) => {
 
 const getQuery = params => {
   const where = {};
+  let include;
   let order = null;
 
   if (params.keywords) {
@@ -283,10 +286,33 @@ const getQuery = params => {
         break;
     }
   }
+  if (params.latitude && params.longitude) {
+    const distance = (params.distance ? +params.distance : 600) * 1000;
+
+    include = [
+      {
+        model: Location,
+        as: 'location',
+        where: Sequelize.where(
+          Sequelize.fn(
+            'ST_Distance_Sphere',
+            Sequelize.literal(
+              `point(${+params.latitude}, ${+params.longitude})`
+            ),
+            Sequelize.literal('point(location.latitude, location.longitude)')
+          ),
+          { [Op.lte]: distance }
+        )
+      }
+    ];
+  }
 
   return {
     where,
     order,
+    include,
+    distinct: true,
+    col: include ? 'id' : 'Item.id',
     limit: +params.limit || null,
     offset: +params.offset || null
   };
