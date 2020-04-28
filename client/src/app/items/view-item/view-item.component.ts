@@ -45,12 +45,12 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
     this.map = new mapboxgl.Map({
       container: this.mapElement.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [this.item.location.latitude, this.item.location.longitude], // Huelva, Spain
+      center: [this.item.location.longitude, this.item.location.latitude],
       zoom: this.item.location.zoom
     });
 
     this.map.addControl(new mapboxgl.NavigationControl());
-    new mapboxgl.Marker().setLngLat([this.item.location.latitude, this.item.location.longitude]).addTo(this.map);
+    new mapboxgl.Marker().setLngLat([this.item.location.longitude, this.item.location.latitude]).addTo(this.map);
   }
 
   onMarkAsFavorite() {

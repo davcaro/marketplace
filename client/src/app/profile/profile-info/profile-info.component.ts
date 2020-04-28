@@ -54,7 +54,12 @@ export class ProfileInfoComponent implements OnInit, AfterViewInit {
     });
 
     this.geocoder.on('result', ({ result: location }) => {
-      this.location = new Location(location.center[0], location.center[1], location.bbox ? 10 : 16, location.placeName);
+      this.location = new Location(
+        location.center[1],
+        location.center[0],
+        location.bbox ? 10 : 16,
+        location.place_name
+      );
 
       if (marker) {
         marker.remove();
@@ -64,7 +69,7 @@ export class ProfileInfoComponent implements OnInit, AfterViewInit {
     this.map = new mapboxgl.Map({
       container: this.mapElement.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: this.user.location ? [this.user.location.latitude, this.user.location.longitude] : [-6.94, 37.27], // Huelva, Spain
+      center: this.user.location ? [this.user.location.longitude, this.user.location.latitude] : [-6.94, 37.27], // Huelva, Spain
       zoom: this.user.location ? this.user.location.zoom : 12
     });
 
@@ -73,7 +78,7 @@ export class ProfileInfoComponent implements OnInit, AfterViewInit {
 
     if (this.user.location) {
       marker = new mapboxgl.Marker()
-        .setLngLat([this.user.location.latitude, this.user.location.longitude])
+        .setLngLat([this.user.location.longitude, this.user.location.latitude])
         .addTo(this.map);
 
       this.geocoder.setInput(this.user.location.placeName);

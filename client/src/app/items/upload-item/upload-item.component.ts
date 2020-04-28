@@ -125,7 +125,7 @@ export class UploadItemComponent implements OnInit, AfterViewInit {
     this.map = new mapboxgl.Map({
       container: this.mapElement.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: this.location ? [this.location.latitude, this.location.longitude] : [-6.94, 37.27], // Huelva, Spain
+      center: this.location ? [this.location.longitude, this.location.latitude] : [-6.94, 37.27], // Huelva, Spain
       zoom: this.location ? this.location.zoom : 12
     });
 
@@ -133,7 +133,7 @@ export class UploadItemComponent implements OnInit, AfterViewInit {
     this.map.addControl(new mapboxgl.NavigationControl());
 
     if (this.location) {
-      marker = new mapboxgl.Marker().setLngLat([this.location.latitude, this.location.longitude]).addTo(this.map);
+      marker = new mapboxgl.Marker().setLngLat([this.location.longitude, this.location.latitude]).addTo(this.map);
       this.geocoder.setInput(this.location.placeName);
     }
   }

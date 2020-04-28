@@ -153,6 +153,53 @@
 
   <button
     nz-button
+    [nzType]="filters.location.isApplied ? 'primary' : 'default'"
+    nzShape="round"
+    nz-popover
+    [(nzVisible)]="filters.location.isVisible"
+    nzPopoverTrigger="click"
+    [nzPopoverTitle]="locationTitleTpl"
+    [nzPopoverContent]="locationBodyTpl"
+    nzPopoverPlacement="bottomLeft"
+    (nzVisibleChange)="loadMap($event)"
+  >
+    <i class="icon-sort-alpha-asc" style="margin-right: 5px;"></i>
+    <ng-container *ngIf="!filters.location.isApplied">Ubicación</ng-container>
+    <ng-container *ngIf="filters.location.isApplied">
+      Distancia: {{ filtersService.getDistanceSelected().label }}
+    </ng-container>
+    <i nz-icon nzType="arrow-down" nzTheme="outline"></i>
+  </button>
+
+  <ng-template #locationTitleTpl>
+    <div class="popover-title">
+      <span nz-text><strong>Localización</strong></span>
+    </div>
+  </ng-template>
+
+  <ng-template #locationBodyTpl>
+    <div class="map" #map></div>
+
+    <div class="distance-slider">
+      <nz-slider
+        [(ngModel)]="filters.location.distanceSelected"
+        [nzMin]="1"
+        [nzMax]="8"
+        [nzDots]="true"
+        [nzMarks]="distanceMarks"
+        [nzTooltipVisible]="false"
+        (ngModelChange)="updateMapCircle()"
+        (nzOnAfterChange)="onSelectDistance()"
+      ></nz-slider>
+    </div>
+
+    <div class="close-popover">
+      <a (click)="closeLocationPopover()"><span nz-text nzType="secondary">Cancelar</span></a>
+    </div>
+  </ng-template>
+
+  <button
+    nz-button
     [nzType]="filters.order.isApplied ? 'primary' : 'default'"
     nzShape="round"
     nz-popover

@@ -77,7 +77,7 @@
         </nz-form-control>
       </nz-form-item>
 
-      <p class="user-location"><i class="icon-location"></i> {{ user.location.placeName }}</p>
+      <p class="user-location" *ngIf="user.location"><i class="icon-location"></i> {{ user.location.placeName }}</p>
 
       <div class="map" #map></div>
 
