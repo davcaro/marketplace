@@ -139,6 +139,17 @@
 
         <nz-divider></nz-divider>
 
+        <share-buttons class="share-buttons"
+          [theme]="'modern-dark'"
+          [include]="['facebook', 'twitter', 'email', 'copy']"
+          [show]="4"
+          [title]="'Este artículo de Marketplace te puede interesar'"
+          [description]="'Echa un vistazo a este artículo en Marketplace'"
+          [autoSetMeta]="false"
+        ></share-buttons>
+
+        <nz-divider></nz-divider>
+
         <p class="item-location"><i class="icon-location"></i> {{ item.location.placeName }}</p>
 
         <div class="map" #map></div>

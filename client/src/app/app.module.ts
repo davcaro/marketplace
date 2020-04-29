@@ -5,8 +5,10 @@ import { registerLocaleData } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import es from '@angular/common/locales/es';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/header/header.component';
@@ -60,7 +62,9 @@ registerLocaleData(es);
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ShareButtonsModule,
+    ShareIconsModule.forRoot()
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es-ES' },

@@ -34,6 +34,7 @@
             ],
             "styles": [
               "src/styles.less",
+              "src/style.scss",
               "src/icomoon.css"
             ],
             "scripts": []
@@ -99,6 +100,7 @@
             ],
             "styles": [
               "src/styles.less",
+              "src/style.scss",
               "src/icomoon.css"
             ],
             "scripts": []
