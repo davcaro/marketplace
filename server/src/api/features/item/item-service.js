@@ -297,9 +297,9 @@ const getQuery = params => {
           Sequelize.fn(
             'ST_Distance_Sphere',
             Sequelize.literal(
-              `point(${+params.latitude}, ${+params.longitude})`
+              `point(${+params.longitude}, ${+params.latitude})`
             ),
-            Sequelize.literal('point(location.latitude, location.longitude)')
+            Sequelize.literal('point(location.longitude, location.latitude)')
           ),
           { [Op.lte]: distance }
         )

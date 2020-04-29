@@ -34,7 +34,7 @@ export interface Filters {
   location: {
     isVisible: boolean;
     isApplied: boolean;
-    userLocation: { latitude: number; longitude: number };
+    userLocation: { latitude: number; longitude: number; place_name: string };
     distanceSelected: number;
   };
 }
@@ -97,8 +97,8 @@ export class FilterItemsService {
       location: {
         isVisible: false,
         isApplied: false,
-        userLocation: { latitude: 40.4167596, longitude: -3.7038584 },
-        distanceSelected: 8
+        userLocation: { latitude: 40.4167596, longitude: -3.7038584, place_name: null },
+        distanceSelected: 2
       }
     });
   }
@@ -116,16 +116,17 @@ export class FilterItemsService {
     filters.category.selected = null;
     filters.price.range = [0, 10000];
     filters.publicationDate.selected = null;
-    filters.location.distanceSelected = 8;
+    filters.location.distanceSelected = 2;
     filters.order.selected = null;
 
     if (this.user && this.user.location) {
       filters.location.userLocation = {
         latitude: +this.user.location.latitude,
-        longitude: +this.user.location.longitude
+        longitude: +this.user.location.longitude,
+        place_name: null
       };
     } else {
-      filters.location.userLocation = { latitude: 40.4167596, longitude: -3.7038584 };
+      filters.location.userLocation = { latitude: 40.4167596, longitude: -3.7038584, place_name: null };
     }
 
     this.filters.next(filters);

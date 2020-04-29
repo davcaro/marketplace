@@ -6,6 +6,7 @@ import { Category } from 'src/app/shared/category.model';
 import { FilterItemsService, Filters, Order, PublicationDate } from '../filter-items.service';
 import { environment } from 'src/environments/environment';
 import * as mapboxgl from 'mapbox-gl';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/users/user.model';
 
@@ -21,6 +22,7 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
   @ViewChild('map', { static: false }) mapElement: ElementRef;
   mapbox = mapboxgl as typeof mapboxgl;
   map: mapboxgl.Map;
+  geocoder: MapboxGeocoder;
   distanceMarks: any;
 
   categoriesSubscription: Subscription;
@@ -42,7 +44,8 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
     if (this.user && this.user.location) {
       this.filters.location.userLocation = {
         latitude: +this.user.location.latitude,
-        longitude: +this.user.location.longitude
+        longitude: +this.user.location.longitude,
+        place_name: this.user.location.placeName
       };
     }
 
@@ -81,6 +84,22 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.mapbox.accessToken = environment.mapbox.accessToken;
 
+        this.geocoder = new MapboxGeocoder({
+          accessToken: environment.mapbox.accessToken,
+          mapboxgl: this.mapbox,
+          collapsed: !this.filters.location.userLocation.place_name,
+          marker: false,
+          placeholder: '¿Dónde?'
+        });
+
+        this.geocoder.on('result', ({ result: location }) => {
+          this.onSelectLocation({
+            latitude: location.center[1],
+            longitude: location.center[0],
+            place_name: location.place_name
+          });
+        });
+
         this.map = new mapboxgl.Map({
           container: this.mapElement.nativeElement,
           style: 'mapbox://styles/mapbox/streets-v11',
@@ -92,10 +111,19 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
           positionOptions: { enableHighAccuracy: true },
           showUserLocation: false
         });
-        geolocator.on('geolocate', this.onSelectLocation.bind(this));
+        geolocator.on('geolocate', (location: any) => {
+          this.geocoder.setInput('');
 
+          this.onSelectLocation(location.coords);
+        });
+
+        this.map.addControl(this.geocoder);
         this.map.addControl(geolocator);
         this.map.addControl(new mapboxgl.NavigationControl());
+
+        if (this.filters.location.userLocation.place_name) {
+          this.geocoder.setInput(this.filters.location.userLocation.place_name);
+        }
 
         this.map.on('load', () => {
           this.map.addSource(
@@ -202,12 +230,11 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
     this.updateFilter({ published: publicationOption.value });
   }
 
-  onSelectLocation(location: any) {
+  onSelectLocation(location: { latitude: number; longitude: number; place_name: string }) {
+    this.filters.location.distanceSelected = 2; // Default distance
+
     this.filters.location.isApplied = true;
-    this.filters.location.userLocation = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude
-    };
+    this.filters.location.userLocation = location;
 
     const distanceSelected = this.filtersService.getDistanceSelected();
 
@@ -215,10 +242,14 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
       this.createGeoJSONCircle(this.filters.location.userLocation, distanceSelected.value).data
     );
     this.map.easeTo({
-      center: [location.coords.longitude, location.coords.latitude],
+      center: [location.longitude, location.latitude],
       zoom: distanceSelected.zoom
     });
-    this.updateFilter(this.filters.location.userLocation);
+
+    this.updateFilter({
+      latitude: this.filters.location.userLocation.latitude,
+      longitude: this.filters.location.userLocation.longitude
+    });
   }
 
   onSelectDistance() {
@@ -294,7 +325,11 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
     );
 
     if (params.latitude && params.longitude) {
-      this.filters.location.userLocation = { latitude: +params.latitude, longitude: +params.longitude };
+      this.filters.location.userLocation = {
+        latitude: +params.latitude,
+        longitude: +params.longitude,
+        place_name: null
+      };
     }
 
     if (params.distance) {
