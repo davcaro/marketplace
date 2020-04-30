@@ -20,7 +20,9 @@ const SUBJECTS = {
   CATEGORY: 'Category',
   ITEM: 'Item',
   FAVORITE: 'ItemFavorite',
-  VIEW: 'ItemView'
+  VIEW: 'ItemView',
+  CHAT: 'Chat',
+  MESSAGE: 'ChatMessage'
 };
 
 function defineAbilitiesFor(user) {
@@ -39,6 +41,9 @@ function defineAbilitiesFor(user) {
       allow(ACTIONS.CRUD, SUBJECTS.ITEM);
       allow(ACTIONS.CRUD, SUBJECTS.FAVORITE);
       allow(ACTIONS.CREATE, SUBJECTS.VIEW);
+
+      allow(ACTIONS.CRUD, SUBJECTS.CHAT);
+      allow(ACTIONS.CRUD, SUBJECTS.MESSAGE);
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);
