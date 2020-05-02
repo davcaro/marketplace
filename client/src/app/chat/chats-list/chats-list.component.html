@@ -1,0 +1,54 @@
+<app-sider>
+  <div class="chat-layout">
+    <div class="sider" [class.collapse]="chat">
+      <div class="status-wrapper">
+        <button
+          class="status-selector"
+          nz-button
+          nzBlock
+          nz-dropdown
+          [nzTrigger]="'click'"
+          [nzDropdownMenu]="statusMenu"
+        >
+          Bandeja de entrada
+          <i nz-icon nzType="down"></i>
+        </button>
+        <nz-dropdown-menu #statusMenu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li nz-menu-item>Bandeja de entrada</li>
+            <li nz-menu-item>Conversaciones archivadas</li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+
+      <ul class="chats-list" nz-menu nzMode="inline">
+        <li nz-menu-item *ngFor="let i of [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]">
+          <div class="menu-wrapper">
+            <nz-avatar
+              class="item-image"
+              nzIcon="loading"
+              [nzShape]="'square'"
+              [nzSize]="48"
+              nzSrc="http://127.0.0.1:3000/images/items/faifwwkju8y.jpg"
+            ></nz-avatar>
+
+            <div class="chat-info">
+              <span nz-typography nzType="secondary">John Doe</span>
+              <span nz-typography><strong class="item-title">Lexus IS IS 300h F Sport Navibox</strong></span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <ng-content *ngIf="chat"></ng-content>
+
+      <nz-empty [nzNotFoundContent]="emptyDescriptionTpl" *ngIf="!chat">
+        <ng-template #emptyDescriptionTpl>
+          <span>Elige un chat para empezar a conversar.</span>
+        </ng-template>
+      </nz-empty>
+    </div>
+  </div>
+</app-sider>

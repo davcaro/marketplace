@@ -1,0 +1,81 @@
+<app-chats-list>
+  <div class="container">
+    <div class="header">
+      <button class="back-btn" nz-button nzType="link" nzSize="large" [routerLink]="['/', 'chat']">
+        <i class="icon-arrow-left2"></i>
+      </button>
+
+      <a [routerLink]="['/', 'user', 1]">
+        <nz-avatar
+          nzIcon="user"
+          [nzSize]="48"
+          nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+        ></nz-avatar>
+
+        <span nz-typography class="user-name"><strong>John Doe</strong></span>
+      </a>
+    </div>
+
+    <div class="body">
+      <div class="chat">
+        <div class="chat-messages">
+          <div class="message other">
+            <div class="msg">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, eligendi? Lorem ipsum dolor sit amet
+              consectetur adipisicing elit. Quis maiores consectetur sequi quae quam? Amet.
+              <span class="msg-time" nz-typography nzType="secondary">14:05</span>
+            </div>
+          </div>
+
+          <nz-tag class="day-tag" [nzColor]="'volcano'">20 de Abril</nz-tag>
+
+          <div class="message self" *ngFor="let i of [1, 1, 1, 1]">
+            <div class="msg">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, eligendi?
+              <span class="msg-time" nz-typography nzType="secondary">14:05</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input">
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Escribe un mensaje..." />
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <i class="icon-send"></i>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="chat-info">
+        <a class="user-info" [routerLink]="['/', 'user', 1]">
+          <nz-avatar
+            nzIcon="user"
+            [nzSize]="48"
+            nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+          ></nz-avatar>
+
+          <span nz-typography class="user-name"><strong>John Doe</strong></span>
+
+          <nz-rate [ngModel]="4" nzDisabled></nz-rate>
+        </a>
+
+        <a class="item-info" [routerLink]="['/', 'item', 1]">
+          <img class="item-image" src="http://127.0.0.1:3000/images/items/faifwwkju8y.jpg" />
+
+          <span nz-typography><strong>Lexus IS IS 300h F Sport Navibox</strong></span>
+
+          <div class="item-footer">
+            <span nz-typography><strong>25000 €</strong></span>
+
+            <div class="item-stats">
+              <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
+
+              <span style="margin-left: 6px;"><i class="icon-eye"></i> 200</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</app-chats-list>
