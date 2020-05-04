@@ -26,20 +26,10 @@ const getMessages = async (req, res, next) => {
 };
 
 const findChat = async (req, res, next) => {
-  const { userId, itemId } = req.query;
+  const { itemId } = req.query;
 
   try {
-    const chat = await chatService.findChat(userId, itemId);
-
-    return res.json(chat);
-  } catch (e) {
-    return next(e);
-  }
-};
-
-const createChat = async (req, res, next) => {
-  try {
-    const chat = await chatService.createChat(req.user.id, req.body);
+    const chat = await chatService.findChat(req.user.id, itemId);
 
     return res.json(chat);
   } catch (e) {
@@ -103,7 +93,6 @@ module.exports = {
   getChats,
   getMessages,
   findChat,
-  createChat,
   createMessage,
   updateChat,
   deleteChat,

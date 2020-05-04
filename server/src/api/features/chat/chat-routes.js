@@ -19,16 +19,10 @@ module.exports = app => {
     hasPermission(ACTIONS.READ, SUBJECTS.CHAT),
     chatController.getChats
   );
-  route.post(
-    '/',
-    hasPermission(ACTIONS.CREATE, SUBJECTS.CHAT),
-    hasPermission(ACTIONS.CREATE, SUBJECTS.MESSAGE),
-    celebrate(chatValidation.createChat),
-    chatController.createChat
-  );
   route.get(
     '/find',
     hasPermission(ACTIONS.READ, SUBJECTS.CHAT),
+    hasPermission(ACTIONS.CREATE, SUBJECTS.CHAT),
     celebrate(chatValidation.findChat),
     chatController.findChat
   );

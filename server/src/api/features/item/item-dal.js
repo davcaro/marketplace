@@ -66,6 +66,7 @@ const removeFavorite = (userId, itemId) =>
   ItemFavorite.destroy({ where: { userId, itemId } });
 
 module.exports = {
+  countLengths,
   count,
   findAndPaginate,
   findById,
