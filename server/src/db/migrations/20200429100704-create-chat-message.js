@@ -11,11 +11,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      chatId: {
+      chatUserId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Chats',
+          model: 'ChatUsers',
           key: 'id'
         }
       },

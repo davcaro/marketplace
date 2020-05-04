@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from '../item.model';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Chat } from 'src/app/chat/chat.model';
 import { User } from 'src/app/users/user.model';
 import { ItemsService } from '../items.service';
 import { ChatService } from 'src/app/chat/chat.service';
@@ -74,10 +75,12 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
 
   onContactUser(): void {
     this.chatService.findChat(this.item.id).subscribe(res => {
-      if (res.messages.length) {
-        this.router.navigate(['/', 'chat', res.id]);
+      const chat = Object.assign(new Chat(), res);
+
+      if (chat.messages.length) {
+        this.router.navigate(['/', 'chat', chat.id]);
       } else {
-        this.router.navigate(['/', 'chat', res.id], { state: { chat: res } });
+        this.router.navigate(['/', 'chat', chat.id], { state: { chat } });
       }
     });
   }

@@ -17,7 +17,7 @@ const getMessages = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const messages = await chatService.readMessages(id);
+    const messages = await chatService.readMessages(id, req.user.id);
 
     return res.json(messages);
   } catch (e) {

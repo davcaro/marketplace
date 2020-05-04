@@ -42,7 +42,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeSubscription = this.route.data.subscribe(data => {
       this.chat = Object.assign(new Chat(), data.chat);
-      this.chat.messages = this.chat.messages.map((message: any) => Object.assign(new ChatMessage(), message));
+      this.chat.users[0].messages = this.chat.messages.map((message: any) => Object.assign(new ChatMessage(), message));
 
       this.scrollToBottom();
     });

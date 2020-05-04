@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   const ChatMessage = sequelize.define(
     'ChatMessage',
     {
-      chatId: {
+      chatUserId: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   ChatMessage.associate = function(models) {
-    ChatMessage.belongsTo(models.Chat, {
-      as: 'chat'
+    ChatMessage.belongsTo(models.ChatUser, {
+      as: 'ChatUser'
     });
 
     ChatMessage.belongsTo(models.User, {

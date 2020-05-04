@@ -9,9 +9,13 @@ const itemDal = require('../item/item-dal');
 const findAll = async (id, archived) => {
   const chats = await Chat.findAll({
     include: [
-      { model: ChatUser, as: 'users', where: { userId: id, archived } },
-      { model: Item.scope('full'), as: 'item' },
-      { model: ChatMessage, as: 'messages', required: true }
+      {
+        model: ChatUser,
+        as: 'users',
+        where: { userId: id, archived },
+        include: [{ model: ChatMessage, as: 'messages', required: true }]
+      },
+      { model: Item.scope('full'), as: 'item' }
     ]
   });
 
@@ -22,12 +26,16 @@ const findAll = async (id, archived) => {
   return chats;
 };
 
-const findChat = async chatId => {
+const findChat = async (chatId, userId) => {
   const chat = await Chat.findByPk(chatId, {
     include: [
-      { model: ChatUser, as: 'users' },
-      { model: Item.scope('full'), as: 'item' },
-      { model: ChatMessage, as: 'messages', order: ['createdAt'] }
+      {
+        model: ChatUser,
+        as: 'users',
+        where: { userId },
+        include: [{ model: ChatMessage, as: 'messages', order: ['createdAt'] }]
+      },
+      { model: Item.scope('full'), as: 'item' }
     ]
   });
 
@@ -50,19 +58,7 @@ const createChat = (userId, itemId) =>
 
       return chat;
     })
-    .then(async chat => {
-      const newChat = await Chat.findByPk(chat.id, {
-        include: [
-          { model: ChatUser, as: 'users' },
-          { model: ChatMessage, as: 'messages' },
-          { model: Item.scope('full'), as: 'item' }
-        ]
-      });
-
-      newChat.item.dataValues = itemDal.countLengths(newChat.item);
-
-      return newChat;
-    });
+    .then(async chat => findChat(chat.id, userId));
 
 const findChatByItem = (userId, itemId) =>
   Chat.findOne({
@@ -71,14 +67,21 @@ const findChatByItem = (userId, itemId) =>
     where: { itemId }
   }).then(chat => {
     if (chat) {
-      return findChat(chat.id);
+      return findChat(chat.id, userId);
     }
 
     return createChat(userId, itemId);
   });
 
-const createMessage = (chatId, userId, payload) =>
-  ChatMessage.create({ chatId, userId, ...payload });
+const createMessage = (chatId, userId, payload) => {
+  Chat.findByPk(chatId, {
+    include: [{ model: ChatUser, as: 'users' }]
+  }).then(chat =>
+    chat.users.forEach(user => {
+      ChatMessage.create({ chatUserId: user.id, userId, ...payload });
+    })
+  );
+};
 
 const update = (chatId, userId, payload) =>
   ChatUser.update(payload, { where: { chatId, userId } });
@@ -89,8 +92,12 @@ const countUser = (chatId, userId) =>
     where: { id: chatId }
   });
 
-const deleteChat = (chatId, userId) =>
-  ChatUser.destroy({ where: { chatId, userId } });
+const deleteChat = (chatId, userId) => {
+  ChatUser.findOne({
+    attributes: ['id'],
+    where: { chatId, userId }
+  }).then(user => ChatMessage.destroy({ where: { chatUserId: user.id } }));
+};
 
 module.exports = {
   findAll,

@@ -27,7 +27,7 @@ export class ChatsListComponent implements OnInit, OnDestroy {
 
     const state = this.router.getCurrentNavigation().extras.state;
     if (state && state.chat) {
-      this.newChat = Object.assign(new Chat(), state.chat);
+      this.newChat = state.chat;
     }
 
     this.routeParamsSubscription = this.router.events
