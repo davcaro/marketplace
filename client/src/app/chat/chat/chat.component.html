@@ -1,81 +1,110 @@
-<app-chats-list>
-  <div class="container">
-    <div class="header">
+<div class="container">
+  <div class="header">
+    <div class="header-left">
       <button class="back-btn" nz-button nzType="link" nzSize="large" [routerLink]="['/', 'chat']">
         <i class="icon-arrow-left2"></i>
       </button>
 
       <a [routerLink]="['/', 'user', 1]">
-        <nz-avatar
-          nzIcon="user"
-          [nzSize]="48"
-          nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-        ></nz-avatar>
+        <nz-avatar nzIcon="user" [nzSize]="48" [nzSrc]="apiUrl + '/images/avatars/' + chat.user.avatar"></nz-avatar>
 
-        <span nz-typography class="user-name"><strong>John Doe</strong></span>
+        <span nz-typography class="user-name">
+          <strong>{{ chat.user.name }}</strong>
+        </span>
       </a>
     </div>
 
-    <div class="body">
-      <div class="chat">
-        <div class="chat-messages">
-          <div class="message other">
-            <div class="msg">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, eligendi? Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Quis maiores consectetur sequi quae quam? Amet.
-              <span class="msg-time" nz-typography nzType="secondary">14:05</span>
-            </div>
-          </div>
+    <div class="header-right">
+      <a nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzDropdownMenu]="optionsMenu">
+        <i class="icon-dots-three-horizontal"></i>
+      </a>
+      <nz-dropdown-menu #optionsMenu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>
+            <a [routerLink]="['/', 'item', chat.item.id]">Ir al artículo</a>
+          </li>
 
-          <nz-tag class="day-tag" [nzColor]="'volcano'">20 de Abril</nz-tag>
+          <li nz-menu-divider></li>
 
-          <div class="message self" *ngFor="let i of [1, 1, 1, 1]">
-            <div class="msg">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, eligendi?
-              <span class="msg-time" nz-typography nzType="secondary">14:05</span>
-            </div>
-          </div>
-        </div>
+          <li nz-menu-item (click)="onArchiveChat()">
+            <ng-container *ngIf="chat.isArchived(user.id)">
+              Mover a la bandeja de entrada
+            </ng-container>
+            <ng-container *ngIf="!chat.isArchived(user.id)">
+              Archivar conversación
+            </ng-container>
+          </li>
 
-        <div class="input">
-          <nz-input-group [nzSuffix]="suffixIconSearch">
-            <input type="text" nz-input placeholder="Escribe un mensaje..." />
-          </nz-input-group>
-          <ng-template #suffixIconSearch>
-            <i class="icon-send"></i>
-          </ng-template>
-        </div>
-      </div>
-
-      <div class="chat-info">
-        <a class="user-info" [routerLink]="['/', 'user', 1]">
-          <nz-avatar
-            nzIcon="user"
-            [nzSize]="48"
-            nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-          ></nz-avatar>
-
-          <span nz-typography class="user-name"><strong>John Doe</strong></span>
-
-          <nz-rate [ngModel]="4" nzDisabled></nz-rate>
-        </a>
-
-        <a class="item-info" [routerLink]="['/', 'item', 1]">
-          <img class="item-image" src="http://127.0.0.1:3000/images/items/faifwwkju8y.jpg" />
-
-          <span nz-typography><strong>Lexus IS IS 300h F Sport Navibox</strong></span>
-
-          <div class="item-footer">
-            <span nz-typography><strong>25000 €</strong></span>
-
-            <div class="item-stats">
-              <span><i nz-icon nzType="heart" nzTheme="outline"></i> 100</span>
-
-              <span style="margin-left: 6px;"><i class="icon-eye"></i> 200</span>
-            </div>
-          </div>
-        </a>
-      </div>
+          <li nz-menu-item (click)="showDeleteConfirm()">Eliminar conversación</li>
+        </ul>
+      </nz-dropdown-menu>
     </div>
   </div>
-</app-chats-list>
+
+  <div class="body">
+    <div class="chat">
+      <div class="chat-messages" #messages>
+        <nz-tag class="day-tag" [nzColor]="'volcano'">20 de Abril</nz-tag>
+
+        <div
+          class="message"
+          [class.self]="message.userId === user.id"
+          [class.other]="message.userId !== user.id"
+          *ngFor="let message of chat.messages"
+        >
+          <div class="msg">
+            {{ message.message }}
+            <span class="msg-time" nz-typography nzType="secondary">{{ message.time }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="input">
+        <form nz-form [formGroup]="form" (ngSubmit)="sendMessage()">
+          <nz-form-item style="margin-bottom: 0;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <nz-form-control>
+                <input type="text" nz-input formControlName="message" placeholder="Escribe un mensaje..." />
+              </nz-form-control>
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i class="icon-send"></i>
+            </ng-template>
+          </nz-form-item>
+        </form>
+      </div>
+    </div>
+
+    <div class="chat-info">
+      <a class="user-info" [routerLink]="['/', 'user', chat.user.id]">
+        <nz-avatar nzIcon="user" [nzSize]="48" [nzSrc]="apiUrl + '/images/avatars/' + chat.user.avatar"></nz-avatar>
+
+        <span nz-typography class="user-name">
+          <strong>{{ chat.user.name }}</strong>
+        </span>
+
+        <nz-rate [ngModel]="4" nzDisabled></nz-rate>
+      </a>
+
+      <a class="item-info" [routerLink]="['/', 'item', chat.item.id]">
+        <img class="item-image" [src]="apiUrl + '/images/items/' + chat.item.images[0].image" />
+
+        <span nz-typography>
+          <strong>{{ chat.item.title }}</strong>
+        </span>
+
+        <div class="item-footer">
+          <span nz-typography>
+            <strong>{{ chat.item.price | currency: 'EUR' }}</strong>
+          </span>
+
+          <div class="item-stats">
+            <span><i nz-icon nzType="heart" nzTheme="outline"></i> {{ chat.item.favorites }}</span>
+
+            <span style="margin-left: 6px;"><i class="icon-eye"></i> {{ chat.item.views }}</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
