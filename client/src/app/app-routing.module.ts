@@ -15,6 +15,7 @@ import { UserResolverService } from './users/user-resolver.service';
 import { ViewFavoritesComponent } from './items/view-favorites/view-favorites.component';
 import { ChatsListComponent } from './chat/chats-list/chats-list.component';
 import { ChatComponent } from './chat/chat/chat.component';
+import { ChatResolverService } from './chat/chat-resolver.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -51,8 +52,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: ViewFavoritesComponent
   },
-  { path: 'chat', canActivate: [AuthGuard], component: ChatsListComponent },
-  { path: 'chat/:id', canActivate: [AuthGuard], component: ChatComponent }
+  {
+    path: 'chat',
+    component: ChatsListComponent,
+    canActivate: [AuthGuard],
+    children: [{ path: ':id', component: ChatComponent, resolve: { chat: ChatResolverService } }]
+  }
 ];
 
 @NgModule({
