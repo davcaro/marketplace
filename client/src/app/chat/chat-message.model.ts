@@ -10,6 +10,10 @@ export class ChatMessage {
     this.createdAt = new Date();
   }
 
+  get date() {
+    return new Date(this.createdAt).toLocaleDateString();
+  }
+
   get time() {
     const date = new Date(this.createdAt);
 

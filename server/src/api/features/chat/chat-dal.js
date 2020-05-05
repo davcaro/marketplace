@@ -33,9 +33,17 @@ const findChat = async (chatId, userId) => {
         model: ChatUser,
         as: 'users',
         where: { userId },
-        include: [{ model: ChatMessage, as: 'messages', order: ['createdAt'] }]
+        include: [{ model: ChatMessage, as: 'messages' }]
       },
       { model: Item.scope('full'), as: 'item' }
+    ],
+    order: [
+      [
+        { model: ChatUser, as: 'users' },
+        { model: ChatMessage, as: 'messages' },
+        'createdAt',
+        'ASC'
+      ]
     ]
   });
 

@@ -44,19 +44,16 @@
   <div class="body">
     <div class="chat">
       <div class="chat-messages" #messages>
-        <nz-tag class="day-tag" [nzColor]="'volcano'">20 de Abril</nz-tag>
+        <ng-container *ngFor="let message of chat.messages; let i = index">
+          <nz-tag class="day-tag" [nzColor]="'volcano'" *ngIf="!isSameDay(i)">{{ message.date }}</nz-tag>
 
-        <div
-          class="message"
-          [class.self]="message.userId === user.id"
-          [class.other]="message.userId !== user.id"
-          *ngFor="let message of chat.messages"
-        >
-          <div class="msg">
-            {{ message.message }}
-            <span class="msg-time" nz-typography nzType="secondary">{{ message.time }}</span>
+          <div class="message" [class.self]="message.userId === user.id" [class.other]="message.userId !== user.id">
+            <div class="msg">
+              {{ message.message }}
+              <span class="msg-time" nz-typography nzType="secondary">{{ message.time }}</span>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
 
       <div class="input">

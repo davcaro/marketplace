@@ -96,4 +96,19 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.router.navigate(['/', 'chat']);
     });
   }
+
+  isSameDay(index: number): boolean {
+    if (index === 0) {
+      return false;
+    }
+
+    const currentMessage = new Date(this.chat.messages[index].createdAt);
+    const previousMessage = new Date(this.chat.messages[index - 1].createdAt);
+
+    return (
+      currentMessage.getUTCFullYear() === previousMessage.getUTCFullYear() &&
+      currentMessage.getUTCMonth() === previousMessage.getUTCMonth() &&
+      currentMessage.getUTCDate() === previousMessage.getUTCDate()
+    );
+  }
 }
