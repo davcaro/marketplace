@@ -44,6 +44,16 @@ module.exports = (sequelize, DataTypes) => {
     User.belongsTo(models.Location, {
       as: 'location'
     });
+
+    User.hasMany(models.ChatUser, {
+      foreignKey: 'userId',
+      as: 'chats'
+    });
+
+    User.hasMany(models.ChatMessage, {
+      foreignKey: 'userId',
+      as: 'messages'
+    });
   };
 
   User.beforeCreate(async (user, options) => {

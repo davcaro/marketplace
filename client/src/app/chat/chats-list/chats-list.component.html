@@ -1,0 +1,43 @@
+<app-sider>
+  <div class="chat-layout">
+    <div class="sider" [class.collapse]="chatSelected">
+      <div class="status-wrapper">
+        <nz-select class="status-selector" [(ngModel)]="archived" (ngModelChange)="onStatusChange()">
+          <nz-option [nzValue]="false" nzLabel="Bandeja de entrada"></nz-option>
+          <nz-option [nzValue]="true" nzLabel="Conversaciones archivadas"></nz-option>
+        </nz-select>
+      </div>
+
+      <ul class="chats-list" nz-menu nzMode="inline">
+        <li nz-menu-item nzMatchRouter *ngFor="let chat of chats">
+          <a class="menu-wrapper" [routerLink]="['/', 'chat', chat.id]">
+            <nz-avatar
+              class="item-image"
+              nzIcon="loading"
+              [nzShape]="'square'"
+              [nzSize]="48"
+              [nzSrc]="apiUrl + '/images/items/' + chat.item.images[0].image"
+            ></nz-avatar>
+
+            <div class="chat-info">
+              <span nz-typography nzType="secondary">{{ chat.user.name }}</span>
+              <span nz-typography>
+                <strong class="item-title">{{ chat.item.title }}</strong>
+              </span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <router-outlet *ngIf="chatSelected"></router-outlet>
+
+      <nz-empty [nzNotFoundContent]="emptyDescriptionTpl" *ngIf="!chatSelected">
+        <ng-template #emptyDescriptionTpl>
+          <span>Elige un chat para empezar a conversar.</span>
+        </ng-template>
+      </nz-empty>
+    </div>
+  </div>
+</app-sider>

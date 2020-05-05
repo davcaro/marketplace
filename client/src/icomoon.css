@@ -66,6 +66,9 @@ i {
 .icon-plus:before {
   content: '\e904';
 }
+.icon-send:before {
+  content: '\e91a';
+}
 .icon-child_friendly:before {
   content: '\e912';
 }

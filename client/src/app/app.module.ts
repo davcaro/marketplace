@@ -30,6 +30,8 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { ItemsCatalogComponent } from './catalog/items-catalog/items-catalog.component';
 import { ViewUserComponent } from './users/view-user/view-user.component';
 import { ViewFavoritesComponent } from './items/view-favorites/view-favorites.component';
+import { ChatsListComponent } from './chat/chats-list/chats-list.component';
+import { ChatComponent } from './chat/chat/chat.component';
 
 registerLocaleData(es);
 
@@ -53,7 +55,9 @@ registerLocaleData(es);
     CatalogComponent,
     ItemsCatalogComponent,
     ViewUserComponent,
-    ViewFavoritesComponent
+    ViewFavoritesComponent,
+    ChatsListComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from '../item.model';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Chat } from 'src/app/chat/chat.model';
 import { User } from 'src/app/users/user.model';
 import { ItemsService } from '../items.service';
+import { ChatService } from 'src/app/chat/chat.service';
 import * as mapboxgl from 'mapbox-gl';
 
 @Component({
@@ -21,7 +23,13 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
   mapbox = mapboxgl as typeof mapboxgl;
   map: mapboxgl.Map;
 
-  constructor(private authService: AuthService, private itemsService: ItemsService, private route: ActivatedRoute) {
+  constructor(
+    private authService: AuthService,
+    private itemsService: ItemsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private chatService: ChatService
+  ) {
     this.apiUrl = environment.apiUrl;
 
     this.user = this.authService.user.value;
@@ -63,5 +71,17 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
         this.isFavorited = !this.isFavorited;
       });
     }
+  }
+
+  onContactUser(): void {
+    this.chatService.findChat(this.item.id).subscribe(res => {
+      const chat = Object.assign(new Chat(), res);
+
+      if (chat.messages.length) {
+        this.router.navigate(['/', 'chat', chat.id]);
+      } else {
+        this.router.navigate(['/', 'chat', chat.id], { state: { chat } });
+      }
+    });
   }
 }

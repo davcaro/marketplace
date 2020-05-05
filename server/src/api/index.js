@@ -4,6 +4,7 @@ const auth = require('./features/auth/auth-routes');
 const me = require('./features/me/me-routes');
 const category = require('./features/category/category-routes');
 const item = require('./features/item/item-routes');
+const chat = require('./features/chat/chat-routes');
 
 module.exports = () => {
   const app = express.Router();
@@ -13,6 +14,7 @@ module.exports = () => {
   me(app);
   category(app);
   item(app);
+  chat(app);
 
   return app;
 };

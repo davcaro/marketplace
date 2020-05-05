@@ -21,9 +21,11 @@
           </li>
         </ul>
       </li>
-      <li nz-menu-item>
-        <i class="icon-commenting"></i>
-        <span [ngStyle]="{ opacity: isCollapsed ? 0 : 1 }">Mensajes</span>
+      <li nz-menu-item nzMatchRouter>
+        <a [routerLink]="['/', 'chat']">
+          <i class="icon-commenting"></i>
+          <span [ngStyle]="{ opacity: isCollapsed ? 0 : 1 }">Mensajes</span>
+        </a>
       </li>
       <li nz-menu-item nzMatchRouter>
         <a [routerLink]="['/', 'favorites']">
