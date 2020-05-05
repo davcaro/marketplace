@@ -54,6 +54,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'messages'
     });
+
+    User.hasMany(models.SocketConnection, {
+      foreignKey: 'userId',
+      as: 'connections'
+    });
   };
 
   User.beforeCreate(async (user, options) => {
