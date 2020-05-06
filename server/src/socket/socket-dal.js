@@ -3,7 +3,8 @@ const {
   SocketConnection,
   Chat,
   ChatUser,
-  ChatMessage
+  ChatMessage,
+  Item
 } = require('../db/models');
 
 const createConnection = (userId, socketId) =>
@@ -40,10 +41,19 @@ const readOtherChatUserRooms = (chatId, userId) =>
     where: { chatId, userId: { [Op.not]: userId } }
   }).then(user => SocketConnection.findAll({ where: { userId: user.userId } }));
 
+const findChatByUser = chatUserId =>
+  Chat.findOne({
+    include: [
+      { model: ChatUser, as: 'users', where: { id: chatUserId } },
+      { model: Item.scope('full'), as: 'item' }
+    ]
+  });
+
 module.exports = {
   createConnection,
   destroyConnection,
   countChatUser,
   createChatMessage,
-  readOtherChatUserRooms
+  readOtherChatUserRooms,
+  findChatByUser
 };

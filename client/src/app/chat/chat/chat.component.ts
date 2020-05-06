@@ -9,6 +9,7 @@ import { ChatService } from '../chat.service';
 import { Chat } from '../chat.model';
 import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd';
+import { SocketioService } from 'src/app/shared/socketio.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,6 +23,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   form: FormGroup;
   @ViewChild('messages') private messagesElement: ElementRef;
 
+  socket: SocketIOClient.Socket;
   routeSubscription: Subscription;
 
   constructor(
@@ -29,6 +31,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private chatService: ChatService,
+    private socketioService: SocketioService,
     private modal: NzModalService
   ) {
     this.apiUrl = environment.apiUrl;
@@ -46,6 +49,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       this.scrollToBottom();
     });
+
+    this.socket = this.socketioService.getSocket();
+    this.socket.on('message received', (message: any) => {
+      this.chat.messages.push(Object.assign(new ChatMessage(), message.message));
+    });
   }
 
   ngOnDestroy() {
@@ -58,11 +66,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.form.valid) {
       this.form.reset();
 
-      this.chatService.sendMessage(this.chat.id, message).subscribe((res: any) => {
-        this.chat.messages.push(new ChatMessage(this.user.id, message));
+      this.chatService.sendMessage(this.chat.id, message);
+      this.chat.messages.push(new ChatMessage(this.user.id, message));
 
-        this.scrollToBottom();
-      });
+      this.scrollToBottom();
     }
   }
 

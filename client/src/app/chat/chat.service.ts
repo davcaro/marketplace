@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
+import { SocketioService } from '../shared/socketio.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ChatService {
 
   removeChat: Subject<number>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private socketioService: SocketioService) {
     this.apiUrl = environment.apiUrl;
 
     this.removeChat = new Subject<number>();
@@ -40,10 +41,10 @@ export class ChatService {
       .pipe(catchError(this.handleError));
   }
 
-  sendMessage(id: number, message: string): Observable<any> {
-    return this.http
-      .post<any>(`${this.apiUrl}/api/chats/${id}`, { message })
-      .pipe(catchError(this.handleError));
+  sendMessage(chatId: number, message: string): void {
+    const socket = this.socketioService.getSocket();
+
+    socket.emit('message sent', { chatId, message });
   }
 
   updateChat(id: number, archived: boolean): Observable<any> {
