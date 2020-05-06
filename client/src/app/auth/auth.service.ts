@@ -6,6 +6,7 @@ import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from '../users/user.model';
 import { environment } from 'src/environments/environment';
 import { Location } from '../shared/location.model';
+import { SocketioService } from '../shared/socketio.service';
 
 export interface AuthResponseData {
   id: number;
@@ -23,7 +24,7 @@ export class AuthService {
   private tokenExpirationTimer: any;
   apiUrl: string;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private socketioService: SocketioService) {
     this.apiUrl = environment.apiUrl;
   }
 
@@ -83,16 +84,20 @@ export class AuthService {
 
     if (loadedUser.token) {
       this.user.next(loadedUser);
+
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
 
       this.reloadUser();
+
+      this.socketioService.setupConnection(loadedUser.token);
     }
   }
 
   logout(): void {
     this.user.next(null);
     this.router.navigate(['/']);
+    this.socketioService.closeConnection();
     localStorage.removeItem('userData');
     clearTimeout(this.tokenExpirationTimer);
   }
@@ -181,6 +186,7 @@ export class AuthService {
     const user = new User(data.id, data.email, data.name, data.avatar, data.location, data.token, expirationDate);
     this.user.next(user);
     this.autoLogout(data.token_ttl * 1000);
+    this.socketioService.setupConnection(user.token);
     this.saveToLocalStorage();
   }
 
