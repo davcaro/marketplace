@@ -77,7 +77,7 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
     this.chatService.findChat(this.item.id).subscribe(res => {
       const chat = Object.assign(new Chat(), res);
 
-      if (chat.messages.length) {
+      if (chat.getMessages(this.user.id).length) {
         this.router.navigate(['/', 'chat', chat.id]);
       } else {
         this.router.navigate(['/', 'chat', chat.id], { state: { chat } });

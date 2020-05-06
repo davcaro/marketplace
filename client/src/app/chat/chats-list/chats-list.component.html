@@ -20,7 +20,7 @@
             ></nz-avatar>
 
             <div class="chat-info">
-              <span nz-typography nzType="secondary">{{ chat.user.name }}</span>
+              <span nz-typography nzType="secondary">{{ chat.getOtherUser(user.id).name }}</span>
               <span nz-typography>
                 <strong class="item-title">{{ chat.item.title }}</strong>
               </span>

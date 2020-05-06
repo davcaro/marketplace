@@ -12,9 +12,9 @@ const readChats = async (id, query) => {
   }
 };
 
-const readMessages = async (id, userId) => {
+const readMessages = async id => {
   try {
-    return await chatDAL.findChat(id, userId);
+    return await chatDAL.findChat(id);
   } catch (e) {
     throw new AppError(500, e.message);
   }

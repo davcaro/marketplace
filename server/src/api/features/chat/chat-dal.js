@@ -1,19 +1,41 @@
 /* eslint-disable no-param-reassign */
 
-const { Chat } = require('../../../db/models');
-const { ChatUser } = require('../../../db/models');
-const { ChatMessage } = require('../../../db/models');
-const { Item } = require('../../../db/models');
+const { Op } = require('sequelize');
+const {
+  Chat,
+  ChatUser,
+  ChatMessage,
+  User,
+  Item
+} = require('../../../db/models');
 const itemDal = require('../item/item-dal');
 
 const findAll = async (id, archived) => {
-  const chats = await Chat.findAll({
+  // Get all chat ids where the user is in and has messages
+  let chatIds = await Chat.findAll({
+    attributes: ['id'],
+    group: ['id'],
     include: [
       {
         model: ChatUser,
         as: 'users',
+        attributes: [],
         where: { userId: id, archived },
-        include: [{ model: ChatMessage, as: 'messages', required: true }]
+        include: [
+          { model: ChatMessage, as: 'messages', attributes: [], required: true }
+        ]
+      }
+    ]
+  });
+  chatIds = chatIds.map(chat => chat.id);
+
+  const chats = await Chat.findAll({
+    where: { id: { [Op.in]: chatIds } },
+    include: [
+      {
+        model: ChatUser,
+        as: 'users',
+        include: [{ model: User.scope('public'), as: 'user' }]
       },
       { model: Item.scope('full'), as: 'item' }
     ]
@@ -26,14 +48,16 @@ const findAll = async (id, archived) => {
   return chats;
 };
 
-const findChat = async (chatId, userId) => {
+const findChat = async chatId => {
   const chat = await Chat.findByPk(chatId, {
     include: [
       {
         model: ChatUser,
         as: 'users',
-        where: { userId },
-        include: [{ model: ChatMessage, as: 'messages' }]
+        include: [
+          { model: User.scope('public'), as: 'user' },
+          { model: ChatMessage, as: 'messages' }
+        ]
       },
       { model: Item.scope('full'), as: 'item' }
     ],
@@ -66,7 +90,7 @@ const createChat = (userId, itemId) =>
 
       return chat;
     })
-    .then(async chat => findChat(chat.id, userId));
+    .then(async chat => findChat(chat.id));
 
 const findChatByItem = (userId, itemId) =>
   Chat.findOne({
@@ -75,7 +99,7 @@ const findChatByItem = (userId, itemId) =>
     where: { itemId }
   }).then(chat => {
     if (chat) {
-      return findChat(chat.id, userId);
+      return findChat(chat.id);
     }
 
     return createChat(userId, itemId);

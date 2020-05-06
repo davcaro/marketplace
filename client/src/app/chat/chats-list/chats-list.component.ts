@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { SocketioService } from 'src/app/shared/socketio.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/users/user.model';
 
 @Component({
   selector: 'app-chats-list',
@@ -14,6 +16,7 @@ import { SocketioService } from 'src/app/shared/socketio.service';
 })
 export class ChatsListComponent implements OnInit, OnDestroy {
   apiUrl: string;
+  user: User;
   chats: Chat[];
   chatSelected: boolean;
   newChat: Chat;
@@ -27,9 +30,11 @@ export class ChatsListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private chatService: ChatService,
+    private authService: AuthService,
     private socketioService: SocketioService
   ) {
     this.apiUrl = environment.apiUrl;
+    this.user = this.authService.user.value;
     this.archived = false;
 
     const state = this.router.getCurrentNavigation().extras.state;

@@ -45,7 +45,7 @@ const createChatMessage = async (userId, data) => {
     await hasPermission(userId, chatId);
 
     const msg = await socketDAL.createChatMessage(chatId, userId, message);
-    const chat = await socketDAL.findChatByUser(msg.chatUserId);
+    const chat = await socketDAL.findChat(chatId);
 
     return { message: msg, chat };
   } catch (e) {
