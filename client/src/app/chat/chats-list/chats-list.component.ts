@@ -5,6 +5,7 @@ import { Chat } from '../chat.model';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
+import { SocketioService } from 'src/app/shared/socketio.service';
 
 @Component({
   selector: 'app-chats-list',
@@ -18,10 +19,16 @@ export class ChatsListComponent implements OnInit, OnDestroy {
   newChat: Chat;
   archived: boolean;
 
+  socket: SocketIOClient.Socket;
   routeParamsSubscription: Subscription;
   removeChatSubscription: Subscription;
 
-  constructor(private route: ActivatedRoute, private router: Router, private chatService: ChatService) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private chatService: ChatService,
+    private socketioService: SocketioService
+  ) {
     this.apiUrl = environment.apiUrl;
     this.archived = false;
 
@@ -58,6 +65,15 @@ export class ChatsListComponent implements OnInit, OnDestroy {
       const chatToRemove = this.chats.find(chat => chat.id === id);
 
       this.chats.splice(this.chats.indexOf(chatToRemove), 1);
+    });
+
+    this.socket = this.socketioService.getSocket();
+    this.socket.on('message received', (message: any) => {
+      const newChat = Object.assign(new Chat(), message.chat);
+
+      if (!this.chats.find(chat => chat.id === newChat.id)) {
+        this.chats.unshift(newChat);
+      }
     });
   }
 
