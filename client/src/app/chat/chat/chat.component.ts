@@ -21,6 +21,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   chat: Chat;
   user: User;
   form: FormGroup;
+  limit: number;
+  page: number;
+  total: number;
   @ViewChild('messages') private messagesElement: ElementRef;
 
   socket: SocketIOClient.Socket;
@@ -36,6 +39,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) {
     this.apiUrl = environment.apiUrl;
     this.user = this.authService.user.value;
+    this.limit = 30;
+    this.page = 1;
 
     this.form = new FormGroup({
       message: new FormControl(null, [Validators.required])
@@ -46,13 +51,21 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.data.subscribe(data => {
       this.chat = Object.assign(new Chat(), data.chat);
       this.chat.messages.data = this.chat.messages.data.map(message => Object.assign(new ChatMessage(), message));
+      this.total = this.chat.messages.pagination.total;
 
       this.scrollToBottom();
     });
 
     this.socket = this.socketioService.getSocket();
     this.socket.on('message received', (message: any) => {
+      const element = this.messagesElement.nativeElement;
+      const scrollAtBottom = !!(element.scrollTop + element.offsetHeight === element.scrollHeight);
+
       this.chat.messages.data.push(Object.assign(new ChatMessage(), message.message));
+
+      if (scrollAtBottom) {
+        this.scrollToBottom();
+      }
     });
   }
 
@@ -70,6 +83,19 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chat.messages.data.push(new ChatMessage(this.user.id, message));
 
       this.scrollToBottom();
+    }
+  }
+
+  loadMessages(): void {
+    const offset = this.page * this.limit;
+
+    if (offset < this.total) {
+      this.chatService.getChat(this.chat.id, { limit: this.limit, offset }).subscribe(res => {
+        this.page++;
+
+        const messages = res.messages.data.map((message: any) => Object.assign(new ChatMessage(), message));
+        this.chat.messages.data.unshift(...messages);
+      });
     }
   }
 

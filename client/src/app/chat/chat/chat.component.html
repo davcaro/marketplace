@@ -47,7 +47,7 @@
 
   <div class="body">
     <div class="chat">
-      <div class="chat-messages" #messages>
+      <div class="chat-messages" #messages infiniteScroll [scrollWindow]="false" (scrolledUp)="loadMessages()">
         <ng-container *ngFor="let message of chat.messages.data; let i = index">
           <nz-tag class="day-tag" [nzColor]="'volcano'" *ngIf="!isSameDay(i)">{{ message.date }}</nz-tag>
 
