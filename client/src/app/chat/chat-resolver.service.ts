@@ -11,7 +11,7 @@ export class ChatResolverService implements Resolve<any> {
   constructor(private chatService: ChatService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
-    return this.chatService.getChat(+route.paramMap.get('id')).pipe(
+    return this.chatService.getChat(+route.paramMap.get('id'), { limit: 30, offset: 0 }).pipe(
       catchError(err => {
         this.router.navigate(['/', 'chat']);
         return of(null);

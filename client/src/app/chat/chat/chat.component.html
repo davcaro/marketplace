@@ -48,7 +48,7 @@
   <div class="body">
     <div class="chat">
       <div class="chat-messages" #messages>
-        <ng-container *ngFor="let message of chat.getMessages(user.id); let i = index">
+        <ng-container *ngFor="let message of chat.messages.data; let i = index">
           <nz-tag class="day-tag" [nzColor]="'volcano'" *ngIf="!isSameDay(i)">{{ message.date }}</nz-tag>
 
           <div class="message" [class.self]="message.userId === user.id" [class.other]="message.userId !== user.id">

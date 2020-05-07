@@ -64,8 +64,9 @@ const findChat = async (chatId, userId, pagination) => {
   const messages = await ChatMessage.findAndCountAll({
     where: { chatUserId: chatUser.id },
     ...pagination,
-    order: ['createdAt']
+    order: [['createdAt', 'DESC']]
   });
+  messages.rows.reverse();
 
   chat.dataValues.messages = messages;
   chat.item.dataValues = itemDal.countLengths(chat.item);

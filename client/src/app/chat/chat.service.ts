@@ -25,8 +25,10 @@ export class ChatService {
       .pipe(catchError(this.handleError));
   }
 
-  getChat(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/chats/${id}`).pipe(catchError(this.handleError));
+  getChat(id: number, pagination: { limit: any; offset: any }): Observable<any> {
+    return this.http
+      .get<any>(`${this.apiUrl}/api/chats/${id}`, { params: pagination })
+      .pipe(catchError(this.handleError));
   }
 
   findChat(itemId: any): Observable<any> {

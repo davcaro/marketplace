@@ -45,16 +45,14 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeSubscription = this.route.data.subscribe(data => {
       this.chat = Object.assign(new Chat(), data.chat);
-      this.chat.users.forEach(user => {
-        user.messages = user.messages.map((message: any) => Object.assign(new ChatMessage(), message));
-      });
+      this.chat.messages.data = this.chat.messages.data.map(message => Object.assign(new ChatMessage(), message));
 
       this.scrollToBottom();
     });
 
     this.socket = this.socketioService.getSocket();
     this.socket.on('message received', (message: any) => {
-      this.chat.getMessages(this.user.id).push(Object.assign(new ChatMessage(), message.message));
+      this.chat.messages.data.push(Object.assign(new ChatMessage(), message.message));
     });
   }
 
@@ -69,7 +67,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.form.reset();
 
       this.chatService.sendMessage(this.chat.id, message);
-      this.chat.getMessages(this.user.id).push(new ChatMessage(this.user.id, message));
+      this.chat.messages.data.push(new ChatMessage(this.user.id, message));
 
       this.scrollToBottom();
     }
@@ -111,8 +109,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const currentMessage = new Date(this.chat.getMessages(this.user.id)[index].createdAt);
-    const previousMessage = new Date(this.chat.getMessages(this.user.id)[index - 1].createdAt);
+    const currentMessage = new Date(this.chat.messages.data[index].createdAt);
+    const previousMessage = new Date(this.chat.messages.data[index - 1].createdAt);
 
     return (
       currentMessage.getUTCFullYear() === previousMessage.getUTCFullYear() &&
