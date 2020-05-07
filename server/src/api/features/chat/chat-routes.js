@@ -30,6 +30,7 @@ module.exports = app => {
     '/:id',
     hasPermission(ACTIONS.READ, SUBJECTS.MESSAGE),
     chatController.hasPermission,
+    celebrate(chatValidation.getMessages),
     chatController.getMessages
   );
   route.post(

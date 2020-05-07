@@ -10,7 +10,16 @@ const findChat = {
   [Segments.QUERY]: Joi.object().keys({
     itemId: Joi.number()
       .positive()
-      .required()
+      .required(),
+    limit: Joi.number().min(0),
+    offset: Joi.number().min(0)
+  })
+};
+
+const getMessages = {
+  [Segments.QUERY]: Joi.object().keys({
+    limit: Joi.number().min(0),
+    offset: Joi.number().min(0)
   })
 };
 
@@ -23,5 +32,6 @@ const updateChat = {
 module.exports = {
   createMessage,
   findChat,
+  getMessages,
   updateChat
 };

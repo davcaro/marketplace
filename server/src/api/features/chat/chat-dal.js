@@ -48,35 +48,32 @@ const findAll = async (id, archived) => {
   return chats;
 };
 
-const findChat = async chatId => {
+const findChat = async (chatId, userId, pagination) => {
   const chat = await Chat.findByPk(chatId, {
     include: [
       {
         model: ChatUser,
         as: 'users',
-        include: [
-          { model: User.scope('public'), as: 'user' },
-          { model: ChatMessage, as: 'messages' }
-        ]
+        include: [{ model: User.scope('public'), as: 'user' }]
       },
       { model: Item.scope('full'), as: 'item' }
-    ],
-    order: [
-      [
-        { model: ChatUser, as: 'users' },
-        { model: ChatMessage, as: 'messages' },
-        'createdAt',
-        'ASC'
-      ]
     ]
   });
 
+  const chatUser = chat.users.find(user => user.userId === userId);
+  const messages = await ChatMessage.findAndCountAll({
+    where: { chatUserId: chatUser.id },
+    ...pagination,
+    order: ['createdAt']
+  });
+
+  chat.dataValues.messages = messages;
   chat.item.dataValues = itemDal.countLengths(chat.item);
 
   return chat;
 };
 
-const createChat = (userId, itemId) =>
+const createChat = (userId, itemId, pagination) =>
   Chat.create({ itemId })
     .then(async chat => {
       const item = await Item.findByPk(itemId, {
@@ -90,19 +87,19 @@ const createChat = (userId, itemId) =>
 
       return chat;
     })
-    .then(async chat => findChat(chat.id));
+    .then(async chat => findChat(chat.id, userId, pagination));
 
-const findChatByItem = (userId, itemId) =>
+const findChatByItem = (userId, itemId, pagination) =>
   Chat.findOne({
     attributes: ['id'],
     include: [{ model: ChatUser, as: 'users', where: { userId } }],
     where: { itemId }
   }).then(chat => {
     if (chat) {
-      return findChat(chat.id);
+      return findChat(chat.id, userId, pagination);
     }
 
-    return createChat(userId, itemId);
+    return createChat(userId, itemId, pagination);
   });
 
 const createMessage = (chatId, userId, payload) => {
