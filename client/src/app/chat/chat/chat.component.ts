@@ -24,7 +24,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   limit: number;
   page: number;
   total: number;
+  scrollDown: boolean;
   @ViewChild('messages') private messagesElement: ElementRef;
+  @ViewChild('chatBottom') private chatBottomElement: ElementRef;
 
   socket: SocketIOClient.Socket;
   routeSubscription: Subscription;
@@ -53,13 +55,12 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chat.messages.data = this.chat.messages.data.map(message => Object.assign(new ChatMessage(), message));
       this.total = this.chat.messages.pagination.total;
 
-      this.scrollToBottom();
+      this.scrollToBottom('auto');
     });
 
     this.socket = this.socketioService.getSocket();
     this.socket.on('message received', (message: any) => {
-      const element = this.messagesElement.nativeElement;
-      const scrollAtBottom = !!(element.scrollTop + element.offsetHeight === element.scrollHeight);
+      const scrollAtBottom = this.getScrollBottom() === 0;
 
       this.chat.messages.data.push(Object.assign(new ChatMessage(), message.message));
 
@@ -106,9 +107,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.router.navigate(['/', 'chat']);
   }
 
-  scrollToBottom(): void {
+  scrollToBottom(behavior: string = 'smooth'): void {
     setTimeout(() => {
-      this.messagesElement.nativeElement.scrollTop = this.messagesElement.nativeElement.scrollHeight;
+      this.chatBottomElement.nativeElement.scrollIntoView({ behavior });
     }, 0);
   }
 
@@ -143,5 +144,19 @@ export class ChatComponent implements OnInit, OnDestroy {
       currentMessage.getUTCMonth() === previousMessage.getUTCMonth() &&
       currentMessage.getUTCDate() === previousMessage.getUTCDate()
     );
+  }
+
+  // Get the scroll distance from bottom of the chat
+  getScrollBottom(): number {
+    if (!this.messagesElement) {
+      return 0;
+    }
+
+    const element = this.messagesElement.nativeElement;
+    return element.scrollHeight - (element.scrollTop + element.offsetHeight);
+  }
+
+  onScroll(): void {
+    this.scrollDown = this.getScrollBottom() > 100;
   }
 }

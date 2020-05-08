@@ -47,7 +47,14 @@
 
   <div class="body">
     <div class="chat">
-      <div class="chat-messages" #messages infiniteScroll [scrollWindow]="false" (scrolledUp)="loadMessages()">
+      <div
+        class="chat-messages"
+        #messages
+        infiniteScroll
+        [scrollWindow]="false"
+        (scrolledUp)="loadMessages()"
+        (scroll)="onScroll()"
+      >
         <ng-container *ngFor="let message of chat.messages.data; let i = index">
           <nz-tag class="day-tag" [nzColor]="'volcano'" *ngIf="!isSameDay(i)">{{ message.date }}</nz-tag>
 
@@ -58,7 +65,21 @@
             </div>
           </div>
         </ng-container>
+
+        <div #chatBottom></div>
       </div>
+
+      <button
+        class="scroll-down"
+        nz-button
+        nzType="primary"
+        nzSize="large"
+        nzShape="circle"
+        [class.visible]="scrollDown"
+        (click)="scrollToBottom()"
+      >
+        <i class="icon-arrow-down"></i>
+      </button>
 
       <div class="input">
         <form nz-form [formGroup]="form" (ngSubmit)="sendMessage()">
