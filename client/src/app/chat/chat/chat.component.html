@@ -5,7 +5,7 @@
         <i class="icon-arrow-left2"></i>
       </button>
 
-      <a [routerLink]="['/', 'user', 1]">
+      <a [routerLink]="['/', 'user', chat.getOtherUser(user.id).id]">
         <nz-avatar
           nzIcon="user"
           [nzSize]="48"
@@ -69,17 +69,16 @@
         <div #chatBottom></div>
       </div>
 
-      <button
+      <nz-badge
+        [nzCount]="unreadMessagesCount"
         class="scroll-down"
-        nz-button
-        nzType="primary"
-        nzSize="large"
-        nzShape="circle"
         [class.visible]="scrollDown"
         (click)="scrollToBottom()"
       >
-        <i class="icon-arrow-down"></i>
-      </button>
+        <button nz-button nzType="primary" nzSize="large" nzShape="circle">
+          <i class="icon-arrow-down"></i>
+        </button>
+      </nz-badge>
 
       <div class="input">
         <form nz-form [formGroup]="form" (ngSubmit)="sendMessage()">

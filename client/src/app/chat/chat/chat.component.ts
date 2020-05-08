@@ -18,8 +18,9 @@ import { SocketioService } from 'src/app/shared/socketio.service';
 })
 export class ChatComponent implements OnInit, OnDestroy {
   apiUrl: string;
-  chat: Chat;
   user: User;
+  chat: Chat;
+  unreadMessagesCount: number;
   form: FormGroup;
   limit: number;
   page: number;
@@ -43,6 +44,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.user = this.authService.user.value;
     this.limit = 30;
     this.page = 1;
+    this.unreadMessagesCount = 0;
 
     this.form = new FormGroup({
       message: new FormControl(null, [Validators.required])
@@ -60,18 +62,27 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     this.socket = this.socketioService.getSocket();
     this.socket.on('message received', (message: any) => {
-      const scrollAtBottom = this.getScrollBottom() === 0;
+      if (message.chat.id === this.chat.id) {
+        const scrollAtBottom = this.getScrollBottom() === 0;
 
-      this.chat.messages.data.push(Object.assign(new ChatMessage(), message.message));
+        this.chat.messages.data.push(Object.assign(new ChatMessage(), message.message));
 
-      if (scrollAtBottom) {
-        this.scrollToBottom();
+        if (scrollAtBottom) {
+          this.scrollToBottom();
+
+          this.markMessagesAsRead();
+        } else {
+          this.unreadMessagesCount++;
+          this.chatService.updateUnreadCount.next(this.unreadMessagesCount);
+        }
       }
     });
   }
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+
+    this.socket.off('message received');
   }
 
   sendMessage(): void {
@@ -85,6 +96,21 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       this.scrollToBottom();
     }
+  }
+
+  markMessagesAsRead(): void {
+    const unreadMessages = this.chat.messages.data.filter(message => message.readAt === null);
+
+    if (unreadMessages.length) {
+      this.chatService.markMessagesAsRead(this.chat.id);
+    }
+
+    unreadMessages.forEach(message => {
+      message.readAt = new Date();
+    });
+
+    this.unreadMessagesCount = 0;
+    this.chatService.updateUnreadCount.next(this.unreadMessagesCount);
   }
 
   loadMessages(): void {
@@ -157,6 +183,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onScroll(): void {
-    this.scrollDown = this.getScrollBottom() > 100;
+    const scroll = this.getScrollBottom();
+
+    this.scrollDown = scroll > 100;
+
+    if (scroll === 0) {
+      this.markMessagesAsRead();
+    }
   }
 }

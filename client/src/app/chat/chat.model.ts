@@ -7,6 +7,11 @@ export class Chat {
   public item: Item;
   public users: { userId: number; archived: boolean; user: User }[];
   public messages: { pagination: { limit: number; offset: number; total: number }; data: ChatMessage[] };
+  public unreadMessages: number;
+
+  constructor(unreadMessages: number = 0) {
+    this.unreadMessages = unreadMessages;
+  }
 
   getOtherUser(userId: number) {
     return this.users.find(user => user.userId !== userId).user;

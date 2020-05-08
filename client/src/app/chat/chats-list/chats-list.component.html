@@ -10,7 +10,7 @@
 
       <ul class="chats-list" nz-menu nzMode="inline">
         <li nz-menu-item nzMatchRouter *ngFor="let chat of chats">
-          <a class="menu-wrapper" [routerLink]="['/', 'chat', chat.id]">
+          <a class="menu-wrapper" [routerLink]="['/', 'chat', chat.id]" (click)="onSelectChat(chat)">
             <nz-avatar
               class="item-image"
               nzIcon="loading"
@@ -25,6 +25,8 @@
                 <strong class="item-title">{{ chat.item.title }}</strong>
               </span>
             </div>
+
+            <nz-badge [nzCount]="chat.unreadMessages" style="margin-left: auto;"></nz-badge>
           </a>
         </li>
       </ul>

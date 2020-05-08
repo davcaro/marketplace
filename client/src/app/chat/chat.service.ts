@@ -12,11 +12,13 @@ export class ChatService {
   apiUrl: string;
 
   removeChat: Subject<number>;
+  updateUnreadCount: Subject<number>;
 
   constructor(private http: HttpClient, private socketioService: SocketioService) {
     this.apiUrl = environment.apiUrl;
 
     this.removeChat = new Subject<number>();
+    this.updateUnreadCount = new Subject<number>();
   }
 
   getChats(archived: boolean = false): Observable<any> {
@@ -47,6 +49,12 @@ export class ChatService {
     const socket = this.socketioService.getSocket();
 
     socket.emit('message sent', { chatId, message });
+  }
+
+  markMessagesAsRead(chatId: number): void {
+    const socket = this.socketioService.getSocket();
+
+    socket.emit('messages read', { chatId });
   }
 
   updateChat(id: number, archived: boolean): Observable<any> {
