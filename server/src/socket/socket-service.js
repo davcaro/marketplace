@@ -1,5 +1,5 @@
 const socketDAL = require('./socket-dal');
-const { createMessage } = require('./socket-validation');
+const { createMessage, markMessagesRead } = require('./socket-validation');
 
 const createConnection = async (userId, socketId) => {
   try {
@@ -53,6 +53,21 @@ const createChatMessage = async (userId, data) => {
   }
 };
 
+const markMessagesAsRead = async (userId, data) => {
+  const validatedData = markMessagesRead.validate(data);
+  if (validatedData.error) {
+    throw new Error(validatedData.error);
+  }
+
+  const { chatId } = validatedData.value;
+
+  try {
+    return await socketDAL.markMessagesAsRead(chatId, userId);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 const readOtherChatUserRooms = async (userId, data) => {
   const { chatId } = data;
 
@@ -67,5 +82,6 @@ module.exports = {
   createConnection,
   deleteConnection,
   createChatMessage,
+  markMessagesAsRead,
   readOtherChatUserRooms
 };

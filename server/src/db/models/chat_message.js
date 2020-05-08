@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       message: {
         type: DataTypes.TEXT,
         allowNull: false
+      },
+      readAt: {
+        type: DataTypes.DATE
       }
     },
     { paranoid: true }

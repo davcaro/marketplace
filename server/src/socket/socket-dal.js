@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const {
   SocketConnection,
@@ -27,7 +28,12 @@ const createChatMessage = (chatId, userId, message) =>
     let chatMessage;
 
     chat.users.forEach(user => {
-      const msg = ChatMessage.create({ chatUserId: user.id, userId, message });
+      const msg = ChatMessage.create({
+        chatUserId: user.id,
+        userId,
+        message,
+        readAt: user.userId === userId ? Sequelize.fn('NOW') : null
+      });
 
       if (user.userId !== userId) {
         chatMessage = msg;
@@ -36,6 +42,17 @@ const createChatMessage = (chatId, userId, message) =>
 
     return chatMessage;
   });
+
+const markMessagesAsRead = (chatId, userId) =>
+  ChatUser.findOne({
+    attributes: ['id'],
+    where: { chatId, userId }
+  }).then(user =>
+    ChatMessage.update(
+      { readAt: Sequelize.fn('NOW') },
+      { where: { readAt: null, chatUserId: user.id } }
+    )
+  );
 
 const readOtherChatUserRooms = (chatId, userId) =>
   ChatUser.findOne({
@@ -59,6 +76,7 @@ module.exports = {
   destroyConnection,
   countChatUser,
   createChatMessage,
+  markMessagesAsRead,
   readOtherChatUserRooms,
   findChat
 };

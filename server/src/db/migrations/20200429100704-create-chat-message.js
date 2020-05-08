@@ -30,6 +30,9 @@ module.exports = {
       message: {
         type: Sequelize.TEXT
       },
+      readAt: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
