@@ -17,6 +17,25 @@ const update = {
   })
 };
 
+const getReviews = {
+  [Segments.QUERY]: Joi.object().keys({
+    pending: Joi.valid('0', '1')
+  })
+};
+
+const updateReview = {
+  [Segments.BODY]: Joi.object().keys({
+    score: Joi.number()
+      .min(0)
+      .max(5)
+      .precision(1)
+      .required(),
+    description: Joi.string().required()
+  })
+};
+
 module.exports = {
-  update
+  update,
+  getReviews,
+  updateReview
 };

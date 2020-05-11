@@ -1,9 +1,12 @@
 const { Op } = require('sequelize');
-const { Item } = require('../../../db/models');
-const { ItemImage } = require('../../../db/models');
-const { ItemFavorite } = require('../../../db/models');
-const { ItemView } = require('../../../db/models');
-const { Location } = require('../../../db/models');
+const {
+  Item,
+  ItemImage,
+  ItemFavorite,
+  ItemView,
+  Location,
+  Review
+} = require('../../../db/models');
 
 const countLengths = ({ dataValues: item }) => ({
   ...item,
@@ -42,6 +45,17 @@ const addFavorite = (userId, itemId) =>
 
 const addView = (userId, itemId) => ItemView.create({ userId, itemId });
 
+const addReviews = (itemId, userId, review) =>
+  Review.bulkCreate([
+    { itemId, fromUserId: review.user, toUserId: userId },
+    {
+      itemId,
+      fromUserId: userId,
+      toUserId: review.user,
+      ...review
+    }
+  ]);
+
 const findOrCreateImage = (itemId, image) =>
   ItemImage.findCreateFind({ where: { itemId, image } });
 
@@ -77,6 +91,7 @@ module.exports = {
   addImage,
   addFavorite,
   addView,
+  addReviews,
   findOrCreateImage,
   updateById,
   updateLocation,

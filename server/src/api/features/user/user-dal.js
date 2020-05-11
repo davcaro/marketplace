@@ -1,9 +1,10 @@
-const { User } = require('../../../db/models');
-const { Location } = require('../../../db/models');
+const { User, Location, Review } = require('../../../db/models');
 
 const findAll = () => User.scope('public').findAll();
 
 const findById = id => User.scope('public').findOne({ where: { id } });
+
+const findUserReviews = id => Review.findAll({ where: { toUserId: id } });
 
 const create = payload => User.create(payload);
 
@@ -37,6 +38,7 @@ const deleteById = id => User.scope('public').destroy({ where: { id } });
 module.exports = {
   findAll,
   findById,
+  findUserReviews,
   create,
   createLocation,
   countById,

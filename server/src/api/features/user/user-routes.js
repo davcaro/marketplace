@@ -20,22 +20,17 @@ module.exports = app => {
     hasPermission(ACTIONS.MANAGE, SUBJECTS.USER),
     userController.getUsers
   );
-  route.get(
-    '/:id',
-    hasPermission(ACTIONS.READ, SUBJECTS.USER),
-    userController.getUser
-  );
-  route.get(
-    '/:id/items',
-    hasPermission(ACTIONS.READ, SUBJECTS.USER),
-    userController.getUserItems
-  );
   route.post(
     '/',
     isAuthorized,
     hasPermission(ACTIONS.CREATE, SUBJECTS.USER),
     celebrate(userValidation.create),
     userController.createUser
+  );
+  route.get(
+    '/:id',
+    hasPermission(ACTIONS.READ, SUBJECTS.USER),
+    userController.getUser
   );
   route.patch(
     '/:id',
@@ -49,5 +44,15 @@ module.exports = app => {
     isAuthorized,
     hasPermission(ACTIONS.DELETE, SUBJECTS.USER),
     userController.deleteUser
+  );
+  route.get(
+    '/:id/items',
+    hasPermission(ACTIONS.READ, SUBJECTS.USER),
+    userController.getUserItems
+  );
+  route.get(
+    '/:id/reviews',
+    hasPermission(ACTIONS.READ, SUBJECTS.REVIEW),
+    userController.getUserReviews
   );
 };

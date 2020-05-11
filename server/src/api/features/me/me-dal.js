@@ -1,7 +1,11 @@
-const { User } = require('../../../db/models');
-const { Item } = require('../../../db/models');
-const { ItemFavorite } = require('../../../db/models');
-const { Location } = require('../../../db/models');
+const { Op } = require('sequelize');
+const {
+  User,
+  Item,
+  ItemFavorite,
+  Location,
+  Review
+} = require('../../../db/models');
 
 const findById = id => User.scope('public').findOne({ where: { id } });
 
@@ -48,10 +52,42 @@ const findFavorites = async (userId, query) => {
   return items;
 };
 
+const findReviews = async (userId, pending) => {
+  if (pending) {
+    return Review.findAll({
+      where: {
+        score: null,
+        description: null,
+        [Op.or]: {
+          fromUserId: userId,
+          toUserId: userId
+        }
+      }
+    });
+  }
+
+  return Review.findAll({
+    where: {
+      fromUserId: userId,
+      score: { [Op.not]: null },
+      description: { [Op.not]: null }
+    }
+  });
+};
+
+const updateReview = async (id, userId, payload) =>
+  Review.update(payload, { where: { id, fromUserId: userId } });
+
+const deleteReview = (id, userId) =>
+  Review.destroy({ where: { id, fromUserId: userId } });
+
 module.exports = {
   findById,
   updateById,
   updateLocation,
   deleteById,
-  findFavorites
+  findFavorites,
+  findReviews,
+  updateReview,
+  deleteReview
 };

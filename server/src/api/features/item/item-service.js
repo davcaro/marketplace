@@ -62,7 +62,7 @@ const createItem = async body => {
   }
 };
 
-const updateItem = async (id, body) => {
+const updateItem = async (id, userId, body) => {
   const { categoryId } = body;
 
   if (categoryId) {
@@ -83,6 +83,10 @@ const updateItem = async (id, body) => {
 
     if (body.location) {
       await itemDAL.updateLocation(id, body.location);
+    }
+
+    if (body.review) {
+      await itemDAL.addReviews(id, userId, body.review);
     }
 
     return await itemDAL.updateById(id, body);

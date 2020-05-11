@@ -59,6 +59,16 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'connections'
     });
+
+    User.hasMany(models.Review, {
+      foreignKey: 'fromUserId',
+      as: 'ownReviews'
+    });
+
+    User.hasMany(models.Review, {
+      foreignKey: 'toUserId',
+      as: 'othersReviews'
+    });
   };
 
   User.beforeCreate(async (user, options) => {

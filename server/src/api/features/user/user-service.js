@@ -74,6 +74,28 @@ const readUserItems = async (id, query) => {
   return Paginator.paginate(items, +query.limit, +query.offset);
 };
 
+const readUserReviews = async id => {
+  let user;
+
+  try {
+    user = await userDAL.countById(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!user) {
+    throw new AppError(404, 'User not found');
+  }
+
+  try {
+    const reviews = await userDAL.findUserReviews(id);
+
+    return reviews;
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 const createUser = async body => {
   const payload = { ...body };
 
@@ -142,6 +164,7 @@ module.exports = {
   readUsers,
   readUser,
   readUserItems,
+  readUserReviews,
   createUser,
   updateUser,
   deleteUser

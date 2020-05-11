@@ -45,7 +45,7 @@ const updateItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    await itemService.updateItem(id, req.body);
+    await itemService.updateItem(id, req.user.id, req.body);
 
     return res.sendStatus(204);
   } catch (e) {

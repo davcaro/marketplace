@@ -39,4 +39,21 @@ module.exports = app => {
     hasPermission(ACTIONS.READ, SUBJECTS.SELF_USER),
     meController.getFavorites
   );
+  route.get(
+    '/reviews',
+    hasPermission(ACTIONS.READ, SUBJECTS.REVIEW),
+    celebrate(meValidation.getReviews),
+    meController.getReviews
+  );
+  route.patch(
+    '/reviews/:id',
+    hasPermission(ACTIONS.UPDATE, SUBJECTS.REVIEW),
+    celebrate(meValidation.updateReview),
+    meController.updateReview
+  );
+  route.delete(
+    '/reviews/:id',
+    hasPermission(ACTIONS.DELETE, SUBJECTS.REVIEW),
+    meController.deleteReview
+  );
 };

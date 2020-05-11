@@ -48,7 +48,24 @@ const update = {
     }),
     status: Joi.string().valid('for_sale', 'reserved', 'sold'),
     condition: Joi.string().valid('new', 'like_new', 'good', 'fair', 'poor'),
-    images: Joi.array().items(Joi.string())
+    images: Joi.array().items(Joi.string()),
+    review: Joi.object()
+      .keys({
+        user: Joi.number()
+          .positive()
+          .required(),
+        score: Joi.number()
+          .min(0)
+          .max(5)
+          .precision(1),
+        description: Joi.string()
+      })
+      .and('score', 'description')
+      .when('status', {
+        is: Joi.valid('sold'),
+        then: Joi.optional(),
+        otherwise: Joi.forbidden()
+      })
   })
 };
 

@@ -58,9 +58,40 @@ const readFavorites = async (id, query) => {
   return Paginator.paginate(items, +query.limit, +query.offset);
 };
 
+const readReviews = async (id, query) => {
+  const pending = !!(query && query.pending === '1');
+
+  try {
+    const reviews = await meDAL.findReviews(id, pending);
+
+    return reviews;
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
+const updateReview = async (id, userId, body) => {
+  try {
+    return await meDAL.updateReview(id, userId, body);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
+const deleteReview = async (id, userId) => {
+  try {
+    return await meDAL.deleteReview(id, userId);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 module.exports = {
   readUser,
   updateUser,
   deleteUser,
-  readFavorites
+  readFavorites,
+  readReviews,
+  updateReview,
+  deleteReview
 };

@@ -22,7 +22,8 @@ const SUBJECTS = {
   FAVORITE: 'ItemFavorite',
   VIEW: 'ItemView',
   CHAT: 'Chat',
-  MESSAGE: 'ChatMessage'
+  MESSAGE: 'ChatMessage',
+  REVIEW: 'Review'
 };
 
 function defineAbilitiesFor(user) {
@@ -41,15 +42,16 @@ function defineAbilitiesFor(user) {
       allow(ACTIONS.CRUD, SUBJECTS.ITEM);
       allow(ACTIONS.CRUD, SUBJECTS.FAVORITE);
       allow(ACTIONS.CREATE, SUBJECTS.VIEW);
-
       allow(ACTIONS.CRUD, SUBJECTS.CHAT);
       allow(ACTIONS.CRUD, SUBJECTS.MESSAGE);
+      allow(ACTIONS.CRUD, SUBJECTS.REVIEW);
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);
     allow(ACTIONS.READ, SUBJECTS.USER);
     allow(ACTIONS.READ, SUBJECTS.ITEM);
     allow(ACTIONS.READ, SUBJECTS.FAVORITE);
+    allow(ACTIONS.READ, SUBJECTS.REVIEW);
   }
 
   return new Ability(rules);

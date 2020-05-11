@@ -34,6 +34,18 @@ const getUserItems = async (req, res, next) => {
   }
 };
 
+const getUserReviews = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const reviews = await userService.readUserReviews(id);
+
+    return res.json(reviews);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const createUser = async (req, res, next) => {
   try {
     const user = await userService.createUser(req.body);
@@ -72,6 +84,7 @@ module.exports = {
   getUsers,
   getUser,
   getUserItems,
+  getUserReviews,
   createUser,
   updateUser,
   deleteUser
