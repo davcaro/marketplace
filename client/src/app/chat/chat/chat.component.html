@@ -5,11 +5,15 @@
         <i class="icon-arrow-left2"></i>
       </button>
 
-      <a [routerLink]="['/', 'user', 1]">
-        <nz-avatar nzIcon="user" [nzSize]="48" [nzSrc]="apiUrl + '/images/avatars/' + chat.user.avatar"></nz-avatar>
+      <a [routerLink]="['/', 'user', chat.getOtherUser(user.id).id]">
+        <nz-avatar
+          nzIcon="user"
+          [nzSize]="48"
+          [nzSrc]="apiUrl + '/images/avatars/' + chat.getOtherUser(user.id).avatar"
+        ></nz-avatar>
 
         <span nz-typography class="user-name">
-          <strong>{{ chat.user.name }}</strong>
+          <strong>{{ chat.getOtherUser(user.id).name }}</strong>
         </span>
       </a>
     </div>
@@ -43,8 +47,15 @@
 
   <div class="body">
     <div class="chat">
-      <div class="chat-messages" #messages>
-        <ng-container *ngFor="let message of chat.messages; let i = index">
+      <div
+        class="chat-messages"
+        #messages
+        infiniteScroll
+        [scrollWindow]="false"
+        (scrolledUp)="loadMessages()"
+        (scroll)="onScroll()"
+      >
+        <ng-container *ngFor="let message of chat.messages.data; let i = index">
           <nz-tag class="day-tag" [nzColor]="'volcano'" *ngIf="!isSameDay(i)">{{ message.date }}</nz-tag>
 
           <div class="message" [class.self]="message.userId === user.id" [class.other]="message.userId !== user.id">
@@ -54,7 +65,20 @@
             </div>
           </div>
         </ng-container>
+
+        <div #chatBottom></div>
       </div>
+
+      <nz-badge
+        [nzCount]="unreadMessagesCount"
+        class="scroll-down"
+        [class.visible]="scrollDown"
+        (click)="scrollToBottom()"
+      >
+        <button nz-button nzType="primary" nzSize="large" nzShape="circle">
+          <i class="icon-arrow-down"></i>
+        </button>
+      </nz-badge>
 
       <div class="input">
         <form nz-form [formGroup]="form" (ngSubmit)="sendMessage()">
@@ -73,11 +97,15 @@
     </div>
 
     <div class="chat-info">
-      <a class="user-info" [routerLink]="['/', 'user', chat.user.id]">
-        <nz-avatar nzIcon="user" [nzSize]="48" [nzSrc]="apiUrl + '/images/avatars/' + chat.user.avatar"></nz-avatar>
+      <a class="user-info" [routerLink]="['/', 'user', chat.getOtherUser(user.id).id]">
+        <nz-avatar
+          nzIcon="user"
+          [nzSize]="48"
+          [nzSrc]="apiUrl + '/images/avatars/' + chat.getOtherUser(user.id).avatar"
+        ></nz-avatar>
 
         <span nz-typography class="user-name">
-          <strong>{{ chat.user.name }}</strong>
+          <strong>{{ chat.getOtherUser(user.id).name }}</strong>
         </span>
 
         <nz-rate [ngModel]="4" nzDisabled></nz-rate>

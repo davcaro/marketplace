@@ -1,6 +1,7 @@
 const chatDAL = require('./chat-dal');
 const itemDAL = require('../item/item-dal');
 const AppError = require('../../utils/app-error');
+const Paginator = require('../../utils/paginator');
 
 const readChats = async (id, query) => {
   const archived = !!(query && query.archived === '1');
@@ -12,15 +13,28 @@ const readChats = async (id, query) => {
   }
 };
 
-const readMessages = async (id, userId) => {
+const readMessages = async (id, userId, query) => {
+  const pagination = {
+    limit: query.limit ? +query.limit : null,
+    offset: query.offset ? +query.offset : null
+  };
+
   try {
-    return await chatDAL.findChat(id, userId);
+    const chat = await chatDAL.findChat(id, userId, pagination);
+
+    chat.dataValues.messages = Paginator.paginate(
+      chat.dataValues.messages,
+      pagination.limit,
+      pagination.offset
+    );
+
+    return chat;
   } catch (e) {
     throw new AppError(500, e.message);
   }
 };
 
-const findChat = async (userId, itemId) => {
+const findChat = async (userId, itemId, query) => {
   let item;
 
   try {
@@ -33,8 +47,21 @@ const findChat = async (userId, itemId) => {
     throw new AppError(404, 'Item not found');
   }
 
+  const pagination = {
+    limit: query.limit ? +query.limit : null,
+    offset: query.offset ? +query.offset : null
+  };
+
   try {
-    return await chatDAL.findChatByItem(userId, itemId);
+    const chat = await chatDAL.findChatByItem(userId, itemId, pagination);
+
+    chat.dataValues.messages = Paginator.paginate(
+      chat.dataValues.messages,
+      pagination.limit,
+      pagination.offset
+    );
+
+    return chat;
   } catch (e) {
     throw new AppError(500, e.message);
   }

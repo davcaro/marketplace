@@ -41,5 +41,13 @@ module.exports = server => {
         return throwError(socket, e.message);
       }
     });
+
+    socket.on('messages read', async data => {
+      try {
+        await socketService.markMessagesAsRead(user.id, data);
+      } catch (e) {
+        return throwError(socket, e.message);
+      }
+    });
   });
 };

@@ -18,10 +18,16 @@ import { SocketioService } from 'src/app/shared/socketio.service';
 })
 export class ChatComponent implements OnInit, OnDestroy {
   apiUrl: string;
-  chat: Chat;
   user: User;
+  chat: Chat;
+  unreadMessagesCount: number;
   form: FormGroup;
+  limit: number;
+  page: number;
+  total: number;
+  scrollDown: boolean;
   @ViewChild('messages') private messagesElement: ElementRef;
+  @ViewChild('chatBottom') private chatBottomElement: ElementRef;
 
   socket: SocketIOClient.Socket;
   routeSubscription: Subscription;
@@ -36,6 +42,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) {
     this.apiUrl = environment.apiUrl;
     this.user = this.authService.user.value;
+    this.limit = 30;
+    this.page = 1;
+    this.unreadMessagesCount = 0;
 
     this.form = new FormGroup({
       message: new FormControl(null, [Validators.required])
@@ -45,19 +54,35 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeSubscription = this.route.data.subscribe(data => {
       this.chat = Object.assign(new Chat(), data.chat);
-      this.chat.users[0].messages = this.chat.messages.map((message: any) => Object.assign(new ChatMessage(), message));
+      this.chat.messages.data = this.chat.messages.data.map(message => Object.assign(new ChatMessage(), message));
+      this.total = this.chat.messages.pagination.total;
 
-      this.scrollToBottom();
+      this.scrollToBottom('auto');
     });
 
     this.socket = this.socketioService.getSocket();
     this.socket.on('message received', (message: any) => {
-      this.chat.messages.push(Object.assign(new ChatMessage(), message.message));
+      if (message.chat.id === this.chat.id) {
+        const scrollAtBottom = this.getScrollBottom() === 0;
+
+        this.chat.messages.data.push(Object.assign(new ChatMessage(), message.message));
+
+        if (scrollAtBottom) {
+          this.scrollToBottom();
+
+          this.markMessagesAsRead();
+        } else {
+          this.unreadMessagesCount++;
+          this.chatService.updateUnreadCount.next(this.unreadMessagesCount);
+        }
+      }
     });
   }
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+
+    this.socket.off('message received');
   }
 
   sendMessage(): void {
@@ -67,9 +92,37 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.form.reset();
 
       this.chatService.sendMessage(this.chat.id, message);
-      this.chat.messages.push(new ChatMessage(this.user.id, message));
+      this.chat.messages.data.push(new ChatMessage(this.user.id, message));
 
       this.scrollToBottom();
+    }
+  }
+
+  markMessagesAsRead(): void {
+    const unreadMessages = this.chat.messages.data.filter(message => message.readAt === null);
+
+    if (unreadMessages.length) {
+      this.chatService.markMessagesAsRead(this.chat.id);
+    }
+
+    unreadMessages.forEach(message => {
+      message.readAt = new Date();
+    });
+
+    this.unreadMessagesCount = 0;
+    this.chatService.updateUnreadCount.next(this.unreadMessagesCount);
+  }
+
+  loadMessages(): void {
+    const offset = this.page * this.limit;
+
+    if (offset < this.total) {
+      this.chatService.getChat(this.chat.id, { limit: this.limit, offset }).subscribe(res => {
+        this.page++;
+
+        const messages = res.messages.data.map((message: any) => Object.assign(new ChatMessage(), message));
+        this.chat.messages.data.unshift(...messages);
+      });
     }
   }
 
@@ -80,9 +133,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.router.navigate(['/', 'chat']);
   }
 
-  scrollToBottom(): void {
+  scrollToBottom(behavior: string = 'smooth'): void {
     setTimeout(() => {
-      this.messagesElement.nativeElement.scrollTop = this.messagesElement.nativeElement.scrollHeight;
+      this.chatBottomElement.nativeElement.scrollIntoView({ behavior });
     }, 0);
   }
 
@@ -109,13 +162,33 @@ export class ChatComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const currentMessage = new Date(this.chat.messages[index].createdAt);
-    const previousMessage = new Date(this.chat.messages[index - 1].createdAt);
+    const currentMessage = new Date(this.chat.messages.data[index].createdAt);
+    const previousMessage = new Date(this.chat.messages.data[index - 1].createdAt);
 
     return (
       currentMessage.getUTCFullYear() === previousMessage.getUTCFullYear() &&
       currentMessage.getUTCMonth() === previousMessage.getUTCMonth() &&
       currentMessage.getUTCDate() === previousMessage.getUTCDate()
     );
+  }
+
+  // Get the scroll distance from bottom of the chat
+  getScrollBottom(): number {
+    if (!this.messagesElement) {
+      return 0;
+    }
+
+    const element = this.messagesElement.nativeElement;
+    return element.scrollHeight - (element.scrollTop + element.offsetHeight);
+  }
+
+  onScroll(): void {
+    const scroll = this.getScrollBottom();
+
+    this.scrollDown = scroll > 100;
+
+    if (scroll === 0) {
+      this.markMessagesAsRead();
+    }
   }
 }

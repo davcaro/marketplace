@@ -1,58 +1,93 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,no-restricted-syntax,no-await-in-loop */
 
-const { Chat } = require('../../../db/models');
-const { ChatUser } = require('../../../db/models');
-const { ChatMessage } = require('../../../db/models');
-const { Item } = require('../../../db/models');
+const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
+const {
+  Chat,
+  ChatUser,
+  ChatMessage,
+  User,
+  Item
+} = require('../../../db/models');
 const itemDal = require('../item/item-dal');
 
-const findAll = async (id, archived) => {
-  const chats = await Chat.findAll({
+const findAll = async (userId, archived) => {
+  // Get all chat ids where the user is in and has messages
+  let chatIds = await Chat.findAll({
+    attributes: ['id'],
+    group: ['id'],
     include: [
       {
         model: ChatUser,
         as: 'users',
-        where: { userId: id, archived },
-        include: [{ model: ChatMessage, as: 'messages', required: true }]
+        attributes: [],
+        where: { userId, archived },
+        include: [
+          { model: ChatMessage, as: 'messages', attributes: [], required: true }
+        ]
+      }
+    ]
+  });
+  chatIds = chatIds.map(chat => chat.id);
+
+  const chats = await Chat.findAll({
+    where: { id: { [Op.in]: chatIds } },
+    include: [
+      {
+        model: ChatUser,
+        as: 'users',
+        include: [{ model: User.scope('public'), as: 'user' }]
       },
       { model: Item.scope('full'), as: 'item' }
     ]
   });
 
-  chats.forEach(chat => {
+  for (const chat of chats) {
     chat.item.dataValues = itemDal.countLengths(chat.item);
-  });
+
+    // Get unread messages
+    const chatUser = chat.users.find(user => user.userId === userId);
+    const unreadMessages = await ChatMessage.count({
+      where: { chatUserId: chatUser.id, readAt: null }
+    });
+
+    chat.dataValues.unreadMessages = unreadMessages;
+  }
 
   return chats;
 };
 
-const findChat = async (chatId, userId) => {
+const findChat = async (chatId, userId, pagination) => {
   const chat = await Chat.findByPk(chatId, {
     include: [
       {
         model: ChatUser,
         as: 'users',
-        where: { userId },
-        include: [{ model: ChatMessage, as: 'messages' }]
+        include: [{ model: User.scope('public'), as: 'user' }]
       },
       { model: Item.scope('full'), as: 'item' }
-    ],
-    order: [
-      [
-        { model: ChatUser, as: 'users' },
-        { model: ChatMessage, as: 'messages' },
-        'createdAt',
-        'ASC'
-      ]
     ]
   });
 
+  const chatUser = chat.users.find(user => user.userId === userId);
+  await ChatMessage.update(
+    { readAt: Sequelize.fn('NOW') },
+    { where: { readAt: null, chatUserId: chatUser.id } }
+  );
+  const messages = await ChatMessage.findAndCountAll({
+    where: { chatUserId: chatUser.id },
+    ...pagination,
+    order: [['createdAt', 'DESC']]
+  });
+  messages.rows.reverse();
+
+  chat.dataValues.messages = messages;
   chat.item.dataValues = itemDal.countLengths(chat.item);
 
   return chat;
 };
 
-const createChat = (userId, itemId) =>
+const createChat = (userId, itemId, pagination) =>
   Chat.create({ itemId })
     .then(async chat => {
       const item = await Item.findByPk(itemId, {
@@ -66,19 +101,19 @@ const createChat = (userId, itemId) =>
 
       return chat;
     })
-    .then(async chat => findChat(chat.id, userId));
+    .then(async chat => findChat(chat.id, userId, pagination));
 
-const findChatByItem = (userId, itemId) =>
+const findChatByItem = (userId, itemId, pagination) =>
   Chat.findOne({
     attributes: ['id'],
     include: [{ model: ChatUser, as: 'users', where: { userId } }],
     where: { itemId }
   }).then(chat => {
     if (chat) {
-      return findChat(chat.id, userId);
+      return findChat(chat.id, userId, pagination);
     }
 
-    return createChat(userId, itemId);
+    return createChat(userId, itemId, pagination);
   });
 
 const createMessage = (chatId, userId, payload) => {
@@ -86,7 +121,12 @@ const createMessage = (chatId, userId, payload) => {
     include: [{ model: ChatUser, as: 'users' }]
   }).then(chat =>
     chat.users.forEach(user => {
-      ChatMessage.create({ chatUserId: user.id, userId, ...payload });
+      ChatMessage.create({
+        chatUserId: user.id,
+        userId,
+        readAt: user.userId === userId ? Sequelize.fn('NOW') : null,
+        ...payload
+      });
     })
   );
 };

@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { SocketioService } from 'src/app/shared/socketio.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/users/user.model';
 
 @Component({
   selector: 'app-chats-list',
@@ -14,22 +16,26 @@ import { SocketioService } from 'src/app/shared/socketio.service';
 })
 export class ChatsListComponent implements OnInit, OnDestroy {
   apiUrl: string;
+  user: User;
   chats: Chat[];
-  chatSelected: boolean;
+  chatSelected: number;
   newChat: Chat;
   archived: boolean;
 
   socket: SocketIOClient.Socket;
   routeParamsSubscription: Subscription;
   removeChatSubscription: Subscription;
+  updateUnreadSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private chatService: ChatService,
+    private authService: AuthService,
     private socketioService: SocketioService
   ) {
     this.apiUrl = environment.apiUrl;
+    this.user = this.authService.user.value;
     this.archived = false;
 
     const state = this.router.getCurrentNavigation().extras.state;
@@ -48,7 +54,7 @@ export class ChatsListComponent implements OnInit, OnDestroy {
         switchMap(activeRoute => activeRoute.paramMap)
       )
       .subscribe(paramMap => {
-        this.chatSelected = !!paramMap.get('id');
+        this.chatSelected = +paramMap.get('id');
       });
   }
 
@@ -67,23 +73,45 @@ export class ChatsListComponent implements OnInit, OnDestroy {
       this.chats.splice(this.chats.indexOf(chatToRemove), 1);
     });
 
+    this.updateUnreadSubscription = this.chatService.updateUnreadCount.subscribe(count => {
+      const selectedChat = this.chats.find(chat => chat.id === this.chatSelected);
+
+      if (selectedChat) {
+        selectedChat.unreadMessages = count;
+      }
+    });
+
     this.socket = this.socketioService.getSocket();
     this.socket.on('message received', (message: any) => {
       const newChat = Object.assign(new Chat(), message.chat);
 
-      if (!this.chats.find(chat => chat.id === newChat.id)) {
-        this.chats.unshift(newChat);
+      if (newChat.isArchived(this.user.id) === this.archived) {
+        let chatFound = this.chats.find(chat => chat.id === newChat.id);
+
+        if (!chatFound) {
+          newChat.unreadMessages = 0;
+          this.chats.unshift(newChat);
+          chatFound = newChat;
+        }
+
+        chatFound.unreadMessages++;
       }
     });
   }
 
   ngOnDestroy() {
     this.routeParamsSubscription.unsubscribe();
+
+    this.socket.off('message received');
   }
 
   onStatusChange(): void {
     this.chatService.getChats(this.archived).subscribe(chats => {
       this.chats = chats.map((chat: any) => Object.assign(new Chat(), chat));
     });
+  }
+
+  onSelectChat(chat: Chat): void {
+    chat.unreadMessages = 0;
   }
 }

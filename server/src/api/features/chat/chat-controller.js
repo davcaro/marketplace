@@ -17,7 +17,7 @@ const getMessages = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const messages = await chatService.readMessages(id, req.user.id);
+    const messages = await chatService.readMessages(id, req.user.id, req.query);
 
     return res.json(messages);
   } catch (e) {
@@ -29,7 +29,7 @@ const findChat = async (req, res, next) => {
   const { itemId } = req.query;
 
   try {
-    const chat = await chatService.findChat(req.user.id, itemId);
+    const chat = await chatService.findChat(req.user.id, itemId, req.query);
 
     return res.json(chat);
   } catch (e) {

@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -68,7 +69,8 @@ registerLocaleData(es);
     HttpClientModule,
     BrowserAnimationsModule,
     ShareButtonsModule,
-    ShareIconsModule.forRoot()
+    ShareIconsModule.forRoot(),
+    InfiniteScrollModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es-ES' },
