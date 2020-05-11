@@ -26,6 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@mapbox/mapbox-gl-geocoder": "^4.5.1",
     "@types/socket.io-client": "^1.4.32",
+    "date-fns": "^2.13.0",
     "mapbox-gl": "^1.9.1",
     "ng-zorro-antd": "^8.5.2",
     "ngx-infinite-scroll": "^8.0.2",

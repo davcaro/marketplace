@@ -10,6 +10,7 @@ import { Chat } from '../chat.model';
 import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd';
 import { SocketioService } from 'src/app/shared/socketio.service';
+import { isSameDay } from 'date-fns';
 
 @Component({
   selector: 'app-chat',
@@ -165,11 +166,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     const currentMessage = new Date(this.chat.messages.data[index].createdAt);
     const previousMessage = new Date(this.chat.messages.data[index - 1].createdAt);
 
-    return (
-      currentMessage.getUTCFullYear() === previousMessage.getUTCFullYear() &&
-      currentMessage.getUTCMonth() === previousMessage.getUTCMonth() &&
-      currentMessage.getUTCDate() === previousMessage.getUTCDate()
-    );
+    return isSameDay(previousMessage, currentMessage);
   }
 
   // Get the scroll distance from bottom of the chat

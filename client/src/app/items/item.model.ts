@@ -1,4 +1,5 @@
 import { Location } from '../shared/location.model';
+import { format } from 'date-fns';
 
 export class Item {
   public id: number;
@@ -17,10 +18,10 @@ export class Item {
   public images: { id: number; image: string }[];
 
   get creationDate() {
-    return new Date(this.createdAt).toLocaleDateString('es-ES');
+    return format(new Date(this.createdAt), 'dd/MM/yyyy');
   }
 
   get updatedDate() {
-    return new Date(this.updatedAt).toLocaleDateString('es-ES');
+    return format(new Date(this.updatedAt), 'dd/MM/yyyy');
   }
 }

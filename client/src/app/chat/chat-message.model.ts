@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export class ChatMessage {
   public id: number;
   public userId: number;
@@ -13,12 +15,10 @@ export class ChatMessage {
   }
 
   get date() {
-    return new Date(this.createdAt).toLocaleDateString();
+    return format(new Date(this.createdAt), 'dd/MM/yyyy');
   }
 
   get time() {
-    const date = new Date(this.createdAt);
-
-    return `${date.getHours()}:${date.getMinutes()}`;
+    return format(new Date(this.createdAt), 'HH:mm');
   }
 }
