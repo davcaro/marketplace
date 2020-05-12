@@ -37,6 +37,18 @@ const findChat = async (req, res, next) => {
   }
 };
 
+const findUsers = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const users = await chatService.readUsers(id, req.user.id);
+
+    return res.json(users);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const createMessage = async (req, res, next) => {
   const { id } = req.params;
 
@@ -61,6 +73,18 @@ const updateChat = async (req, res, next) => {
   }
 };
 
+const deleteChat = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await chatService.deleteChat(id, req.user.id);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const hasPermission = async (req, res, next) => {
   const { id } = req.params;
 
@@ -77,24 +101,30 @@ const hasPermission = async (req, res, next) => {
   return next();
 };
 
-const deleteChat = async (req, res, next) => {
+const hasPermissionOnItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    await chatService.deleteChat(id, req.user.id);
+    const userHasPermission = await chatService.countItemOwner(id, req.user.id);
 
-    return res.sendStatus(204);
+    if (!userHasPermission) {
+      return next(Boom.forbidden());
+    }
   } catch (e) {
     return next(e);
   }
+
+  return next();
 };
 
 module.exports = {
   getChats,
   getMessages,
   findChat,
+  findUsers,
   createMessage,
   updateChat,
   deleteChat,
-  hasPermission
+  hasPermission,
+  hasPermissionOnItem
 };

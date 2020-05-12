@@ -67,6 +67,26 @@ const findChat = async (userId, itemId, query) => {
   }
 };
 
+const readUsers = async (itemId, userId) => {
+  let item;
+
+  try {
+    item = await itemDAL.count(itemId);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+
+  if (!item) {
+    throw new AppError(404, 'Item not found');
+  }
+
+  try {
+    return await chatDAL.findUsersByItem(itemId, userId);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 const createMessage = async (chatId, userId, body) => {
   try {
     return await chatDAL.createMessage(chatId, userId, body);
@@ -99,12 +119,22 @@ const deleteChat = async (chatId, userId) => {
   }
 };
 
+const countItemOwner = async (itemId, userId) => {
+  try {
+    return await chatDAL.countItemOwner(itemId, userId);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 module.exports = {
   readChats,
   readMessages,
   findChat,
+  readUsers,
   createMessage,
   updateChat,
   deleteChat,
-  checkUser
+  checkUser,
+  countItemOwner
 };

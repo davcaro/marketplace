@@ -27,6 +27,13 @@ module.exports = app => {
     chatController.findChat
   );
   route.get(
+    '/item/:id',
+    hasPermission(ACTIONS.READ, SUBJECTS.USER),
+    hasPermission(ACTIONS.READ, SUBJECTS.CHAT),
+    chatController.hasPermissionOnItem,
+    chatController.findUsers
+  );
+  route.get(
     '/:id',
     hasPermission(ACTIONS.READ, SUBJECTS.MESSAGE),
     chatController.hasPermission,

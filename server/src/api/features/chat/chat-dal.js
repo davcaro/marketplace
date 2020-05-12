@@ -116,6 +116,28 @@ const findChatByItem = (userId, itemId, pagination) =>
     return createChat(userId, itemId, pagination);
   });
 
+const findUsersByItem = (itemId, userId) =>
+  User.scope('public').findAll({
+    where: { id: { [Op.not]: userId } },
+    include: [
+      {
+        model: ChatUser,
+        as: 'chats',
+        attributes: [],
+        include: [
+          {
+            model: Chat,
+            as: 'chat',
+            attributes: [],
+            where: { itemId },
+            required: true
+          }
+        ],
+        required: true
+      }
+    ]
+  });
+
 const createMessage = (chatId, userId, payload) => {
   Chat.findByPk(chatId, {
     include: [{ model: ChatUser, as: 'users' }]
@@ -140,20 +162,23 @@ const countUser = (chatId, userId) =>
     where: { id: chatId }
   });
 
-const deleteChat = (chatId, userId) => {
+const deleteChat = (chatId, userId) =>
   ChatUser.findOne({
     attributes: ['id'],
     where: { chatId, userId }
   }).then(user => ChatMessage.destroy({ where: { chatUserId: user.id } }));
-};
+
+const countItemOwner = (id, userId) => Item.count({ where: { id, userId } });
 
 module.exports = {
   findAll,
   findChat,
   findChatByItem,
+  findUsersByItem,
   createChat,
   createMessage,
   update,
   deleteChat,
-  countUser
+  countUser,
+  countItemOwner
 };

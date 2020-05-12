@@ -60,7 +60,6 @@ const update = {
           .precision(1),
         description: Joi.string()
       })
-      .and('score', 'description')
       .when('status', {
         is: Joi.valid('sold'),
         then: Joi.optional(),
