@@ -4,6 +4,7 @@ import { Item } from 'src/app/items/item.model';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/users/user.model';
+import { ChatService } from 'src/app/chat/chat.service';
 
 @Component({
   selector: 'app-items-catalog',
@@ -18,12 +19,26 @@ export class ItemsCatalogComponent implements OnInit {
   itemConfirmOpen: Item;
   pagination: { page: number; limit: number; offset: number; total: number };
 
+  // Sell Modal
+  itemModalOpen: Item;
+  sellModalVisible: boolean;
+  selectedBuyer: User;
+  hasConfirmedBuyer: boolean;
+  users: User[];
+  rate: number;
+  description: string;
+
   @Input() user: User;
   @Input() mode: string;
   @Input() itemsStatus: string;
   @Output() itemsCount: EventEmitter<number>;
 
-  constructor(private itemsService: ItemsService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private itemsService: ItemsService,
+    private chatService: ChatService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.apiUrl = environment.apiUrl;
     this.loading = true;
     this.items = [];
@@ -93,8 +108,16 @@ export class ItemsCatalogComponent implements OnInit {
     });
   }
 
-  onMarkAsSold(item: Item) {
-    this.itemsService.updateItem(item.id, { status: 'sold' }).subscribe(() => {
+  onMarkAsSold(item: Item, review: boolean) {
+    const data: { status: string; review?: { user: number; score: number; description: string } } = {
+      status: 'sold'
+    };
+    if (review) {
+      data.review = { user: this.selectedBuyer.id, score: this.rate, description: this.description };
+    }
+
+    this.itemsService.updateItem(item.id, data).subscribe(() => {
+      this.closeSellModal();
       this.loadItems();
     });
   }
@@ -121,5 +144,30 @@ export class ItemsCatalogComponent implements OnInit {
     this.itemsService.removeFavorite(item.id).subscribe(() => {
       this.loadFavorites();
     });
+  }
+
+  showSellModal(item: Item): void {
+    this.itemModalOpen = item;
+    this.sellModalVisible = true;
+
+    this.chatService.findUsersByItem(item.id).subscribe(users => {
+      this.users = users;
+    });
+  }
+
+  closeSellModal(): void {
+    this.sellModalVisible = false;
+    this.hasConfirmedBuyer = false;
+    this.selectedBuyer = null;
+    this.rate = null;
+    this.description = null;
+  }
+
+  onConfirmBuyer(): void {
+    this.hasConfirmedBuyer = true;
+  }
+
+  onModalBack(): void {
+    this.hasConfirmedBuyer = false;
   }
 }

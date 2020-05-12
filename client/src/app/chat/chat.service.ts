@@ -39,6 +39,10 @@ export class ChatService {
       .pipe(catchError(this.handleError));
   }
 
+  findUsersByItem(itemId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/chats/item/${itemId}`).pipe(catchError(this.handleError));
+  }
+
   createChat(itemId: number, message: string): Observable<any> {
     return this.http
       .post<any>(`${this.apiUrl}/api/chats`, { itemId, message })

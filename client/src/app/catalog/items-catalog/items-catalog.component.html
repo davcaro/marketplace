@@ -104,7 +104,7 @@
     </ng-template>
     <ng-template #markAsSold>
       <span
-        (click)="$event.preventDefault(); $event.stopPropagation(); onMarkAsSold(item)"
+        (click)="$event.preventDefault(); $event.stopPropagation(); showSellModal(item)"
         nz-tooltip
         nzTooltipTitle="Marcar como vendido"
         (nzVisibleChange)="onTooltipChange($event, item)"
@@ -150,6 +150,71 @@
     </ng-template>
   </div>
 </div>
+
+<nz-modal [(nzVisible)]="sellModalVisible" [nzFooter]="null" (nzOnCancel)="closeSellModal()">
+  <div class="modal-back" *ngIf="hasConfirmedBuyer">
+    <button nz-button nzType="link" [nzSize]="'large'" class="modal-back-arrow" (click)="onModalBack()">
+      <i class="icon-arrow-left2"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container *ngIf="!hasConfirmedBuyer">
+      <span nz-text><strong class="header-title">¡Enhorabuena por la venta!</strong></span>
+      <p>Elige quién ha sido el comprador de entre tus conversaciones</p>
+
+      <div class="user-selector">
+        <nz-select
+          class="user-select"
+          nzShowSearch
+          nzAllowClear
+          [nzNotFoundContent]="usersEmptyTpl"
+          nzPlaceHolder="Selecciona el usuario"
+          [(ngModel)]="selectedBuyer"
+        >
+          <nz-option nzCustomContent [nzLabel]="user.name" [nzValue]="user" *ngFor="let user of users">
+            <nz-avatar nzIcon="user" nzSize="small" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>
+            {{ user.name }}
+          </nz-option>
+        </nz-select>
+        <ng-template #usersEmptyTpl>
+          <nz-empty [nzNotFoundContent]="'No se encontraron usuarios'"></nz-empty>
+        </ng-template>
+
+        <button nz-button nzType="primary" (click)="onConfirmBuyer()">Continuar</button>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <a nz-button nzType="link" (click)="onMarkAsSold(itemModalOpen, false)">Lo he vendido fuera de Marketplace</a>
+    </ng-container>
+
+    <ng-container *ngIf="hasConfirmedBuyer">
+      <span nz-text><strong class="header-title">Valora cómo ha sido la venta</strong></span>
+
+      <div class="user-info">
+        <nz-avatar nzIcon="user" [nzSize]="36" [nzSrc]="apiUrl + '/images/avatars/' + selectedBuyer.avatar"></nz-avatar>
+
+        <span nz-text>{{ selectedBuyer.name }}</span>
+      </div>
+
+      <div class="review">
+        <span nz-text>Puntuación:</span>
+        <nz-rate [(ngModel)]="rate" nzAllowHalf></nz-rate>
+        <textarea
+          nz-input
+          [(ngModel)]="description"
+          placeholder="Escribe tu opinión..."
+          [nzAutosize]="{ minRows: 2, maxRows: 5 }"
+        ></textarea>
+      </div>
+
+      <button class="confirm-sale" nz-button nzType="primary" (click)="onMarkAsSold(itemModalOpen, true)">
+        Finalizar venta
+      </button>
+    </ng-container>
+  </div>
+</nz-modal>
 
 <nz-pagination
   [nzHideOnSinglePage]="true"
