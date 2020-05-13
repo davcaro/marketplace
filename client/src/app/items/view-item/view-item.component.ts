@@ -7,6 +7,7 @@ import { Chat } from 'src/app/chat/chat.model';
 import { User } from 'src/app/users/user.model';
 import { ItemsService } from '../items.service';
 import { ChatService } from 'src/app/chat/chat.service';
+import { ReviewsService } from 'src/app/reviews/reviews.service';
 import * as mapboxgl from 'mapbox-gl';
 
 @Component({
@@ -19,20 +20,24 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
   user: User;
   item: Item;
   isFavorited: boolean;
+  userItemsCount: number;
+  userScore: { score: number; reviews: number };
   @ViewChild('map', { static: false }) mapElement: ElementRef;
   mapbox = mapboxgl as typeof mapboxgl;
   map: mapboxgl.Map;
 
   constructor(
-    private authService: AuthService,
-    private itemsService: ItemsService,
     private route: ActivatedRoute,
     private router: Router,
-    private chatService: ChatService
+    private authService: AuthService,
+    private itemsService: ItemsService,
+    private chatService: ChatService,
+    private reviewsService: ReviewsService
   ) {
     this.apiUrl = environment.apiUrl;
-
     this.user = this.authService.user.value;
+
+    this.userScore = { score: 0, reviews: 0 };
   }
 
   ngOnInit(): void {
@@ -45,6 +50,14 @@ export class ViewItemComponent implements OnInit, AfterViewInit {
 
       this.itemsService.addView(this.item.id).subscribe();
     }
+
+    this.itemsService.countUserItems(this.item.user.id).subscribe(res => {
+      this.userItemsCount = res;
+    });
+
+    this.reviewsService.getUserScore(this.item.user.id).subscribe(res => {
+      this.userScore = res;
+    });
   }
 
   ngAfterViewInit() {

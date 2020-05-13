@@ -46,6 +46,10 @@ export class ItemsService {
       .pipe(catchError(this.handleError));
   }
 
+  countUserItems(userId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/users/${userId}/items/count`).pipe(catchError(this.handleError));
+  }
+
   getUserFavorites(pagination: { limit: any; offset: any }): Observable<Item> {
     return this.http
       .get<Item>(`${this.apiUrl}/api/me/favorites`, { params: pagination })

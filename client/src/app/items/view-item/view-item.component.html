@@ -21,13 +21,13 @@
 
           <div class="user-info">
             <span nz-text>{{ item.user.name | truncate: 17 }}</span>
-            <span nz-text nzType="secondary">5 Productos</span>
+            <span nz-text nzType="secondary">{{ userItemsCount }} Productos</span>
           </div>
         </a>
 
         <div class="header-rate">
-          <nz-rate [ngModel]="4" nzDisabled></nz-rate>
-          <span nz-text class="rate-text">50 valoraciones</span>
+          <nz-rate [ngModel]="userScore.score" nzDisabled></nz-rate>
+          <span nz-text class="rate-text">{{ userScore.reviews }} valoraciones</span>
         </div>
 
         <div class="header-buttons">

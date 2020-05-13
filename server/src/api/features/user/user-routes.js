@@ -51,8 +51,19 @@ module.exports = app => {
     userController.getUserItems
   );
   route.get(
+    '/:id/items/count',
+    hasPermission(ACTIONS.READ, SUBJECTS.USER),
+    hasPermission(ACTIONS.READ, SUBJECTS.ITEM),
+    userController.countUserItems
+  );
+  route.get(
     '/:id/reviews',
     hasPermission(ACTIONS.READ, SUBJECTS.REVIEW),
     userController.getUserReviews
+  );
+  route.get(
+    '/:id/score',
+    hasPermission(ACTIONS.READ, SUBJECTS.REVIEW),
+    userController.getUserScore
   );
 };

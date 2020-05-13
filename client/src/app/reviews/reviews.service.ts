@@ -24,6 +24,10 @@ export class ReviewsService {
       .pipe(catchError(this.handleError));
   }
 
+  getUserScore(userId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/users/${userId}/score`).pipe(catchError(this.handleError));
+  }
+
   updateReview(id: number, review: { score?: number; description?: string }): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/api/me/reviews/${id}`, review).pipe(catchError(this.handleError));
   }

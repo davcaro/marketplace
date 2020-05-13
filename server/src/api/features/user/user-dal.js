@@ -1,5 +1,6 @@
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
-const { User, Location, Review } = require('../../../db/models');
+const { User, Item, Location, Review } = require('../../../db/models');
 
 const findAll = () => User.scope('public').findAll();
 
@@ -17,6 +18,33 @@ const findUserReviews = id =>
     include: { model: User.scope('public'), as: 'fromUser' }
   });
 
+const findUserScore = async id => {
+  const reviews = await Review.count({
+    where: {
+      toUserId: id,
+      [Op.not]: {
+        score: null,
+        description: null
+      }
+    }
+  });
+
+  const score = await Review.findOne({
+    attributes: [
+      [
+        Sequelize.fn('IFNULL', Sequelize.fn('AVG', Sequelize.col('score')), 0),
+        'score'
+      ]
+    ],
+    where: {
+      toUserId: id,
+      score: { [Op.not]: null }
+    }
+  });
+
+  return { score: score.score, reviews };
+};
+
 const create = payload => User.create(payload);
 
 const createLocation = payload => Location.create(payload);
@@ -24,6 +52,8 @@ const createLocation = payload => Location.create(payload);
 const countById = id => User.count({ where: { id } });
 
 const countByEmail = email => User.count({ where: { email } });
+
+const countUserItems = userId => Item.count({ where: { userId } });
 
 const updateById = (id, payload) =>
   User.scope('public').update(payload, {
@@ -50,10 +80,12 @@ module.exports = {
   findAll,
   findById,
   findUserReviews,
+  findUserScore,
   create,
   createLocation,
   countById,
   countByEmail,
+  countUserItems,
   updateById,
   updateLocation,
   deleteById

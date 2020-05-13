@@ -34,6 +34,18 @@ const getUserItems = async (req, res, next) => {
   }
 };
 
+const countUserItems = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const items = await userService.countUserItems(id);
+
+    return res.json(items);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const getUserReviews = async (req, res, next) => {
   const { id } = req.params;
 
@@ -41,6 +53,18 @@ const getUserReviews = async (req, res, next) => {
     const reviews = await userService.readUserReviews(id);
 
     return res.json(reviews);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const getUserScore = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const score = await userService.readUserScore(id);
+
+    return res.json(score);
   } catch (e) {
     return next(e);
   }
@@ -84,7 +108,9 @@ module.exports = {
   getUsers,
   getUser,
   getUserItems,
+  countUserItems,
   getUserReviews,
+  getUserScore,
   createUser,
   updateUser,
   deleteUser
