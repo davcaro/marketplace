@@ -16,6 +16,7 @@ import { ViewFavoritesComponent } from './items/view-favorites/view-favorites.co
 import { ChatsListComponent } from './chat/chats-list/chats-list.component';
 import { ChatComponent } from './chat/chat/chat.component';
 import { ChatResolverService } from './chat/chat-resolver.service';
+import { ReviewsComponent } from './reviews/reviews.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HeaderComponent },
@@ -42,6 +43,15 @@ const routes: Routes = [
         resolve: { item: ItemResolverService },
         data: { resolverCanEdit: true }
       }
+    ]
+  },
+  {
+    path: 'reviews',
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', pathMatch: 'full', component: ReviewsComponent, data: { reviewsStatus: 'own' } },
+      { path: 'others', component: ReviewsComponent, data: { reviewsStatus: 'others' } },
+      { path: 'pending', component: ReviewsComponent, data: { reviewsStatus: 'pending' } }
     ]
   },
   { path: 'search', component: SearchItemsComponent },

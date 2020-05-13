@@ -1,10 +1,21 @@
+const { Op } = require('sequelize');
 const { User, Location, Review } = require('../../../db/models');
 
 const findAll = () => User.scope('public').findAll();
 
 const findById = id => User.scope('public').findOne({ where: { id } });
 
-const findUserReviews = id => Review.findAll({ where: { toUserId: id } });
+const findUserReviews = id =>
+  Review.findAll({
+    where: {
+      toUserId: id,
+      [Op.not]: {
+        score: null,
+        description: null
+      }
+    },
+    include: { model: User.scope('public'), as: 'fromUser' }
+  });
 
 const create = payload => User.create(payload);
 

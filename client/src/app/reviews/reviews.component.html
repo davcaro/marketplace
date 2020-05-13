@@ -1,0 +1,26 @@
+<app-sider>
+  <div class="container">
+    <h3 nz-title>Tus valoraciones</h3>
+    <span nz-text>Aquí puedes gestionar tus valoraciones, las que tienes pendientes y ver las de otros usuarios</span>
+
+    <nz-tabset nzLinkRouter>
+      <nz-tab>
+        <a nz-tab-link [routerLink]="['/', 'reviews']">
+          Propias
+        </a>
+      </nz-tab>
+      <nz-tab>
+        <a nz-tab-link [routerLink]="['/', 'reviews', 'pending']">
+          Pendientes
+        </a>
+      </nz-tab>
+      <nz-tab>
+        <a nz-tab-link [routerLink]="['/', 'reviews', 'others']">
+          De otros
+        </a>
+      </nz-tab>
+    </nz-tabset>
+
+    <app-reviews-catalog [user]="user" [reviewsStatus]="reviewsStatus"></app-reviews-catalog>
+  </div>
+</app-sider>

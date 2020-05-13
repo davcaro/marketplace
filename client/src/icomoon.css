@@ -42,6 +42,9 @@ i {
 .icon-joystick:before {
   content: '\e910';
 }
+.icon-dots-three-vertical:before {
+  content: '\e91c';
+}
 .icon-dots-three-horizontal:before {
   content: '\e918';
 }

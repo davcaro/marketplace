@@ -33,6 +33,8 @@ import { ViewUserComponent } from './users/view-user/view-user.component';
 import { ViewFavoritesComponent } from './items/view-favorites/view-favorites.component';
 import { ChatsListComponent } from './chat/chats-list/chats-list.component';
 import { ChatComponent } from './chat/chat/chat.component';
+import { ReviewsComponent } from './reviews/reviews.component';
+import { ReviewsCatalogComponent } from './reviews/reviews-catalog/reviews-catalog.component';
 
 registerLocaleData(es);
 
@@ -58,7 +60,9 @@ registerLocaleData(es);
     ViewUserComponent,
     ViewFavoritesComponent,
     ChatsListComponent,
-    ChatComponent
+    ChatComponent,
+    ReviewsComponent,
+    ReviewsCatalogComponent
   ],
   imports: [
     BrowserModule,

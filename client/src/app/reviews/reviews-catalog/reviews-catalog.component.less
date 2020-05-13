@@ -1,0 +1,65 @@
+@import '../../../custom-styles.less';
+
+.reviews {
+  background-color: @color-white;
+  padding: 1px 1rem;
+}
+
+.review {
+  list-style: none;
+  display: flex;
+  margin: 1rem 0;
+}
+
+.review nz-avatar {
+  margin-right: 0.5rem;
+}
+
+.review-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-date,
+.review-actions {
+  margin-left: 1rem;
+}
+
+.edit-review-btn {
+  margin-top: 0.5rem;
+  width: fit-content;
+}
+
+:host ::ng-deep .review-body nz-rate i {
+  font-size: 15px;
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.header-title,
+.user-info {
+  font-size: 1.2em;
+}
+
+.user-info {
+  margin-top: 0.5rem;
+}
+
+.user-info nz-avatar {
+  margin-right: 0.3rem;
+}
+
+.modal-review {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.modal-review nz-rate {
+  margin-left: 0.5rem;
+}
+
+.submit-btn {
+  margin-top: 1rem;
+}

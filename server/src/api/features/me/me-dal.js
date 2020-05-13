@@ -53,25 +53,34 @@ const findFavorites = async (userId, query) => {
 };
 
 const findReviews = async (userId, pending) => {
+  let where;
+
   if (pending) {
-    return Review.findAll({
-      where: {
+    where = {
+      fromUserId: userId,
+      score: null,
+      description: null
+    };
+  } else {
+    where = {
+      fromUserId: userId,
+      [Op.not]: {
         score: null,
-        description: null,
-        [Op.or]: {
-          fromUserId: userId,
-          toUserId: userId
-        }
+        description: null
       }
-    });
+    };
   }
 
   return Review.findAll({
-    where: {
-      fromUserId: userId,
-      score: { [Op.not]: null },
-      description: { [Op.not]: null }
-    }
+    where,
+    include: [
+      { model: User.scope('public'), as: 'toUser' },
+      {
+        model: Item,
+        as: 'item',
+        include: [{ model: User.scope('public'), as: 'user' }]
+      }
+    ]
   });
 };
 

@@ -28,9 +28,8 @@ const updateReview = {
     score: Joi.number()
       .min(0)
       .max(5)
-      .precision(1)
-      .required(),
-    description: Joi.string().required()
+      .precision(1),
+    description: Joi.string()
   })
 };
 

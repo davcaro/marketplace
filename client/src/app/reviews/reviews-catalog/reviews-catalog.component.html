@@ -1,0 +1,82 @@
+<nz-empty [nzNotFoundContent]="emptyDescriptionTpl" *ngIf="!reviews.length && !loading">
+  <ng-template #emptyDescriptionTpl>
+    <span>No se encontraron valoraciones.</span>
+  </ng-template>
+</nz-empty>
+
+<ul class="reviews" *ngIf="reviews.length">
+  <li class="review" *ngFor="let review of reviews; let i = index">
+    <nz-avatar nzIcon="user" [nzSize]="64" [nzSrc]="apiUrl + '/images/avatars/' + review.user.avatar"></nz-avatar>
+
+    <div class="review-body">
+      <div class="user-header">
+        <span nz-text>
+          <strong>{{ review.user.name }}</strong>
+        </span>
+
+        <span class="review-date" nz-text>{{ review.date }}</span>
+
+        <a
+          class="review-actions"
+          nz-dropdown
+          nzTrigger="click"
+          [nzDropdownMenu]="actionsMenu"
+          *ngIf="reviewsStatus === 'own'"
+        >
+          <i class="icon-dots-three-vertical"></i>
+        </a>
+        <nz-dropdown-menu #actionsMenu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li nz-menu-item (click)="showDeleteConfirm(review.id, i)">Eliminar valoración</li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+
+      <ng-container *ngIf="reviewsStatus !== 'pending'">
+        <nz-rate [ngModel]="review.score" nzDisabled *ngIf="review.score"></nz-rate>
+        <span *ngIf="review.description">{{ review.description }}</span>
+      </ng-container>
+
+      <ng-container *ngIf="reviewsStatus == 'pending'">
+        <span>Le {{ review.isAPurchase ? 'compraste' : 'vendiste' }} el artículo "{{ review.item.title }}"</span>
+
+        <button class="edit-review-btn" nz-button nzSize="small" (click)="showEditModal(review)">
+          Escribir valoración
+        </button>
+      </ng-container>
+    </div>
+  </li>
+</ul>
+
+<nz-modal [(nzVisible)]="editModalVisible" [nzFooter]="null" (nzOnCancel)="closeEditModal()" *ngIf="editModalVisible">
+  <div class="modal-body">
+    <span nz-text>
+      <strong class="header-title">Valora cómo ha sido la {{ selectedReview.isAPurchase ? 'compra' : 'venta' }}</strong>
+    </span>
+
+    <div class="user-info">
+      <nz-avatar
+        nzIcon="user"
+        [nzSize]="36"
+        [nzSrc]="apiUrl + '/images/avatars/' + selectedReview.user.avatar"
+      ></nz-avatar>
+
+      <span nz-text>{{ selectedReview.user.name }}</span>
+    </div>
+
+    <div class="modal-review">
+      <span nz-text>Puntuación:</span>
+      <nz-rate [(ngModel)]="rate" nzAllowHalf></nz-rate>
+      <textarea
+        nz-input
+        [(ngModel)]="description"
+        placeholder="Escribe tu opinión..."
+        [nzAutosize]="{ minRows: 2, maxRows: 5 }"
+      ></textarea>
+    </div>
+
+    <button class="submit-btn" nz-button nzType="primary" (click)="updateReview()">
+      Guardar
+    </button>
+  </div>
+</nz-modal>
