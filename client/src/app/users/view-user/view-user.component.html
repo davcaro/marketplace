@@ -1,7 +1,7 @@
 <nz-content>
   <div nz-row [nzGutter]="32">
     <div nz-col [nzMd]="14" [nzLg]="16" [nzXl]="18">
-      <nz-tabset [nzTabBarGutter]="5">
+      <nz-tabset [nzTabBarGutter]="5" (nzSelectedIndexChange)="loadTabMap($event)">
         <nz-tab [nzTitle]="forSaleItemsCount + ' Artículos'">
           <app-items-catalog
             [user]="user"
@@ -20,22 +20,27 @@
           ></app-items-catalog>
         </nz-tab>
 
-        <nz-tab [nzTitle]="reviewsCount + ' Opiniones'">
-          Opiniones
+        <nz-tab [nzTitle]="userScore.reviews + ' Valoraciones'">
+          <app-reviews-catalog [user]="user" [reviewsStatus]="'others'"></app-reviews-catalog>
         </nz-tab>
 
         <nz-tab nzTitle="Info">
           <div nz-row [nzGutter]="16">
-            <div nz-col [nzSm]="12">
+            <div nz-col [nzSpan]="24">
               <ng-container [ngTemplateOutlet]="userCardTpl"></ng-container>
             </div>
 
-            <div nz-col [nzSm]="12">
-              <ng-container [ngTemplateOutlet]="statsCardTpl"></ng-container>
-            </div>
-
             <div nz-col [nzSpan]="24">
-              <ng-container [ngTemplateOutlet]="locationCardTpl"></ng-container>
+              <nz-card class="location-card" *ngIf="user.location">
+                <div class="card-body">
+                  <div class="map" #mapTab></div>
+
+                  <p>
+                    <i class="icon-location"></i>
+                    {{ user.location.placeName }}
+                  </p>
+                </div>
+              </nz-card>
             </div>
           </div>
         </nz-tab>
@@ -44,8 +49,16 @@
 
     <div nz-col [nzXs]="0" [nzMd]="10" [nzLg]="8" [nzXl]="6">
       <ng-container [ngTemplateOutlet]="userCardTpl"></ng-container>
-      <ng-container [ngTemplateOutlet]="statsCardTpl"></ng-container>
-      <ng-container [ngTemplateOutlet]="locationCardTpl"></ng-container>
+      <nz-card class="location-card" *ngIf="user.location">
+        <div class="card-body">
+          <div class="map" #mapSide></div>
+
+          <p>
+            <i class="icon-location"></i>
+            {{ user.location.placeName }}
+          </p>
+        </div>
+      </nz-card>
     </div>
   </div>
 
@@ -58,36 +71,9 @@
             <strong>{{ user.name | truncate: 17 }}</strong>
           </span>
 
-          <nz-rate [ngModel]="4" nzDisabled></nz-rate>
+          <nz-rate [ngModel]="userScore.score" nzDisabled></nz-rate>
         </div>
       </div>
-    </nz-card>
-  </ng-template>
-
-  <ng-template #statsCardTpl>
-    <nz-card class="stats-card">
-      <div class="card-body">
-        <i class="icon-stats-bars"></i>
-        <span>{{ soldItemsCount }} Ventas</span>
-        <span>3 Compras</span>
-      </div>
-    </nz-card>
-  </ng-template>
-
-  <ng-template #locationCardTpl>
-    <nz-card class="location-card" [nzCover]="locationMapTpl" *ngIf="user.location">
-      <div class="card-body">
-        <p>
-          <i class="icon-location"></i>
-          {{ user.location }}
-        </p>
-      </div>
-
-      <ng-template #locationMapTpl>
-        <div class="location-map" style="display: flex; justify-content: center; align-items: center; height: 75px;">
-          <span>[MAPA DE UBICACIÓN]</span>
-        </div>
-      </ng-template>
     </nz-card>
   </ng-template>
 </nz-content>
