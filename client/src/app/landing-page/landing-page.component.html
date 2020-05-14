@@ -27,12 +27,17 @@
   <span class="categories-header" nz-text><strong>¿Qué estás buscando hoy?</strong></span>
 
   <div class="categories-wall">
-    <div class="category-col" *ngFor="let category of categories">
-      <a class="category-link" [routerLink]="['/', 'search']" [queryParams]="{ category: category.id }">
+    <a
+      class="category-col"
+      [routerLink]="['/', 'search']"
+      [queryParams]="{ category: category.id }"
+      *ngFor="let category of categories"
+    >
+      <div class="category-body">
         <i class="icon-{{ category.icon }}"></i>
         {{ category.name }}
-      </a>
-    </div>
+      </div>
+    </a>
   </div>
 
   <div class="steps">
