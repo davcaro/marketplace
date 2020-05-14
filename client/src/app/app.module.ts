@@ -35,6 +35,7 @@ import { ChatsListComponent } from './chat/chats-list/chats-list.component';
 import { ChatComponent } from './chat/chat/chat.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { ReviewsCatalogComponent } from './reviews/reviews-catalog/reviews-catalog.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 registerLocaleData(es);
 
@@ -62,7 +63,8 @@ registerLocaleData(es);
     ChatsListComponent,
     ChatComponent,
     ReviewsComponent,
-    ReviewsCatalogComponent
+    ReviewsCatalogComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,

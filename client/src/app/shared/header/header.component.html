@@ -7,7 +7,7 @@
     <form nz-form class="search-box" [nzLayout]="'inline'" [formGroup]="form" (ngSubmit)="submitForm()">
       <nz-form-item class="category-item">
         <nz-form-control>
-          <nz-select formControlName="category">
+          <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="category">
             <nz-option
               *ngFor="let category of categories"
               [nzValue]="category.id"

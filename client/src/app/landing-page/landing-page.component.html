@@ -1,0 +1,88 @@
+<div class="search">
+  <span class="search-header" nz-text><strong>Vende fácil, compra seguro.</strong></span>
+
+  <form nz-form class="search-box" [nzLayout]="'inline'" [formGroup]="form" (ngSubmit)="searchItems()">
+    <nz-form-item class="category-item">
+      <nz-form-control>
+        <nz-select nzSize="large" [nzDropdownMatchSelectWidth]="false" formControlName="category">
+          <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="keywords-item">
+      <nz-form-control>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIconSearch">
+          <input nz-input formControlName="keywords" placeholder="Buscar artículo..." />
+          <ng-template #suffixIconSearch>
+            <i class="icon-search"></i>
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>
+
+<div class="container">
+  <span class="categories-header" nz-text><strong>¿Qué estás buscando hoy?</strong></span>
+
+  <div class="categories-wall">
+    <div class="category-col" *ngFor="let category of categories">
+      <a class="category-link" [routerLink]="['/', 'search']" [queryParams]="{ category: category.id }">
+        <i class="icon-{{ category.icon }}"></i>
+        {{ category.name }}
+      </a>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <img src="assets/icons/devices.svg" />
+
+      <div class="step-text">
+        <span class="step-header" nz-text><strong>Véndelo</strong></span>
+        <span nz-text
+          ><strong>En venta en 2 minutos.</strong> Toma unas fotos. Añade una descripción. Pon un precio.</span
+        >
+      </div>
+    </div>
+
+    <div class="step">
+      <img src="assets/icons/delivery-truck.svg" />
+
+      <div class="step-text">
+        <span class="step-header" nz-text><strong>Envíalo</strong></span>
+        <span nz-text><strong>Sin encuentros.</strong> Descuentos en los envíos. Llega en perfecto estado.</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <img src="assets/icons/money.svg" />
+
+      <div class="step-text">
+        <span class="step-header" nz-text><strong>Gana dinero</strong></span>
+        <span nz-text><strong>Totalmente gratis.</strong> Sin comisiones ni costes alguno.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stories">
+    <div class="story">
+      <img src="assets/icons/multimedia.svg" />
+      <span nz-text>Contacta con otros usuarios a través del chat</span>
+      <span nz-text>¡Ya no tendrás que salir de Marketplace!</span>
+    </div>
+
+    <div class="story">
+      <img src="assets/icons/internet.svg" />
+      <span nz-text>Guarda tus artículos favoritos</span>
+      <span nz-text>¡No les quites el ojo de encima!</span>
+    </div>
+
+    <div class="story">
+      <img src="assets/icons/interface.svg" />
+      <span nz-text>Sube hasta 10 fotos por artículo...</span>
+      <span nz-text>¡Y pon a la venta tus cosas en menos de 2 minutos!</span>
+    </div>
+  </div>
+</div>

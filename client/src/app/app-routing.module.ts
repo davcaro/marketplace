@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HeaderComponent } from './shared/header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileInfoComponent } from './profile/profile-info/profile-info.component';
 import { ProfileAccountComponent } from './profile/profile-account/profile-account.component';
@@ -17,9 +16,10 @@ import { ChatsListComponent } from './chat/chats-list/chats-list.component';
 import { ChatComponent } from './chat/chat/chat.component';
 import { ChatResolverService } from './chat/chat-resolver.service';
 import { ReviewsComponent } from './reviews/reviews.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: HeaderComponent },
+  { path: '', pathMatch: 'full', component: LandingPageComponent },
   {
     path: 'profile',
     component: ProfileComponent,
