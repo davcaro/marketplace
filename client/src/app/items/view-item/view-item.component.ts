@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Item } from '../item.model';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -27,6 +28,8 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) mapElement: ElementRef;
   mapbox = mapboxgl as typeof mapboxgl;
   map: mapboxgl.Map;
+  messageForm: FormGroup;
+  defaultMessages: string[];
 
   userSubscription: Subscription;
 
@@ -44,6 +47,10 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.userScore = { score: 0, reviews: 0 };
     this.isFavorited = false;
+    this.defaultMessages = ['¿Todavía está disponible?', '¿El precio es negociable?'];
+    this.messageForm = new FormGroup({
+      message: new FormControl(null, [Validators.required])
+    });
   }
 
   ngOnInit(): void {
@@ -121,5 +128,25 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.authModalService.showModal();
     }
+  }
+
+  sendQuickMessage(): void {
+    if (this.user) {
+      const message = this.messageForm.value.message;
+
+      if (this.messageForm.valid) {
+        this.chatService.findChat(this.item.id).subscribe(chat => {
+          this.chatService.sendQuickMessage(chat.id, message).subscribe(() => {
+            this.router.navigate(['/', 'chat', chat.id]);
+          });
+        });
+      }
+    } else {
+      this.authModalService.showModal();
+    }
+  }
+
+  setMessage(message: string): void {
+    this.messageForm.reset({ message });
   }
 }

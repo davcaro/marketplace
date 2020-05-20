@@ -152,6 +152,62 @@
           [description]="'Echa un vistazo a este artículo en Marketplace'"
           [autoSetMeta]="false"
         ></share-buttons>
+
+        <ng-container *ngIf="!user || user.id !== item.user.id">
+          <nz-divider></nz-divider>
+
+          <nz-card class="quick-chat">
+            <a class="header-user" [routerLink]="['/', 'user', item.user.id]">
+              <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + item.user.avatar"></nz-avatar>
+
+              <div class="user-info">
+                <span nz-text>{{ item.user.name | truncate: 17 }}</span>
+                <span nz-text nzType="secondary">{{ userItemsCount }} Productos</span>
+              </div>
+
+              <i class="icon-keyboard_arrow_right user-arrow"></i>
+            </a>
+
+            <nz-divider></nz-divider>
+
+            <div class="card-body">
+              <p>Enviar un mensaje al vendedor:</p>
+
+              <div class="default-messages">
+                <button
+                  class="quick-message"
+                  nz-button
+                  nzType="primary"
+                  nzShape="round"
+                  *ngFor="let message of defaultMessages"
+                  (click)="setMessage(message)"
+                >
+                  {{ message }}
+                </button>
+              </div>
+
+              <form class="quickmessage-form" nz-form [formGroup]="messageForm" (ngSubmit)="sendQuickMessage()">
+                <nz-form-item>
+                  <nz-input-group [nzSuffix]="suffixIcon">
+                    <nz-form-control>
+                      <input
+                        type="text"
+                        nz-input
+                        formControlName="message"
+                        placeholder="Chat con {{ item.user.name }}"
+                      />
+                    </nz-form-control>
+                  </nz-input-group>
+                  <ng-template #suffixIcon>
+                    <button class="send-btn" nz-button nzType="link">
+                      <i class="icon-send"></i>
+                    </button>
+                  </ng-template>
+                </nz-form-item>
+              </form>
+            </div>
+          </nz-card>
+        </ng-container>
       </div>
     </div>
   </nz-card>
