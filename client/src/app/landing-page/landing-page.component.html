@@ -21,7 +21,14 @@
             (focusout)="changeSearchFocus(false)"
           />
           <ng-template #suffixIconSearch>
-            <button class="search-btn" [class.focused]="searchFocused" nz-button nzType="link" (click)="searchItems()">
+            <button
+              type="button"
+              class="search-btn"
+              [class.focused]="searchFocused"
+              nz-button
+              nzType="link"
+              (click)="searchItems()"
+            >
               <i class="icon-search"></i>
             </button>
           </ng-template>

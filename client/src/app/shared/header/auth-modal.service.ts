@@ -27,6 +27,11 @@ export class AuthModalService {
     });
   }
 
+  showModal(): void {
+    this.visibilityChange.next(true);
+    this.oauth();
+  }
+
   closeModal(): void {
     this.visibilityChange.next(false);
   }
