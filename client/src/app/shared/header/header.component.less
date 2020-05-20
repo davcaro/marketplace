@@ -50,6 +50,22 @@ nz-header a {
   margin: 0;
 }
 
+.search-box nz-form-control {
+  width: 100%;
+}
+
+:host ::ng-deep .search-box .ant-input-suffix {
+  right: 0;
+}
+
+.search-btn {
+  color: @color-secondary;
+}
+
+.search-btn.focused {
+  color: @color-primary;
+}
+
 .search-box .category-item {
   max-width: 30%;
   position: relative;
@@ -58,10 +74,6 @@ nz-header a {
 
 .search-box .keywords-item {
   flex: 1 1 auto;
-}
-
-.search-box nz-form-control {
-  width: 100%;
 }
 
 :host ::ng-deep .search-box nz-select [nz-select-top-control] {

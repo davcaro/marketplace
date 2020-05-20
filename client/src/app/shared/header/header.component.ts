@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   form: FormGroup;
   categories: Category[];
   filters: Filters;
-
+  searchFocused: boolean;
   authModalIsVisible: boolean;
   authModalView: string;
 
@@ -79,8 +79,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   showAuthModal(): void {
-    this.authModalService.visibilityChange.next(true);
-    this.authModalService.oauth();
+    this.authModalService.showModal();
   }
 
   onAuthModalBack(): void {
@@ -119,5 +118,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         keywords
       }
     });
+  }
+
+  changeSearchFocus(focused: boolean): void {
+    this.searchFocused = focused;
   }
 }

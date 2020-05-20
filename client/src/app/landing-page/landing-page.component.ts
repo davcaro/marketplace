@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class LandingPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   categories: Category[];
+  searchFocused: boolean;
 
   categoriesSubscription: Subscription;
 
@@ -44,5 +45,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         keywords
       }
     });
+  }
+
+  changeSearchFocus(focused: boolean): void {
+    this.searchFocused = focused;
   }
 }

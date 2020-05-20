@@ -4,7 +4,7 @@
 </div>
 
 <div class="main-content">
-  <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
+  <form nz-form [formGroup]="form" class="signup-form" (ngSubmit)="submitForm()">
     <nz-form-item>
       <nz-alert
         nzType="error"
@@ -48,7 +48,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item class="password-input">
       <nz-form-control nzHasFeedback [nzErrorTip]="passwordErrorTpl">
         <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixIconTpl">
           <input
@@ -71,6 +71,7 @@
             nz-icon
             [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
             (click)="passwordVisible = !passwordVisible"
+            style="cursor: pointer;"
           ></i>
         </ng-template>
       </nz-form-control>

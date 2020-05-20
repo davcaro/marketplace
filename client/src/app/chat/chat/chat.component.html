@@ -80,16 +80,18 @@
         </button>
       </nz-badge>
 
-      <div class="input">
+      <div class="message-input">
         <form nz-form [formGroup]="form" (ngSubmit)="sendMessage()">
           <nz-form-item style="margin-bottom: 0;">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
+            <nz-input-group [nzSuffix]="suffixIcon">
               <nz-form-control>
                 <input type="text" nz-input formControlName="message" placeholder="Escribe un mensaje..." />
               </nz-form-control>
             </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i class="icon-send"></i>
+            <ng-template #suffixIcon>
+              <button class="send-btn" nz-button nzType="link" (click)="sendMessage()">
+                <i class="icon-send"></i>
+              </button>
             </ng-template>
           </nz-form-item>
         </form>

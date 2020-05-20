@@ -53,9 +53,17 @@
   bottom: 70px;
 }
 
-.input {
+.message-input {
   padding: 6px 24px;
   border-top: @border-menu;
+}
+
+.send-btn {
+  color: @color-secondary;
+}
+
+:host ::ng-deep .message-input .ant-input-suffix {
+  right: 0;
 }
 
 .user-name {

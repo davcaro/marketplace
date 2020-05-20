@@ -20,9 +20,17 @@
       <nz-form-item class="keywords-item">
         <nz-form-control>
           <nz-input-group [nzSuffix]="suffixIconSearch">
-            <input nz-input formControlName="keywords" placeholder="Buscar artículo..." />
+            <input
+              nz-input
+              formControlName="keywords"
+              placeholder="Buscar artículo..."
+              (focus)="changeSearchFocus(true)"
+              (focusout)="changeSearchFocus(false)"
+            />
             <ng-template #suffixIconSearch>
-              <i class="icon-search"></i>
+              <button class="search-btn" [class.focused]="searchFocused" nz-button nzType="link" (click)="submitForm()">
+                <i class="icon-search"></i>
+              </button>
             </ng-template>
           </nz-input-group>
         </nz-form-control>
