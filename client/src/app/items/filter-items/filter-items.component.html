@@ -27,18 +27,19 @@
   <ng-template #categoryBodyTpl>
     <div class="popover-content">
       <div class="categories-wall" nz-row nzGutter="8" nzType="flex">
-        <div class="category-col" nz-col [nzXs]="8" [nzSm]="6" [nzMd]="4" *ngFor="let category of categories">
-          <div class="category-btn">
-            <a
-              (click)="onSelectCategory(category)"
-              class="category-link"
-              [ngClass]="{ active: category === filters.category.selected }"
-            >
-              <i class="icon-{{ category.icon }} category-icon"></i>
-              <span class="category-name">{{ category.name }}</span>
-            </a>
-          </div>
-        </div>
+        <a
+          class="category-col"
+          [class.active]="category === filters.category.selected"
+          nz-col
+          [nzXs]="8"
+          [nzSm]="6"
+          [nzMd]="4"
+          *ngFor="let category of categories"
+          (click)="onSelectCategory(category)"
+        >
+          <img class="category-icon" src="assets/icons/{{ category.icon }}.svg" />
+          <span class="category-name">{{ category.name }}</span>
+        </a>
       </div>
     </div>
 

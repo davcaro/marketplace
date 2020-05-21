@@ -13,40 +13,39 @@ nz-header button {
 }
 
 .categories-wall {
+  justify-content: center;
   max-width: 700px;
 }
 
 .category-col {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.category-btn {
-  display: flex;
+  align-items: center;
   text-align: center;
-  margin: 0 1rem;
-}
-
-.category-link {
   color: @color-secondary;
-  transition: none;
+  width: 125px;
+  height: 90px;
+  line-height: 15px;
+  margin: 0.75rem;
+  border-radius: 4px;
+  background-color: #f7f7f7;
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.15);
 }
 
-.category-link .category-icon {
+.category-col.active {
+  background-color: #ff716147 !important;
+}
+
+.category-col:hover {
+  background-color: #ff71611a;
+}
+
+.category-icon {
   display: block;
-  font-size: 2rem;
   width: 48px;
-  height: 48px;
   margin: 0 auto;
-}
-
-.category-link.active {
-  color: #e53935;
-}
-
-.category-link:hover {
-  color: #e57373;
+  margin-bottom: 0.3rem !important;
 }
 
 .slider-inputs .max-price {
