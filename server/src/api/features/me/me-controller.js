@@ -95,6 +95,19 @@ const deleteReview = async (req, res, next) => {
   }
 };
 
+const getStatistics = async (req, res, next) => {
+  const { id } = req.user;
+  const { data } = req.query;
+
+  try {
+    const statistics = await meService.readStatistics(id, data);
+
+    return res.json(statistics);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 module.exports = {
   getUser,
   updateUser,
@@ -102,5 +115,6 @@ module.exports = {
   getFavorites,
   getReviews,
   updateReview,
-  deleteReview
+  deleteReview,
+  getStatistics
 };

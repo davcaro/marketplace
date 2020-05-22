@@ -56,4 +56,10 @@ module.exports = app => {
     hasPermission(ACTIONS.DELETE, SUBJECTS.REVIEW),
     meController.deleteReview
   );
+  route.get(
+    '/statistics',
+    hasPermission(ACTIONS.READ, SUBJECTS.SELF_USER),
+    celebrate(meValidation.getStatistics),
+    meController.getStatistics
+  );
 };

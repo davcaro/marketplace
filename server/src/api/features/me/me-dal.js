@@ -1,10 +1,16 @@
+/* eslint-disable no-param-reassign */
+
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const {
   User,
+  Category,
   Item,
+  ItemView,
   ItemFavorite,
   Location,
-  Review
+  Review,
+  Chat
 } = require('../../../db/models');
 
 const findById = id => User.scope('public').findOne({ where: { id } });
@@ -90,6 +96,72 @@ const updateReview = async (id, userId, payload) =>
 const deleteReview = (id, userId) =>
   Review.destroy({ where: { id, fromUserId: userId } });
 
+const findItemsMonthStats = async userId => {
+  const query = {
+    where: {
+      createdAt: {
+        [Op.between]: [
+          Sequelize.fn(
+            'DATE_SUB',
+            Sequelize.fn('CURDATE'),
+            Sequelize.literal('INTERVAL 30 DAY')
+          ),
+          Sequelize.fn('NOW')
+        ]
+      }
+    },
+    include: [
+      {
+        model: Item,
+        as: 'item',
+        attributes: [],
+        include: [
+          { model: User, as: 'user', attributes: [], where: { id: userId } }
+        ],
+        required: true
+      }
+    ]
+  };
+
+  const views = await ItemView.count({
+    group: [Sequelize.fn('DATE', Sequelize.col('ItemView.createdAt'))],
+    ...query
+  });
+
+  const favorites = await ItemFavorite.count({
+    group: [Sequelize.fn('DATE', Sequelize.col('ItemFavorite.createdAt'))],
+    ...query
+  });
+
+  const chats = await Chat.count({
+    group: [Sequelize.fn('DATE', Sequelize.col('Chat.createdAt'))],
+    ...query
+  });
+
+  return { views, favorites, chats };
+};
+
+const findItemsCategoriesStats = async userId =>
+  Item.findAll({
+    attributes: [[Sequelize.fn('COUNT', 'id'), 'items']],
+    group: ['categoryId'],
+    include: [
+      { model: Category, as: 'category' },
+      { model: User, as: 'user', attributes: [], where: { id: userId } }
+    ]
+  }).then(categories => {
+    const totalItems = categories
+      .map(category => category.dataValues.items)
+      .reduce((a, b) => +a + +b, 0);
+
+    categories.forEach(category => {
+      category.dataValues.percentage =
+        (+category.dataValues.items / totalItems) * 100;
+    });
+
+    return categories;
+  });
+
 module.exports = {
   findById,
   updateById,
@@ -98,5 +170,7 @@ module.exports = {
   findFavorites,
   findReviews,
   updateReview,
-  deleteReview
+  deleteReview,
+  findItemsMonthStats,
+  findItemsCategoriesStats
 };

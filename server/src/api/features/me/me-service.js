@@ -86,6 +86,21 @@ const deleteReview = async (id, userId) => {
   }
 };
 
+const readStatistics = async (userId, data) => {
+  try {
+    switch (data) {
+      case 'items-month':
+        return await meDAL.findItemsMonthStats(userId);
+      case 'items-categories':
+        return await meDAL.findItemsCategoriesStats(userId);
+      default:
+        throw new Error();
+    }
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 module.exports = {
   readUser,
   updateUser,
@@ -93,5 +108,6 @@ module.exports = {
   readFavorites,
   readReviews,
   updateReview,
-  deleteReview
+  deleteReview,
+  readStatistics
 };

@@ -33,8 +33,15 @@ const updateReview = {
   })
 };
 
+const getStatistics = {
+  [Segments.QUERY]: Joi.object().keys({
+    data: Joi.valid('items-month', 'items-categories')
+  })
+};
+
 module.exports = {
   update,
   getReviews,
-  updateReview
+  updateReview,
+  getStatistics
 };
