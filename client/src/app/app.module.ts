@@ -36,6 +36,8 @@ import { ChatComponent } from './chat/chat/chat.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { ReviewsCatalogComponent } from './reviews/reviews-catalog/reviews-catalog.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { ChartsModule } from 'ng2-charts';
 
 registerLocaleData(es);
 
@@ -64,7 +66,8 @@ registerLocaleData(es);
     ChatComponent,
     ReviewsComponent,
     ReviewsCatalogComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +79,8 @@ registerLocaleData(es);
     BrowserAnimationsModule,
     ShareButtonsModule,
     ShareIconsModule.forRoot(),
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    ChartsModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es-ES' },

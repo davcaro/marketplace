@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
+declare let gtag;
 
 @Component({
   selector: 'app-root',
@@ -7,7 +11,15 @@ import { AuthService } from './auth/auth.service';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        gtag('config', environment.analytics.id, {
+          page_path: event.urlAfterRedirects
+        });
+      }
+    });
+  }
 
   ngOnInit() {
     this.authService.autoLogin();

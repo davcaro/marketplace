@@ -1,0 +1,31 @@
+<app-sider>
+  <div class="container">
+    <div nz-row>
+      <div nz-col [nzMd]="12">
+        <canvas
+          baseChart
+          width="400"
+          height="300"
+          [datasets]="itemsMonthData"
+          [labels]="itemsMonthLabels"
+          [options]="itemsMonthOptions"
+          [chartType]="lineChartType"
+          *ngIf="!itemsMonthLoading"
+        ></canvas>
+      </div>
+
+      <div nz-col [nzMd]="12">
+        <canvas
+          baseChart
+          width="400"
+          height="300"
+          [data]="itemsCategoriesData"
+          [labels]="itemsCategoriesLabels"
+          [options]="itemsCategoriesOptions"
+          [chartType]="pieChartType"
+          *ngIf="!itemsCategoriesLoading"
+        ></canvas>
+      </div>
+    </div>
+  </div>
+</app-sider>

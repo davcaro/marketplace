@@ -17,6 +17,7 @@ import { ChatComponent } from './chat/chat/chat.component';
 import { ChatResolverService } from './chat/chat-resolver.service';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: LandingPageComponent },
@@ -67,6 +68,11 @@ const routes: Routes = [
     component: ChatsListComponent,
     canActivate: [AuthGuard],
     children: [{ path: ':id', component: ChatComponent, resolve: { chat: ChatResolverService } }]
+  },
+  {
+    path: 'statistics',
+    canActivate: [AuthGuard],
+    component: StatisticsComponent
   }
 ];
 
