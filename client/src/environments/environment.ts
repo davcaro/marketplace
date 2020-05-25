@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://127.0.0.1:3000',
   socketUrl: 'http://127.0.0.1:3000',
+  currencyLocale: 'ES-ES',
   mapbox: {
     accessToken: 'pk.eyJ1IjoibWFya2V0cGxhY2UiLCJhIjoiY2thZmZ1OXZ2MjVkNjJ4czlneGo5YjN5YiJ9.36OS_JNQMRuebTQgAcLtWQ'
   },

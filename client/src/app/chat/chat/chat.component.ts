@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd';
 import { SocketioService } from 'src/app/shared/socketio.service';
 import { isSameDay } from 'date-fns';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-chat',
@@ -39,6 +40,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private chatService: ChatService,
     private socketioService: SocketioService,
+    private titleService: Title,
     private modal: NzModalService
   ) {
     this.apiUrl = environment.apiUrl;
@@ -57,6 +59,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chat = Object.assign(new Chat(), data.chat);
       this.chat.messages.data = this.chat.messages.data.map(message => Object.assign(new ChatMessage(), message));
       this.total = this.chat.messages.pagination.total;
+
+      this.titleService.setTitle(`Conversacion con ${this.chat.getOtherUser(this.user.id).name} - Marketplace`);
 
       this.scrollToBottom('auto');
     });

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ReviewsService } from 'src/app/reviews/reviews.service';
 import * as mapboxgl from 'mapbox-gl';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-user',
@@ -25,9 +26,11 @@ export class ViewUserComponent implements OnInit, AfterViewInit {
   mapSide: mapboxgl.Map;
   mapbox = mapboxgl as typeof mapboxgl;
 
-  constructor(private route: ActivatedRoute, private reviewsService: ReviewsService) {
+  constructor(private route: ActivatedRoute, private reviewsService: ReviewsService, private titleService: Title) {
     this.apiUrl = environment.apiUrl;
     this.user = this.route.snapshot.data.user;
+
+    this.titleService.setTitle(`Perfil de ${this.user.name} - Marketplace`);
 
     this.forSaleItemsCount = 0;
     this.soldItemsCount = 0;

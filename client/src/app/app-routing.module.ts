@@ -20,24 +20,29 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: LandingPageComponent },
+  {
+    path: '',
+    pathMatch: 'full',
+    component: LandingPageComponent,
+    data: { title: 'Marketplace - La aplicación para comprar y vender artículos de segunda mano' }
+  },
   {
     path: 'profile',
     component: ProfileComponent,
     canActivate: [AuthGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'info' },
-      { path: 'info', component: ProfileInfoComponent },
-      { path: 'account', component: ProfileAccountComponent }
+      { path: 'info', component: ProfileInfoComponent, data: { title: 'Mi perfil' } },
+      { path: 'account', component: ProfileAccountComponent, data: { title: 'Mi cuenta' } }
     ]
   },
   {
     path: 'catalog',
     canActivate: [AuthGuard],
     children: [
-      { path: 'upload', component: UploadItemComponent },
-      { path: 'items', component: CatalogComponent, data: { itemsStatus: '' } },
-      { path: 'sold', component: CatalogComponent, data: { itemsStatus: 'sold' } },
+      { path: 'upload', component: UploadItemComponent, data: { title: 'Subir un nuevo artículo' } },
+      { path: 'items', component: CatalogComponent, data: { itemsStatus: '', title: 'Mis artículos en venta' } },
+      { path: 'sold', component: CatalogComponent, data: { itemsStatus: 'sold', title: 'Mis artículos vendidos' } },
       {
         path: 'edit/:id',
         component: UploadItemComponent,
@@ -50,29 +55,45 @@ const routes: Routes = [
     path: 'reviews',
     canActivate: [AuthGuard],
     children: [
-      { path: '', pathMatch: 'full', component: ReviewsComponent, data: { reviewsStatus: 'own' } },
-      { path: 'others', component: ReviewsComponent, data: { reviewsStatus: 'others' } },
-      { path: 'pending', component: ReviewsComponent, data: { reviewsStatus: 'pending' } }
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ReviewsComponent,
+        data: { reviewsStatus: 'own', title: 'Mis valoraciones' }
+      },
+      {
+        path: 'others',
+        component: ReviewsComponent,
+        data: { reviewsStatus: 'others', title: 'Valoraciones sobre mí' }
+      },
+      {
+        path: 'pending',
+        component: ReviewsComponent,
+        data: { reviewsStatus: 'pending', title: 'Valoraciones pendientes' }
+      }
     ]
   },
-  { path: 'search', component: SearchItemsComponent },
+  { path: 'search', component: SearchItemsComponent, data: { title: 'Buscador de artículos' } },
   { path: 'item/:id', component: ViewItemComponent, resolve: { item: ItemResolverService } },
   { path: 'user/:id', component: ViewUserComponent, resolve: { user: UserResolverService } },
   {
     path: 'favorites',
     canActivate: [AuthGuard],
-    component: ViewFavoritesComponent
+    component: ViewFavoritesComponent,
+    data: { title: 'Mis favoritos' }
   },
   {
     path: 'chat',
     component: ChatsListComponent,
+    data: { title: 'Mis conversaciones' },
     canActivate: [AuthGuard],
     children: [{ path: ':id', component: ChatComponent, resolve: { chat: ChatResolverService } }]
   },
   {
     path: 'statistics',
     canActivate: [AuthGuard],
-    component: StatisticsComponent
+    component: StatisticsComponent,
+    data: { title: 'Mis estadísticas' }
   }
 ];
 

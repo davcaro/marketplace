@@ -12,6 +12,7 @@ import * as mapboxgl from 'mapbox-gl';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Location } from 'src/app/shared/location.model';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-item',
@@ -47,7 +48,8 @@ export class UploadItemComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private msg: NzMessageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private titleService: Title
   ) {
     this.apiUrl = environment.apiUrl;
     this.editItem = this.route.snapshot.data.item;
@@ -58,6 +60,8 @@ export class UploadItemComponent implements OnInit, AfterViewInit {
         this.editItem.location.zoom,
         this.editItem.location.placeName
       );
+
+      this.titleService.setTitle(`Editar ${this.editItem.title} - Marketplace`);
     } else {
       this.location = this.authService.user.value.location;
     }

@@ -12,11 +12,14 @@ import { ReviewsService } from 'src/app/reviews/reviews.service';
 import { AuthModalService } from 'src/app/shared/header/auth-modal.service';
 import { Subscription } from 'rxjs';
 import * as mapboxgl from 'mapbox-gl';
+import { Title } from '@angular/platform-browser';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-view-item',
   templateUrl: './view-item.component.html',
-  styleUrls: ['./view-item.component.less']
+  styleUrls: ['./view-item.component.less'],
+  providers: [CurrencyPipe]
 })
 export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
   apiUrl: string;
@@ -30,6 +33,7 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
   map: mapboxgl.Map;
   messageForm: FormGroup;
   defaultMessages: string[];
+  currencyPipe: CurrencyPipe;
 
   userSubscription: Subscription;
 
@@ -40,10 +44,12 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
     private authModalService: AuthModalService,
     private itemsService: ItemsService,
     private chatService: ChatService,
-    private reviewsService: ReviewsService
+    private reviewsService: ReviewsService,
+    private titleService: Title
   ) {
     this.apiUrl = environment.apiUrl;
     this.user = this.authService.user.value;
+    this.currencyPipe = new CurrencyPipe(environment.currencyLocale);
 
     this.userScore = { score: 0, reviews: 0 };
     this.isFavorited = false;
@@ -55,6 +61,10 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.item = Object.assign(new Item(), this.route.snapshot.data.item);
+
+    this.titleService.setTitle(
+      `${this.item.title} por ${this.currencyPipe.transform(this.item.price, 'EUR')} - Marketplace`
+    );
 
     if (this.user) {
       this.itemsService.addView(this.item.id).subscribe();
