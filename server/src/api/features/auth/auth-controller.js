@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const authService = require('./auth-service');
 const config = require('../../../config');
+const { handleError: logError } = require('../../utils/errorHandler');
 
 const login = async (req, res, next) => {
   passport.authenticate('login', async (err, user) => {
@@ -49,10 +50,18 @@ const login = async (req, res, next) => {
 };
 
 const signUp = async (req, res, next) => {
+  let newUser;
+
   try {
-    await authService.createUser(req.body);
+    newUser = await authService.createUser(req.body);
   } catch (e) {
     return next(e);
+  }
+
+  try {
+    await authService.sendWelcomeMail(newUser);
+  } catch (e) {
+    logError(e);
   }
 
   return passport.authenticate('login', async (err, user) => {

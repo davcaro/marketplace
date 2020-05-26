@@ -1,3 +1,5 @@
+const sgMail = require('@sendgrid/mail');
+const config = require('../../../config');
 const authDAL = require('./auth-dal');
 const AppError = require('../../utils/app-error');
 
@@ -50,8 +52,40 @@ const readLocation = async locationId => {
   return location;
 };
 
+const sendWelcomeMail = async user => {
+  const { name, email } = user;
+
+  sgMail.setApiKey(config.ENV.MAIL.apiKey);
+
+  const msg = {
+    from: config.ENV.MAIL.fromEmail,
+    templateId: config.ENV.MAIL.templates.welcome,
+    personalizations: [
+      {
+        name,
+        to: email,
+        dynamicTemplateData: { user_name: name }
+      }
+    ]
+  };
+
+  return sgMail.send(msg).then(
+    () => {},
+    reason => {
+      let error = reason.message;
+
+      if (reason.response.body.errors) {
+        error = reason.response.body.errors[0].message;
+      }
+
+      throw new AppError(500, error);
+    }
+  );
+};
+
 module.exports = {
   createUser,
   checkUserExists,
-  readLocation
+  readLocation,
+  sendWelcomeMail
 };
