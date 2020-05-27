@@ -23,7 +23,8 @@ const SUBJECTS = {
   VIEW: 'ItemView',
   CHAT: 'Chat',
   MESSAGE: 'ChatMessage',
-  REVIEW: 'Review'
+  REVIEW: 'Review',
+  NOTIFICATION: 'Notification'
 };
 
 function defineAbilitiesFor(user) {
@@ -45,6 +46,7 @@ function defineAbilitiesFor(user) {
       allow(ACTIONS.CRUD, SUBJECTS.CHAT);
       allow(ACTIONS.CRUD, SUBJECTS.MESSAGE);
       allow(ACTIONS.CRUD, SUBJECTS.REVIEW);
+      allow(ACTIONS.CRUD, SUBJECTS.NOTIFICATION);
     }
   } else {
     allow(ACTIONS.CREATE, SUBJECTS.USER);

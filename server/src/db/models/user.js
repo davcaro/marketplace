@@ -19,9 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       avatar: DataTypes.STRING,
-      locationId: {
-        type: DataTypes.INTEGER
-      },
+      locationId: DataTypes.INTEGER,
       admin: DataTypes.BOOLEAN
     },
     {
@@ -68,6 +66,16 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Review, {
       foreignKey: 'toUserId',
       as: 'othersReviews'
+    });
+
+    User.hasMany(models.Notification, {
+      foreignKey: 'fromUserId',
+      as: 'othersNotifications'
+    });
+
+    User.hasMany(models.Notification, {
+      foreignKey: 'toUserId',
+      as: 'notifications'
     });
   };
 
