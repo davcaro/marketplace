@@ -58,6 +58,8 @@ const findFavorites = async (userId, query) => {
   return items;
 };
 
+const findReview = async id => Review.findByPk(id);
+
 const findReviews = async (userId, pending) => {
   let where;
 
@@ -168,6 +170,7 @@ module.exports = {
   updateLocation,
   deleteById,
   findFavorites,
+  findReview,
   findReviews,
   updateReview,
   deleteReview,

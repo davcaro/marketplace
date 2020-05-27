@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const {
+  User,
   Item,
   ItemImage,
   ItemFavorite,
@@ -29,6 +30,11 @@ const findById = async id => {
 
   return countLengths(item);
 };
+
+const findItemOwner = async id =>
+  User.scope('public').findOne({
+    include: [{ model: Item, as: 'items', attributes: [], where: { id } }]
+  });
 
 const findFavorites = id => ItemFavorite.findAll({ where: { itemId: id } });
 
@@ -84,6 +90,7 @@ module.exports = {
   count,
   findAndPaginate,
   findById,
+  findItemOwner,
   findFavorites,
   create,
   createLocation,

@@ -1,4 +1,5 @@
 const meService = require('./me-service');
+const notificationService = require('../notification/notification-service');
 
 const getUser = async (req, res, next) => {
   const { id } = req.user;
@@ -76,6 +77,14 @@ const updateReview = async (req, res, next) => {
 
   try {
     await meService.updateReview(id, req.user.id, req.body);
+
+    const review = await meService.readReview(id);
+    await notificationService.createNotification(
+      'review',
+      review.toUserId,
+      req.user.id,
+      review.itemId
+    );
 
     return res.sendStatus(204);
   } catch (e) {

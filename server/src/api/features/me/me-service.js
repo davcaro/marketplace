@@ -58,6 +58,14 @@ const readFavorites = async (id, query) => {
   return Paginator.paginate(items, +query.limit, +query.offset);
 };
 
+const readReview = async id => {
+  try {
+    return await meDAL.findReview(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 const readReviews = async (id, query) => {
   const pending = !!(query && query.pending === '1');
 
@@ -106,6 +114,7 @@ module.exports = {
   updateUser,
   deleteUser,
   readFavorites,
+  readReview,
   readReviews,
   updateReview,
   deleteReview,

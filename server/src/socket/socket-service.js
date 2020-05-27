@@ -68,11 +68,46 @@ const markMessagesAsRead = async (userId, data) => {
   }
 };
 
-const readOtherChatUserRooms = async (userId, data) => {
-  const { chatId } = data;
+const readOtherChatUser = async (chatId, userId) => {
+  try {
+    return await socketDAL.readOtherChatUser(chatId, userId);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
 
+const readOtherChatUserRooms = async (chatId, userId) => {
   try {
     return await socketDAL.readOtherChatUserRooms(chatId, userId);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+const countUnreadNotifications = async userId => {
+  try {
+    return await socketDAL.countUnreadNotifications(userId);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+const createNotification = async (type, toUserId, fromUserId, itemId) => {
+  try {
+    return await socketDAL.createNotification(
+      type,
+      toUserId,
+      fromUserId,
+      itemId
+    );
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+const readUserRooms = async userId => {
+  try {
+    return await socketDAL.readUserRooms(userId);
   } catch (e) {
     throw new Error(e.message);
   }
@@ -83,5 +118,9 @@ module.exports = {
   deleteConnection,
   createChatMessage,
   markMessagesAsRead,
-  readOtherChatUserRooms
+  readOtherChatUser,
+  readOtherChatUserRooms,
+  countUnreadNotifications,
+  createNotification,
+  readUserRooms
 };

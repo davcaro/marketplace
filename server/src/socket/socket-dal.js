@@ -6,7 +6,8 @@ const {
   ChatUser,
   ChatMessage,
   User,
-  Item
+  Item,
+  Notification
 } = require('../db/models');
 
 const createConnection = (userId, socketId) =>
@@ -54,10 +55,16 @@ const markMessagesAsRead = (chatId, userId) =>
     )
   );
 
-const readOtherChatUserRooms = (chatId, userId) =>
+const readUserRooms = userId => SocketConnection.findAll({ where: { userId } });
+
+const readOtherChatUser = (chatId, userId) =>
   ChatUser.findOne({
-    where: { chatId, userId: { [Op.not]: userId } }
-  }).then(user => SocketConnection.findAll({ where: { userId: user.userId } }));
+    where: { chatId, userId: { [Op.not]: userId } },
+    include: [{ model: Chat, as: 'chat' }]
+  });
+
+const readOtherChatUserRooms = (chatId, userId) =>
+  readOtherChatUser(chatId, userId).then(user => readUserRooms(user.userId));
 
 const findChat = chatId =>
   Chat.findByPk(chatId, {
@@ -71,12 +78,22 @@ const findChat = chatId =>
     ]
   });
 
+const countUnreadNotifications = userId =>
+  Notification.count({ where: { toUserId: userId, readAt: null } });
+
+const createNotification = async (type, toUserId, fromUserId, itemId) =>
+  Notification.create({ type, toUserId, fromUserId, itemId });
+
 module.exports = {
   createConnection,
   destroyConnection,
   countChatUser,
   createChatMessage,
   markMessagesAsRead,
+  readOtherChatUser,
   readOtherChatUserRooms,
-  findChat
+  findChat,
+  countUnreadNotifications,
+  createNotification,
+  readUserRooms
 };

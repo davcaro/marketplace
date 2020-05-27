@@ -1,5 +1,6 @@
 const itemService = require('./item-service');
 const AppError = require('../../utils/app-error');
+const notificationService = require('../notification/notification-service');
 
 const getItems = async (req, res, next) => {
   try {
@@ -46,6 +47,15 @@ const updateItem = async (req, res, next) => {
 
   try {
     await itemService.updateItem(id, req.user.id, req.body);
+
+    if (req.body.review) {
+      await notificationService.createNotification(
+        'pending_review',
+        req.body.review.user,
+        req.user.id,
+        id
+      );
+    }
 
     return res.sendStatus(204);
   } catch (e) {
@@ -107,6 +117,14 @@ const addFavorite = async (req, res, next) => {
 
   try {
     await itemService.addFavorite(id, req.user);
+
+    const itemOwner = await itemService.readItemOwner(id);
+    await notificationService.createNotification(
+      'favorite',
+      itemOwner.id,
+      req.user.id,
+      id
+    );
 
     return res.sendStatus(204);
   } catch (e) {

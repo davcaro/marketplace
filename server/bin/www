@@ -29,7 +29,7 @@ var server = http.createServer(app);
  * Create Socket server.
  */
 
-socket(server);
+socket.setUp(server);
 
 /**
  * Listen on provided port, on all network interfaces.

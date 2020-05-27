@@ -37,6 +37,14 @@ const readItem = async id => {
   return item;
 };
 
+const readItemOwner = async id => {
+  try {
+    return await itemDAL.findItemOwner(id);
+  } catch (e) {
+    throw new AppError(500, e.message);
+  }
+};
+
 const createItem = async body => {
   const payload = { ...body };
 
@@ -325,6 +333,7 @@ const getQuery = params => {
 module.exports = {
   readItems,
   readItem,
+  readItemOwner,
   createItem,
   updateItem,
   addImage,
