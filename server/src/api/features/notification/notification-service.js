@@ -51,9 +51,9 @@ const markAsRead = async id => {
   }
 };
 
-const deleteAll = async (userId, body) => {
+const deleteAll = async (userId, payload) => {
   try {
-    return await notificationDAL.deleteAll(userId, body.type);
+    return await notificationDAL.deleteAll(userId, payload.type);
   } catch (e) {
     throw new AppError(500, e.message);
   }

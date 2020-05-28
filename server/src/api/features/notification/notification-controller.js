@@ -55,7 +55,7 @@ const deleteAll = async (req, res, next) => {
   const { id } = req.user;
 
   try {
-    await notificationService.deleteAll(id, req.body);
+    await notificationService.deleteAll(id, req.query);
 
     return res.sendStatus(204);
   } catch (e) {

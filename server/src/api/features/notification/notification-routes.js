@@ -27,7 +27,7 @@ module.exports = app => {
   route.patch(
     '/',
     hasPermission(ACTIONS.UPDATE, SUBJECTS.NOTIFICATION),
-    celebrate(notificationValidation.notificationTypes),
+    celebrate(notificationValidation.notificationTypesBody),
     notificationController.markAsReadAll
   );
   route.patch(
@@ -39,7 +39,7 @@ module.exports = app => {
   route.delete(
     '/',
     hasPermission(ACTIONS.DELETE, SUBJECTS.NOTIFICATION),
-    celebrate(notificationValidation.notificationTypes),
+    celebrate(notificationValidation.notificationTypesQuery),
     notificationController.deleteAll
   );
   route.delete(
