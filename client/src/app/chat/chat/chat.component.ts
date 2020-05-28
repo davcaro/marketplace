@@ -108,14 +108,14 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     if (unreadMessages.length) {
       this.chatService.markMessagesAsRead(this.chat.id);
+
+      unreadMessages.forEach(message => {
+        message.readAt = new Date();
+      });
+
+      this.unreadMessagesCount = 0;
+      this.chatService.updateUnreadCount.next(this.unreadMessagesCount);
     }
-
-    unreadMessages.forEach(message => {
-      message.readAt = new Date();
-    });
-
-    this.unreadMessagesCount = 0;
-    this.chatService.updateUnreadCount.next(this.unreadMessagesCount);
   }
 
   loadMessages(): void {

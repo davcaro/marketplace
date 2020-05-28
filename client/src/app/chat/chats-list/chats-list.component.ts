@@ -8,6 +8,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { SocketioService } from 'src/app/shared/socketio.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/users/user.model';
+import { NotificationsService } from 'src/app/shared/header/notifications/notifications.service';
 
 @Component({
   selector: 'app-chats-list',
@@ -32,11 +33,14 @@ export class ChatsListComponent implements OnInit, OnDestroy {
     private router: Router,
     private chatService: ChatService,
     private authService: AuthService,
+    private notificationsService: NotificationsService,
     private socketioService: SocketioService
   ) {
     this.apiUrl = environment.apiUrl;
     this.user = this.authService.user.value;
     this.archived = false;
+
+    this.notificationsService.deleteNotification.next('new_message');
 
     const state = this.router.getCurrentNavigation().extras.state;
     if (state && state.chat) {
@@ -74,10 +78,12 @@ export class ChatsListComponent implements OnInit, OnDestroy {
     });
 
     this.updateUnreadSubscription = this.chatService.updateUnreadCount.subscribe(count => {
-      const selectedChat = this.chats.find(chat => chat.id === this.chatSelected);
+      if (this.chats) {
+        const selectedChat = this.chats.find(chat => chat.id === this.chatSelected);
 
-      if (selectedChat) {
-        selectedChat.unreadMessages = count;
+        if (selectedChat) {
+          selectedChat.unreadMessages = count;
+        }
       }
     });
 
@@ -96,6 +102,8 @@ export class ChatsListComponent implements OnInit, OnDestroy {
 
         chatFound.unreadMessages++;
       }
+
+      this.notificationsService.deleteNotification.next('new_message');
     });
   }
 

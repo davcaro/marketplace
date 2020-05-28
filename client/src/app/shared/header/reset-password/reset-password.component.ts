@@ -25,8 +25,6 @@ export class ResetPasswordComponent implements OnInit {
         this.form.controls[i].updateValueAndValidity();
       }
     }
-
-    console.log(this.form);
   }
 
   onResetPassword(): void {

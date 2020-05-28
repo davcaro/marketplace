@@ -33,8 +33,8 @@ export class AppComponent implements OnInit {
           while (child) {
             if (child.firstChild) {
               child = child.firstChild;
-            } else if (child.snapshot.data && child.snapshot.data['title']) {
-              return child.snapshot.data['title'];
+            } else if (child.snapshot.data && child.snapshot.data.title) {
+              return child.snapshot.data.title;
             } else {
               return null;
             }
