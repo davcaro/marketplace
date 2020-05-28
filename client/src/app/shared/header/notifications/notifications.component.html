@@ -1,0 +1,58 @@
+<button
+  class="notifications-btn"
+  nz-button
+  nz-popover
+  nzOverlayClassName="notifications-overlay"
+  nzType="link"
+  nzPopoverTrigger="click"
+  nzPopoverPlacement="bottom"
+  [(nzVisible)]="isOpen"
+  [nzPopoverContent]="notificationsContent"
+  (click)="loadNotifications(); markAllAsRead()"
+>
+  <nz-badge [nzCount]="unreadNotificationsCount">
+    <i class="icon-bell notifications-icon"></i>
+  </nz-badge>
+</button>
+<ng-template #notificationsContent>
+  <div class="notifications-popover">
+    <div class="notifications-header">
+      <span nz-typography><strong>Notificaciones</strong></span>
+      <a class="clear-all" nz-button nzType="link" (click)="deleteAllNotifications(); closeNotifications()">
+        Eliminar todas
+      </a>
+    </div>
+
+    <div class="notifications" *ngIf="notifications.length">
+      <a
+        class="notification"
+        [routerLink]="notification.url"
+        (click)="closeNotifications()"
+        *ngFor="let notification of notifications"
+      >
+        <img src="assets/icons/{{ notification.icon }}.svg" class="notification-icon" />
+
+        <div class="notification-text">
+          <span nz-typography>
+            <strong>{{ notification.title }}</strong>
+          </span>
+          <span nz-typography>{{ notification.description }}</span>
+        </div>
+
+        <button
+          class="remove-btn"
+          nz-button
+          nzType="link"
+          (click)="$event.preventDefault(); $event.stopPropagation(); deleteNotification(notification)"
+        >
+          <i class="icon-clear"></i>
+        </button>
+      </a>
+    </div>
+
+    <nz-empty [nzNotFoundContent]="emptyContent" *ngIf="!notifications.length && !loading"></nz-empty>
+    <ng-template #emptyContent>
+      <span>No tienes notificaciones en este momento</span>
+    </ng-template>
+  </div>
+</ng-template>

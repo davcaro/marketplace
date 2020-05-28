@@ -1,0 +1,75 @@
+@import '../../../../custom-styles.less';
+
+.notifications-btn {
+  display: flex;
+  align-items: flex-end;
+}
+
+.notifications-popover {
+  min-width: 250px;
+}
+
+::ng-deep .notifications-overlay .ant-popover-inner {
+  border-radius: @border-radius;
+}
+
+::ng-deep .notifications-overlay .ant-popover-inner-content {
+  padding: 12px 9px;
+}
+
+.notifications-icon {
+  font-size: 1.25rem;
+  color: @color-secondary;
+}
+
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.clear-all {
+  padding: 0;
+}
+
+.notifications {
+  max-width: 420px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 9px;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  border-radius: @border-radius;
+  padding: 0.3rem;
+  background-color: @bg-light-gray;
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.15);
+}
+
+.notification:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.notification-icon {
+  width: 36px;
+  margin-right: 0.5rem;
+}
+
+.notification-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.remove-btn {
+  color: @color-secondary;
+  height: fit-content;
+  position: relative;
+  top: -5px;
+  right: -3px;
+  padding: 2px;
+  margin-left: auto;
+  align-self: flex-start;
+}

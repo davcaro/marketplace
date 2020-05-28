@@ -28,10 +28,9 @@ nz-header a {
 .header-right {
   display: flex;
   align-items: center;
-  margin-left: 1.2rem;
 }
 
-.collapsed-menu a {
+.collapsed-menu {
   display: none;
 }
 
@@ -44,6 +43,7 @@ nz-header a {
   display: flex;
   width: 85%;
   margin-left: 1.5rem;
+  margin-right: 1.2rem;
 }
 
 .search-box nz-form-item {
@@ -140,7 +140,7 @@ nz-form-item {
 }
 
 @media (max-width: 767.98px) {
-  .collapsed-menu a {
+  .collapsed-menu {
     display: block;
   }
 
@@ -155,11 +155,10 @@ nz-form-item {
   }
 
   .search-box {
-    margin-left: 0;
+    margin-left: 1.1rem;
   }
 
   .search-box input {
-    margin-left: 1.1rem;
     border-radius: @border-radius;
   }
 

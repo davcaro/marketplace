@@ -24,32 +24,11 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-soccer-ball:before {
-  content: '\e90e';
-}
-.icon-t-shirt:before {
-  content: '\e90f';
-}
-.icon-team:before {
-  content: '\e90f';
-}
-.icon-group:before {
-  content: '\e90f';
-}
-.icon-gamepad:before {
-  content: '\e910';
-}
-.icon-joystick:before {
-  content: '\e910';
-}
 .icon-dots-three-vertical:before {
   content: '\e91c';
 }
 .icon-dots-three-horizontal:before {
   content: '\e918';
-}
-.icon-laptop:before {
-  content: '\e911';
 }
 .icon-arrow-right:before {
   content: '\e902';
@@ -69,11 +48,11 @@ i {
 .icon-plus:before {
   content: '\e904';
 }
+.icon-clear:before {
+  content: '\e90e';
+}
 .icon-send:before {
   content: '\e91a';
-}
-.icon-child_friendly:before {
-  content: '\e912';
 }
 .icon-file_upload:before {
   content: '\e905';
@@ -93,15 +72,6 @@ i {
 .icon-rotate-left:before {
   content: '\e91b';
 }
-.icon-paw:before {
-  content: '\e913';
-}
-.icon-automobile:before {
-  content: '\e914';
-}
-.icon-car:before {
-  content: '\e914';
-}
 .icon-commenting:before {
   content: '\e90a';
 }
@@ -111,20 +81,8 @@ i {
 .icon-bookmark:before {
   content: '\e901';
 }
-.icon-home:before {
-  content: '\e915';
-}
-.icon-office:before {
-  content: '\e916';
-}
 .icon-pencil:before {
   content: '\e919';
-}
-.icon-music:before {
-  content: '\e917';
-}
-.icon-books:before {
-  content: '\e920';
 }
 .icon-coin-euro:before {
   content: '\e93c';
@@ -135,6 +93,9 @@ i {
 .icon-clock:before {
   content: '\e94e';
 }
+.icon-bell:before {
+  content: '\e951';
+}
 .icon-calendar:before {
   content: '\e953';
 }
@@ -144,20 +105,11 @@ i {
 .icon-search:before {
   content: '\e986';
 }
-.icon-wrench:before {
-  content: '\e991';
-}
 .icon-stats-bars:before {
   content: '\e99c';
 }
 .icon-bin:before {
   content: '\e9ac';
-}
-.icon-briefcase:before {
-  content: '\e9ae';
-}
-.icon-power:before {
-  content: '\e9b5';
 }
 .icon-list2:before {
   content: '\e9bb';

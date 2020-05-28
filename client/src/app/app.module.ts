@@ -38,6 +38,7 @@ import { ReviewsCatalogComponent } from './reviews/reviews-catalog/reviews-catal
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ChartsModule } from 'ng2-charts';
+import { NotificationsComponent } from './shared/header/notifications/notifications.component';
 
 registerLocaleData(es);
 
@@ -67,7 +68,8 @@ registerLocaleData(es);
     ReviewsComponent,
     ReviewsCatalogComponent,
     LandingPageComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

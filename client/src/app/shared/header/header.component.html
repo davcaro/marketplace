@@ -37,6 +37,8 @@
       </nz-form-item>
     </form>
 
+    <app-notifications *ngIf="user"></app-notifications>
+
     <div class="header-right">
       <a class="user-dropdown" nz-dropdown [nzDropdownMenu]="userMenu" *ngIf="user">
         <nz-avatar nzIcon="user" [nzSrc]="apiUrl + '/images/avatars/' + user.avatar"></nz-avatar>
