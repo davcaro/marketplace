@@ -18,7 +18,8 @@ module.exports = {
       apiKey: process.env.MAIL_API_KEY,
       fromEmail: process.env.MAIL_FROM,
       templates: {
-        welcome: process.env.WELCOME_TEMPLATE
+        welcome: process.env.WELCOME_TEMPLATE,
+        reset_password: process.env.RESET_PASSWORD_TEMPLATE
       }
     }
   },

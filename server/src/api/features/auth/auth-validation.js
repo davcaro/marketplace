@@ -23,6 +23,28 @@ const signUp = {
   })
 };
 
+const forgotPassword = {
+  [Segments.BODY]: Joi.object().keys({
+    email: Joi.string()
+      .email()
+      .required()
+  })
+};
+
+const resetPassword = {
+  [Segments.QUERY]: Joi.object().keys({
+    userId: Joi.number()
+      .positive()
+      .required(),
+    token: Joi.string().required()
+  }),
+  [Segments.BODY]: Joi.object().keys({
+    password: Joi.string()
+      .pattern(new RegExp('^[a-zA-Z0-9]{6,20}$'))
+      .required()
+  })
+};
+
 const checkAvailable = {
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string()
@@ -34,5 +56,7 @@ const checkAvailable = {
 module.exports = {
   login,
   signUp,
+  forgotPassword,
+  resetPassword,
   checkAvailable
 };

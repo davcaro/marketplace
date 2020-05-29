@@ -17,6 +17,7 @@ const SUBJECTS = {
   ALL: 'all',
   SELF_USER: 'self_user',
   USER: 'User',
+  PASSWORD_RESET: 'Password Reset',
   CATEGORY: 'Category',
   ITEM: 'Item',
   FAVORITE: 'ItemFavorite',
@@ -54,6 +55,8 @@ function defineAbilitiesFor(user) {
     allow(ACTIONS.READ, SUBJECTS.ITEM);
     allow(ACTIONS.READ, SUBJECTS.FAVORITE);
     allow(ACTIONS.READ, SUBJECTS.REVIEW);
+    allow(ACTIONS.CREATE, SUBJECTS.PASSWORD_RESET);
+    allow(ACTIONS.UPDATE, SUBJECTS.PASSWORD_RESET);
   }
 
   return new Ability(rules);

@@ -102,6 +102,31 @@ const signUp = async (req, res, next) => {
   })(req, res, next);
 };
 
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    await authService.createPasswordReset(email);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const resetPassword = async (req, res, next) => {
+  const { userId, token } = req.query;
+  const { password } = req.body;
+
+  try {
+    await authService.resetPassword(userId, token, password);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 const checkAvailable = async (req, res, next) => {
   const { email } = req.body;
 
@@ -117,5 +142,7 @@ const checkAvailable = async (req, res, next) => {
 module.exports = {
   login,
   signUp,
+  forgotPassword,
+  resetPassword,
   checkAvailable
 };

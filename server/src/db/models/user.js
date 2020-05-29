@@ -77,6 +77,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'toUserId',
       as: 'notifications'
     });
+
+    User.hasMany(models.PasswordReset, {
+      foreignKey: 'userId',
+      as: 'passwordResets'
+    });
   };
 
   User.beforeCreate(async (user, options) => {

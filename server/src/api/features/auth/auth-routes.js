@@ -26,4 +26,16 @@ module.exports = app => {
     celebrate(authValidation.checkAvailable),
     authController.checkAvailable
   );
+  route.post(
+    '/forgotPassword',
+    hasPermission(ACTIONS.CREATE, SUBJECTS.PASSWORD_RESET),
+    celebrate(authValidation.forgotPassword),
+    authController.forgotPassword
+  );
+  route.post(
+    '/resetPassword',
+    hasPermission(ACTIONS.UPDATE, SUBJECTS.PASSWORD_RESET),
+    celebrate(authValidation.resetPassword),
+    authController.resetPassword
+  );
 };
