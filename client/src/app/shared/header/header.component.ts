@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onAuthModalBack(): void {
-    this.authModalService.oauth();
+    this.authModalService.authSelector();
   }
 
   closeAuthModal(): void {

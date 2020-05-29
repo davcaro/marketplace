@@ -72,14 +72,14 @@
 
       <nz-modal class="auth-modal" [(nzVisible)]="authModalIsVisible" [nzFooter]="null" (nzOnCancel)="closeAuthModal()">
         <div class="auth-modal-body">
-          <div class="modal-back" *ngIf="authModalView !== 'oauth'">
+          <div class="modal-back" *ngIf="authModalView !== 'auth-selector'">
             <button nz-button nzType="link" [nzSize]="'large'" class="modal-back-arrow" (click)="onAuthModalBack()">
               <i class="icon-arrow-left2"></i>
             </button>
           </div>
 
           <div [ngSwitch]="authModalView">
-            <app-oauth *ngSwitchCase="'oauth'"></app-oauth>
+            <app-auth-selector *ngSwitchCase="'auth-selector'"></app-auth-selector>
             <app-login *ngSwitchCase="'login'"></app-login>
             <app-signup *ngSwitchCase="'signup'"></app-signup>
             <app-reset-password *ngSwitchCase="'reset'"></app-reset-password>

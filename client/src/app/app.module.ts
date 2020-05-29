@@ -13,7 +13,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/header/header.component';
-import { OauthComponent } from './shared/header/oauth/oauth.component';
+import { AuthSelectorComponent } from './shared/header/auth-selector/auth-selector.component';
 import { LoginComponent } from './shared/header/login/login.component';
 import { SignupComponent } from './shared/header/signup/signup.component';
 import { ResetPasswordComponent } from './shared/header/reset-password/reset-password.component';
@@ -47,7 +47,7 @@ registerLocaleData(es);
     AppComponent,
     HeaderComponent,
     SiderComponent,
-    OauthComponent,
+    AuthSelectorComponent,
     LoginComponent,
     SignupComponent,
     ResetPasswordComponent,

@@ -29,15 +29,15 @@ export class AuthModalService {
 
   showModal(): void {
     this.visibilityChange.next(true);
-    this.oauth();
+    this.authSelector();
   }
 
   closeModal(): void {
     this.visibilityChange.next(false);
   }
 
-  oauth(): void {
-    this.viewChange.next('oauth');
+  authSelector(): void {
+    this.viewChange.next('auth-selector');
   }
 
   login(): void {
