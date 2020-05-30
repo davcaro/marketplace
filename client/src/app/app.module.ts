@@ -16,7 +16,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { AuthSelectorComponent } from './shared/header/auth-selector/auth-selector.component';
 import { LoginComponent } from './shared/header/login/login.component';
 import { SignupComponent } from './shared/header/signup/signup.component';
-import { ResetPasswordComponent } from './shared/header/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './shared/header/forgot-password/forgot-password.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileInfoComponent } from './profile/profile-info/profile-info.component';
@@ -39,6 +39,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ChartsModule } from 'ng2-charts';
 import { NotificationsComponent } from './shared/header/notifications/notifications.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 registerLocaleData(es);
 
@@ -50,7 +51,7 @@ registerLocaleData(es);
     AuthSelectorComponent,
     LoginComponent,
     SignupComponent,
-    ResetPasswordComponent,
+    ForgotPasswordComponent,
     ProfileComponent,
     ProfileInfoComponent,
     ProfileAccountComponent,
@@ -69,7 +70,8 @@ registerLocaleData(es);
     ReviewsCatalogComponent,
     LandingPageComponent,
     StatisticsComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

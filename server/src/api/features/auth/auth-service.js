@@ -95,7 +95,7 @@ const resetPassword = async (userId, token, password) => {
   let passwordReset;
 
   try {
-    passwordReset = await authDAL.findPasswordReset(userId, token);
+    passwordReset = await authDAL.findPasswordReset(userId);
   } catch (e) {
     throw new AppError(500, e.message);
   }

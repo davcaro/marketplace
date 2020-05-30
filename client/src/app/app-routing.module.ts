@@ -18,6 +18,7 @@ import { ChatResolverService } from './chat/chat-resolver.service';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { StatisticsComponent } from './statistics/statistics.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,7 @@ const routes: Routes = [
       { path: 'account', component: ProfileAccountComponent, data: { title: 'Mi cuenta' } }
     ]
   },
+  { path: 'resetPassword', component: ResetPasswordComponent, data: { title: 'Restablecer contraseña' } },
   {
     path: 'catalog',
     canActivate: [AuthGuard],
