@@ -48,7 +48,7 @@ export class AuthModalService {
     this.viewChange.next('signup');
   }
 
-  resetPassword(): void {
+  forgotPassword(): void {
     this.viewChange.next('reset');
   }
 }

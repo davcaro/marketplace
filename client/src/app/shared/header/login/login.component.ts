@@ -61,8 +61,8 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  onResetPassword(): void {
-    this.authModalService.resetPassword();
+  onForgotPassword(): void {
+    this.authModalService.forgotPassword();
   }
 
   onSignUp(): void {
