@@ -34,7 +34,8 @@ const updateLocation = async (id, payload) =>
     return user.update({ locationId: location.id }, { where: { id } });
   });
 
-const deleteById = id => User.scope('public').destroy({ where: { id } });
+const deleteById = id =>
+  User.scope('public').destroy({ where: { id }, individualHooks: true });
 
 const findFavorites = async (userId, query) => {
   const items = await Item.scope('full').findAndCountAll({

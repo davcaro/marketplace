@@ -101,7 +101,30 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'itemId',
       as: 'reviews'
     });
+
+    Item.hasMany(models.Notification, {
+      foreignKey: 'itemId',
+      as: 'notifications'
+    });
   };
+
+  Item.afterDestroy(async (item, options) => {
+    item.getFavorites().then(favorites => {
+      favorites.forEach(favorite => favorite.destroy());
+    });
+
+    item.getChats().then(chats => {
+      chats.forEach(chat => chat.destroy());
+    });
+
+    item.getReviews().then(reviews => {
+      reviews.forEach(review => review.destroy());
+    });
+
+    item.getNotifications().then(notifications => {
+      notifications.forEach(notification => notification.destroy());
+    });
+  });
 
   return Item;
 };

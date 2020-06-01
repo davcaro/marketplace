@@ -25,5 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  Category.afterDestroy(async (category, options) => {
+    category.getItems().then(items => {
+      items.forEach(item => item.destroy());
+    });
+  });
+
   return Category;
 };

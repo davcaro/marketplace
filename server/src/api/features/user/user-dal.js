@@ -74,7 +74,8 @@ const updateLocation = (userId, payload) =>
     return user.update({ locationId: location.id }, { where: { id: userId } });
   });
 
-const deleteById = id => User.scope('public').destroy({ where: { id } });
+const deleteById = id =>
+  User.scope('public').destroy({ where: { id }, individualHooks: true });
 
 module.exports = {
   findAll,

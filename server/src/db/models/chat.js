@@ -25,5 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  Chat.afterDestroy(async (chat, options) => {
+    chat.getUsers().then(users => {
+      users.forEach(user => user.destroy());
+    });
+  });
+
   return Chat;
 };

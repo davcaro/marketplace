@@ -70,6 +70,7 @@ const createPasswordReset = async email => {
         to: email,
         dynamicTemplateData: {
           userId: user.id,
+          user_name: user.name,
           token
         }
       }

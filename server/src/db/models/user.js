@@ -96,6 +96,38 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  User.afterDestroy(async (user, options) => {
+    user.getItems().then(items => {
+      items.forEach(item => item.destroy());
+    });
+
+    user.getChats().then(chatsUsers => {
+      chatsUsers.forEach(chatUser => {
+        chatUser.getChat().then(chat => chat.destroy());
+      });
+    });
+
+    user.getOwnReviews().then(reviews => {
+      reviews.forEach(review => review.destroy());
+    });
+
+    user.getOthersReviews().then(reviews => {
+      reviews.forEach(review => review.destroy());
+    });
+
+    user.getNotifications().then(notifications => {
+      notifications.forEach(notification => notification.destroy());
+    });
+
+    user.getOthersNotifications().then(notifications => {
+      notifications.forEach(notification => notification.destroy());
+    });
+
+    user.getPasswordResets().then(passwordResets => {
+      passwordResets.forEach(reset => reset.destroy());
+    });
+  });
+
   User.prototype.isValidPassword = function(password) {
     const user = this;
 

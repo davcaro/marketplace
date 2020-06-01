@@ -74,7 +74,8 @@ const updateLocation = (itemId, payload) =>
     include: [{ model: Location, as: 'location' }]
   }).then(item => item.location.update(payload));
 
-const deleteById = id => Item.scope('full').destroy({ where: { id } });
+const deleteById = id =>
+  Item.scope('full').destroy({ where: { id }, individualHooks: true });
 
 const removeImage = (id, itemId) =>
   ItemImage.destroy({ where: { id, itemId } });
