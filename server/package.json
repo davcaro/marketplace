@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=server:* nodemon ./bin/www",
+    "start": "node ./bin/www",
+    "start-dev": "DEBUG=server:* nodemon ./bin/www",
     "lint": "eslint .",
     "format": "prettier --config ./.prettierrc --write 'src/**/*.js'",
     "db-migrate": "sequelize-cli db:migrate",
