@@ -9,6 +9,9 @@
     "db-migrate": "sequelize-cli db:migrate",
     "db-seed": "sequelize-cli db:seed:all"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "@casl/ability": "^3.4.0",
     "@hapi/boom": "^9.1.0",
