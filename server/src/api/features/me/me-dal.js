@@ -104,11 +104,7 @@ const findItemsMonthStats = async userId => {
     where: {
       createdAt: {
         [Op.between]: [
-          Sequelize.fn(
-            'DATE_SUB',
-            Sequelize.fn('CURDATE'),
-            Sequelize.literal('INTERVAL 30 DAY')
-          ),
+          Sequelize.literal("CURRENT_DATE - INTERVAL '30 DAY'"),
           Sequelize.fn('NOW')
         ]
       }
@@ -147,7 +143,7 @@ const findItemsMonthStats = async userId => {
 const findItemsCategoriesStats = async userId =>
   Item.findAll({
     attributes: [[Sequelize.fn('COUNT', 'id'), 'items']],
-    group: ['categoryId'],
+    group: ['"category".id'],
     include: [
       { model: Category, as: 'category' },
       { model: User, as: 'user', attributes: [], where: { id: userId } }

@@ -10,9 +10,6 @@ module.exports = {
     database: DB.database,
     host: DB.host,
     port: DB.port,
-    dialect: 'mysql',
-    dialectOptions: {
-      bigNumberStrings: true
-    }
+    dialect: 'postgres'
   }
 };

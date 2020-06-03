@@ -32,7 +32,11 @@ const findUserScore = async id => {
   const score = await Review.findOne({
     attributes: [
       [
-        Sequelize.fn('IFNULL', Sequelize.fn('AVG', Sequelize.col('score')), 0),
+        Sequelize.fn(
+          'COALESCE',
+          Sequelize.fn('AVG', Sequelize.col('score')),
+          0
+        ),
         'score'
       ]
     ],

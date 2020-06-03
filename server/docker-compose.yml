@@ -1,21 +1,18 @@
-# Use root/example as user/password credentials
 version: '3.1'
 
 services:
-
   db:
-    image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password
+    image: kartoza/postgis:12.1
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: db_dev
+      POSTGRES_USER: admin
+      POSTGRES_PASS: root
+      POSTGRES_DBNAME: db
+      POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology,postgis_raster,pgrouting
     ports:
-      - 3306:3306
+      - 5432:5432
     expose:
-      - 3306
-    volumes:
-      - ./mysql:/var/lib/mysql
+      - 5432
 
   adminer:
     image: adminer

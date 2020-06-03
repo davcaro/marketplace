@@ -15,7 +15,7 @@ const findAll = async (userId, archived) => {
   // Get all chat ids where the user is in and has messages
   let chatIds = await Chat.findAll({
     attributes: ['id'],
-    group: ['id'],
+    group: ['"Chat".id'],
     include: [
       {
         model: ChatUser,
@@ -75,6 +75,7 @@ const findChat = async (chatId, userId, pagination) => {
     { where: { readAt: null, chatUserId: chatUser.id } }
   );
   const messages = await ChatMessage.findAndCountAll({
+    attributes: { exclude: ['ChatUserId'] },
     where: { chatUserId: chatUser.id },
     ...pagination,
     order: [['createdAt', 'DESC']]
@@ -138,7 +139,7 @@ const findUsersByItem = (itemId, userId) =>
     ]
   });
 
-const createMessage = (chatId, userId, payload) => {
+const createMessage = async (chatId, userId, payload) => {
   Chat.findByPk(chatId, {
     include: [{ model: ChatUser, as: 'users' }]
   }).then(chat =>

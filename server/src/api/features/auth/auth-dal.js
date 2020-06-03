@@ -18,11 +18,7 @@ const createPasswordReset = (userId, token) =>
   PasswordReset.create({
     userId,
     tokenHash: token,
-    expirationDate: Sequelize.fn(
-      'DATE_ADD',
-      Sequelize.fn('NOW'),
-      Sequelize.literal('INTERVAL 1 HOUR')
-    ),
+    expirationDate: Sequelize.literal("NOW() + '1 HOUR'"),
     tokenUsed: false
   });
 

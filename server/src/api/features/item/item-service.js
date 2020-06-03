@@ -306,12 +306,8 @@ const getQuery = params => {
         model: Location,
         as: 'location',
         where: Sequelize.where(
-          Sequelize.fn(
-            'ST_Distance_Sphere',
-            Sequelize.literal(
-              `point(${+params.longitude}, ${+params.latitude})`
-            ),
-            Sequelize.literal('point(location.longitude, location.latitude)')
+          Sequelize.literal(
+            `CAST(ST_DistanceSphere(POINT(${+params.longitude}, ${+params.latitude})::geometry, POINT(location.longitude, location.latitude)::geometry) As numeric)`
           ),
           { [Op.lte]: distance }
         )
