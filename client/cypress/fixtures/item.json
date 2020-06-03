@@ -1,0 +1,35 @@
+{
+  "id": 0,
+  "title": "Item title",
+  "description": "Item description",
+  "price": "100.00",
+  "status": "for_sale",
+  "condition": "new",
+  "createdAt": "2020-01-01T00:00:00.000Z",
+  "updatedAt": "2020-01-01T00:00:00.000Z",
+  "user": {
+    "id": 0,
+    "name": "User",
+    "avatar": "avatar.png",
+    "location": {
+      "latitude": "0",
+      "longitude": "0",
+      "zoom": 10,
+      "placeName": "Place name"
+    }
+  },
+  "category": {
+    "id": 0,
+    "name": "Category name",
+    "icon": "Category icon"
+  },
+  "location": {
+    "latitude": "0",
+    "longitude": "0",
+    "zoom": 10,
+    "placeName": "Place name"
+  },
+  "images": [{ "image": "image1.jpg" }, { "image": "image2.png" }, { "image": "image3.jpg" }],
+  "favorites": 50,
+  "views": 100
+}

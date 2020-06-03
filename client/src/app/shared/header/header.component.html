@@ -66,7 +66,7 @@
         </ul>
       </nz-dropdown-menu>
 
-      <button nz-button nzType="default" nzShape="round" (click)="showAuthModal()" *ngIf="!user">
+      <button class="login-btn" nz-button nzType="default" nzShape="round" (click)="showAuthModal()" *ngIf="!user">
         Iniciar sesión
       </button>
 
@@ -101,7 +101,7 @@
     <nz-dropdown-menu #collapsedMenu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
         <ng-container *ngIf="!user">
-          <li nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
+          <li class="login-btn" nz-menu-item (click)="showAuthModal()">Iniciar sesión</li>
         </ng-container>
 
         <li nz-menu-item (click)="onUploadItem()">Subir artículo</li>

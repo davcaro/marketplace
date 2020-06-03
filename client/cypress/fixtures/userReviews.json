@@ -1,0 +1,47 @@
+[
+  {
+    "score": "1",
+    "description": "Review description",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "fromUser": {
+      "name": "Test",
+      "avatar": "avatar.png"
+    }
+  },
+  {
+    "score": "2",
+    "description": "Review description",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "fromUser": {
+      "name": "Test",
+      "avatar": "avatar.png"
+    }
+  },
+  {
+    "score": "3",
+    "description": "Review description",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "fromUser": {
+      "name": "Test",
+      "avatar": "avatar.png"
+    }
+  },
+  {
+    "score": "4",
+    "description": "Review description",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "fromUser": {
+      "name": "Test",
+      "avatar": "avatar.png"
+    }
+  },
+  {
+    "score": "5",
+    "description": "Review description",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "fromUser": {
+      "name": "Test",
+      "avatar": "avatar.png"
+    }
+  }
+]

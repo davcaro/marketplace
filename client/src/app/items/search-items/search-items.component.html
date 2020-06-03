@@ -15,8 +15,8 @@
   </nz-empty>
 
   <div class="items-wall" nz-row [nzGutter]="24" [class.loading]="loading">
-    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXXl]="6" *ngFor="let item of items">
-      <a [routerLink]="['/', 'item', item.id]">
+    <div class="item-col" nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzXXl]="6" *ngFor="let item of items">
+      <a class="item-link" [routerLink]="['/', 'item', item.id]">
         <nz-card class="item-card" nzHoverable [nzCover]="coverTpl">
           <ng-template #coverTpl>
             <nz-badge class="status-badge" [nzCount]="soldIconTpl" *ngIf="item.status === 'sold'"></nz-badge>

@@ -29,7 +29,7 @@
     [nzXl]="6"
     *ngFor="let item of items"
   >
-    <a [routerLink]="['/', 'item', item.id]">
+    <a class="item-link" [routerLink]="['/', 'item', item.id]">
       <nz-card
         class="item-card"
         [class.tooltip-open]="itemTooltipOpen === item || itemConfirmOpen === item"

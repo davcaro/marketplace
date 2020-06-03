@@ -1,0 +1,12 @@
+{
+  "id": 0,
+  "name": "User",
+  "email": "example@example.com",
+  "avatar": "avatar.png",
+  "location": {
+    "latitude": "0",
+    "longitude": "0",
+    "zoom": 10,
+    "placeName": "Place name"
+  }
+}

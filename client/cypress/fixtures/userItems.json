@@ -1,0 +1,44 @@
+{
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "total": 10
+  },
+  "data": [
+    {
+      "id": 0,
+      "title": "Item title",
+      "description": "Item description",
+      "price": "100.00",
+      "images": [{ "image": "image.jpg" }]
+    },
+    {
+      "id": 0,
+      "title": "Item title",
+      "description": "Item description",
+      "price": "100.00",
+      "images": [{ "image": "image.jpg" }]
+    },
+    {
+      "id": 0,
+      "title": "Item title",
+      "description": "Item description",
+      "price": "100.00",
+      "images": [{ "image": "image.jpg" }]
+    },
+    {
+      "id": 0,
+      "title": "Item title",
+      "description": "Item description",
+      "price": "100.00",
+      "images": [{ "image": "image.jpg" }]
+    },
+    {
+      "id": 0,
+      "title": "Item title",
+      "description": "Item description",
+      "price": "100.00",
+      "images": [{ "image": "image.jpg" }]
+    }
+  ]
+}

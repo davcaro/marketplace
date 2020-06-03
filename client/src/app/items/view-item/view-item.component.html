@@ -5,7 +5,9 @@
         <a [routerLink]="['/']">Inicio</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
-        <a [routerLink]="['/', 'search']" [queryParams]="{ category: item.category.id }">{{ item.category.name }}</a>
+        <a class="category-link" [routerLink]="['/', 'search']" [queryParams]="{ category: item.category.id }">
+          {{ item.category.name }}
+        </a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         {{ item.title }}
@@ -39,7 +41,7 @@
           </ng-container>
 
           <ng-container *ngIf="!user || user.id !== item.user.id">
-            <button nz-button nzType="default" nzShape="round" (click)="onMarkAsFavorite()">
+            <button class="favorite-btn" nz-button nzType="default" nzShape="round" (click)="onMarkAsFavorite()">
               <i
                 nz-icon
                 nzType="heart"
@@ -49,7 +51,14 @@
               ></i>
             </button>
 
-            <button nz-button nzType="primary" nzShape="round" style="margin-left: 4px;" (click)="onContactUser()">
+            <button
+              class="chat-btn"
+              nz-button
+              nzType="primary"
+              nzShape="round"
+              style="margin-left: 4px;"
+              (click)="onContactUser()"
+            >
               Contactar
             </button>
           </ng-container>

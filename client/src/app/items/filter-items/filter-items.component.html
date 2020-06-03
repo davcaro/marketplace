@@ -1,5 +1,6 @@
 <nz-header>
   <button
+    class="category-filter"
     nz-button
     [nzType]="filters.category.isApplied ? 'primary' : 'default'"
     nzShape="round"
@@ -49,6 +50,7 @@
   </ng-template>
 
   <button
+    class="price-filter"
     nz-button
     [nzType]="filters.price.isApplied ? 'primary' : 'default'"
     nzShape="round"
@@ -111,6 +113,7 @@
   </ng-template>
 
   <button
+    class="date-filter"
     nz-button
     [nzType]="filters.publicationDate.isApplied ? 'primary' : 'default'"
     nzShape="round"
@@ -135,7 +138,7 @@
 
   <ng-template #publicationBodyTpl>
     <div class="popover-content">
-      <ul class="order-list" nz-menu nzMode="inline" [nzInlineIndent]="16">
+      <ul class="date-list" nz-menu nzMode="inline" [nzInlineIndent]="16">
         <li
           nz-menu-item
           [nzSelected]="filters.publicationDate.selected === option"
@@ -153,6 +156,7 @@
   </ng-template>
 
   <button
+    class="location-filter"
     nz-button
     [nzType]="filters.location.isApplied ? 'primary' : 'default'"
     nzShape="round"
@@ -200,6 +204,7 @@
   </ng-template>
 
   <button
+    class="order-filter"
     nz-button
     [nzType]="filters.order.isApplied ? 'primary' : 'default'"
     nzShape="round"
