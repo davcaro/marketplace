@@ -3,6 +3,8 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Category } from '../shared/category.model';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../users/user.model';
+import { ActivatedRoute } from '@angular/router';
+import { ItemsService } from './items.service';
 
 export interface PublicationDate {
   label: string;
@@ -44,15 +46,20 @@ export interface Filters {
 })
 export class FilterItemsService {
   user: User;
+  categories: Category[];
   filters: BehaviorSubject<Filters>;
   requestItems: Subject<boolean>;
   distanceMarks: any;
 
   userSubscription: Subscription;
 
-  constructor(private authService: AuthService) {
+  constructor(private route: ActivatedRoute, private authService: AuthService, private itemsService: ItemsService) {
     this.authService.user.subscribe(user => {
       this.user = user;
+    });
+
+    this.itemsService.categories.subscribe(categories => {
+      this.categories = categories;
     });
 
     this.requestItems = new Subject<boolean>();
@@ -164,5 +171,61 @@ export class FilterItemsService {
 
   getDistanceSelected() {
     return this.distanceMarks[this.filters.value.location.distanceSelected];
+  }
+
+  private isInsideLimits(price: number) {
+    return price >= this.filters.value.price.limits[0] && price <= this.filters.value.price.limits[1];
+  }
+
+  loadFilters() {
+    const params = this.route.snapshot.queryParams;
+    const filters = this.filters.value;
+
+    filters.category.isApplied = !!params.category;
+    filters.price.isApplied = !!params.min_price || !!params.max_price;
+    filters.publicationDate.isApplied = !!params.published;
+    filters.location.isApplied = !!params.distance || !!params.latitude || !!params.longitude;
+    filters.order.isApplied = !!params.order;
+
+    filters.keywords = params.keywords;
+
+    filters.category.selected = this.categories.find(category => category.id === params.category) || this.categories[0];
+
+    if (
+      params.min_price &&
+      this.isInsideLimits(params.min_price) &&
+      (!params.max_price || params.min_price <= params.max_price)
+    ) {
+      filters.price.range[0] = +params.min_price;
+    }
+    if (
+      params.max_price &&
+      this.isInsideLimits(params.max_price) &&
+      (!params.min_price || params.max_price >= params.min_price)
+    ) {
+      filters.price.range[1] = +params.max_price;
+    }
+
+    filters.publicationDate.selected = filters.publicationDate.options.find(date => date.value === params.published);
+
+    if (params.latitude && params.longitude) {
+      filters.location.userLocation = {
+        latitude: +params.latitude,
+        longitude: +params.longitude,
+        place_name: null
+      };
+    }
+
+    if (params.distance) {
+      for (const key in this.distanceMarks) {
+        if (this.distanceMarks[key].value === +params.distance) {
+          filters.location.distanceSelected = +key;
+        }
+      }
+    }
+
+    filters.order.selected = filters.order.options.find(order => order.value === params.order);
+
+    this.filters.next(filters);
   }
 }

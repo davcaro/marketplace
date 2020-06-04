@@ -19,6 +19,7 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
 
   activeRequest: Subscription;
   requestsSubscription: Subscription;
+  queryParamsSubscription: Subscription;
 
   constructor(
     private itemsService: ItemsService,
@@ -45,10 +46,19 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
       }
       this.loadItems();
     });
+
+    this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
+      if (this.activeRequest.closed) {
+        this.filtersService.loadFilters();
+        this.pagination.page = +this.route.snapshot.queryParams.page || 1;
+        this.filtersService.requestItems.next(false);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.requestsSubscription.unsubscribe();
+    this.queryParamsSubscription.unsubscribe();
   }
 
   onClearFilters() {
@@ -72,7 +82,15 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
       this.itemsService.items.next(this.items);
 
       this.pagination = { page: res.pagination.offset / res.pagination.limit + 1, ...res.pagination };
-      this.router.navigate(['search'], { queryParams: { page: this.pagination.page }, queryParamsHandling: 'merge' });
+
+      const params: any = { queryParamsHandling: 'merge' };
+      // Avoid navigating to page 1 if there is no page specified
+      if (!(!this.route.snapshot.queryParams.page && this.pagination.page === 1)) {
+        params.queryParams = {
+          page: this.pagination.page
+        };
+      }
+      this.router.navigate(['search'], params);
     });
   }
 }

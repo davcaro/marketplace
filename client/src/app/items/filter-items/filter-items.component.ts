@@ -53,8 +53,7 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadQuery(this.route.snapshot.queryParams);
-    this.filtersService.filters.next(this.filters);
+    this.filtersService.loadFilters();
 
     this.filtersSubscription = this.filtersService.filters.subscribe(filters => {
       this.filters = filters;
@@ -67,6 +66,7 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
       this.filters.category.selected =
         this.categories.find(category => category.id === +this.route.snapshot.queryParams.category) ||
         this.categories[0];
+      this.filtersService.filters.next(this.filters);
 
       this.filtersService.requestItems.next(false);
     });
@@ -288,58 +288,5 @@ export class FilterItemsComponent implements OnInit, OnDestroy {
     this.router.navigate(['search'], { queryParams, queryParamsHandling: 'merge' });
     this.filtersService.filters.next(this.filters);
     this.filtersService.requestItems.next(true);
-  }
-
-  private isInsideLimits(price: number) {
-    return price >= this.filters.price.limits[0] && price <= this.filters.price.limits[1];
-  }
-
-  private loadQuery(params: Params) {
-    this.filters.category.isApplied = !!params.category;
-    this.filters.price.isApplied = !!params.min_price || !!params.max_price;
-    this.filters.publicationDate.isApplied = !!params.published;
-    this.filters.location.isApplied = !!params.distance || !!params.latitude || !!params.longitude;
-    this.filters.order.isApplied = !!params.order;
-
-    this.filters.keywords = params.keywords;
-
-    this.filters.category.selected = this.categories[0];
-
-    if (
-      params.min_price &&
-      this.isInsideLimits(params.min_price) &&
-      (!params.max_price || params.min_price <= params.max_price)
-    ) {
-      this.filters.price.range[0] = +params.min_price;
-    }
-    if (
-      params.max_price &&
-      this.isInsideLimits(params.max_price) &&
-      (!params.min_price || params.max_price >= params.min_price)
-    ) {
-      this.filters.price.range[1] = +params.max_price;
-    }
-
-    this.filters.publicationDate.selected = this.filters.publicationDate.options.find(
-      date => date.value === params.published
-    );
-
-    if (params.latitude && params.longitude) {
-      this.filters.location.userLocation = {
-        latitude: +params.latitude,
-        longitude: +params.longitude,
-        place_name: null
-      };
-    }
-
-    if (params.distance) {
-      for (const key in this.distanceMarks) {
-        if (this.distanceMarks[key].value === +params.distance) {
-          this.filters.location.distanceSelected = +key;
-        }
-      }
-    }
-
-    this.filters.order.selected = this.filters.order.options.find(order => order.value === params.order);
   }
 }
