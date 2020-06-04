@@ -1,6 +1,8 @@
 import { Location } from '../shared/location.model';
 
 export class User {
+  public score: { score: number; reviews: number };
+
   constructor(
     public id: number,
     public email: string,

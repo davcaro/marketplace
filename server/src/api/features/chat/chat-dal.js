@@ -10,6 +10,7 @@ const {
   Item
 } = require('../../../db/models');
 const itemDal = require('../item/item-dal');
+const usersDal = require('../user/user-dal');
 
 const findAll = async (userId, archived) => {
   // Get all chat ids where the user is in and has messages
@@ -69,6 +70,13 @@ const findChat = async (chatId, userId, pagination) => {
     ]
   });
 
+  // Get user score
+  for (const chatUser of chat.users) {
+    const score = await usersDal.findUserScore(chatUser.user.id);
+    chatUser.user.dataValues.score = score;
+  }
+
+  // Get messages
   const chatUser = chat.users.find(user => user.userId === userId);
   await ChatMessage.update(
     { readAt: Sequelize.fn('NOW') },

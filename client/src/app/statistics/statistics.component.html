@@ -10,7 +10,7 @@
           [labels]="itemsMonthLabels"
           [options]="itemsMonthOptions"
           [chartType]="lineChartType"
-          *ngIf="!itemsMonthLoading"
+          *ngIf="!itemsMonthLoading && itemsCategoriesData.length"
         ></canvas>
       </div>
 
@@ -23,9 +23,26 @@
           [labels]="itemsCategoriesLabels"
           [options]="itemsCategoriesOptions"
           [chartType]="pieChartType"
-          *ngIf="!itemsCategoriesLoading"
+          *ngIf="!itemsCategoriesLoading && itemsCategoriesData.length"
         ></canvas>
       </div>
     </div>
+
+    <nz-empty
+      [nzNotFoundContent]="emptyDescriptionTpl"
+      [nzNotFoundFooter]="emptyFooterTpl"
+      *ngIf="!itemsCategoriesData.length"
+    >
+      <ng-template #emptyDescriptionTpl>
+        <span>No se encontraron artículos.</span>
+      </ng-template>
+      <ng-template #emptyFooterTpl>
+        <ng-container>
+          <button nz-button nzType="primary" [routerLink]="['/', 'catalog', 'upload']">
+            Subir artículo
+          </button>
+        </ng-container>
+      </ng-template>
+    </nz-empty>
   </div>
 </app-sider>

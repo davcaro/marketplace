@@ -110,7 +110,7 @@
           <strong>{{ chat.getOtherUser(user.id).name }}</strong>
         </span>
 
-        <nz-rate [ngModel]="4" nzDisabled></nz-rate>
+        <nz-rate [ngModel]="chat.getOtherUser(user.id).score" nzDisabled></nz-rate>
       </a>
 
       <a class="item-info" [routerLink]="['/', 'item', chat.item.id]">
