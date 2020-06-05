@@ -212,32 +212,32 @@ const getQuery = params => {
     where[Op.or] = [
       {
         title: {
-          [Op.like]: `%${params.keywords}`
+          [Op.iLike]: `%${params.keywords}`
         }
       },
       {
         title: {
-          [Op.like]: `%${params.keywords}%`
+          [Op.iLike]: `%${params.keywords}%`
         }
       },
       {
         title: {
-          [Op.like]: `${params.keywords}%`
+          [Op.iLike]: `${params.keywords}%`
         }
       },
       {
         description: {
-          [Op.like]: `%${params.keywords}`
+          [Op.iLike]: `%${params.keywords}`
         }
       },
       {
         description: {
-          [Op.like]: `%${params.keywords}%`
+          [Op.iLike]: `%${params.keywords}%`
         }
       },
       {
         description: {
-          [Op.like]: `${params.keywords}%`
+          [Op.iLike]: `${params.keywords}%`
         }
       }
     ];
@@ -298,8 +298,13 @@ const getQuery = params => {
         break;
     }
   }
-  if (params.latitude && params.longitude) {
-    const distance = (params.distance ? +params.distance : 600) * 1000;
+  if (
+    params.latitude &&
+    params.longitude &&
+    params.distance &&
+    +params.distance > 0
+  ) {
+    const distance = +params.distance * 1000;
 
     include = [
       {

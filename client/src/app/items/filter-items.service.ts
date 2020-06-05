@@ -72,7 +72,7 @@ export class FilterItemsService {
       5: { label: '50 Km', value: 50, zoom: 7 },
       6: { label: '100 Km', value: 100, zoom: 6 },
       7: { label: '200 Km', value: 200, zoom: 5 },
-      8: { label: 'Sin límite', value: 600, zoom: 4 }
+      8: { label: 'Sin límite', value: 0, zoom: 4 }
     };
 
     this.filters = new BehaviorSubject<Filters>({
