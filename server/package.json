@@ -24,6 +24,8 @@
     "dotenv": "^8.2.0",
     "escape-html": "^1.0.3",
     "express": "~4.16.1",
+    "faker": "^4.1.0",
+    "fs-extra": "^9.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "morgan": "~1.9.1",

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Motor",
+    "icon": "car"
+  },
+  {
+    "name": "Hogar y jardín",
+    "icon": "house"
+  },
+  {
+    "name": "Informática y Electrónica",
+    "icon": "laptop"
+  },
+  {
+    "name": "Inmobiliaria",
+    "icon": "building"
+  },
+  {
+    "name": "Formación y libros",
+    "icon": "book"
+  },
+  {
+    "name": "Imagen y sonido",
+    "icon": "headphones"
+  },
+  {
+    "name": "Juegos",
+    "icon": "gamepad"
+  },
+  {
+    "name": "Moda y complementos",
+    "icon": "shirt"
+  },
+  {
+    "name": "Mascotas",
+    "icon": "footprint"
+  },
+  {
+    "name": "Deportes",
+    "icon": "football-player"
+  },
+  {
+    "name": "Niños y bebés",
+    "icon": "teddy-bear"
+  },
+  {
+    "name": "Negocios y Servicios",
+    "icon": "briefcase"
+  },
+  {
+    "name": "Otros",
+    "icon": "ellipsis"
+  }
+]
