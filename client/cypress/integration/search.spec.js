@@ -48,7 +48,7 @@ describe('Search Test', () => {
   });
 
   it('Apply Order filter', () => {
-    cy.get('.order-filter').click();
+    cy.get('.order-filter').scrollIntoView().click();
 
     cy.get('.order-list li').its('length').should('be.eq', 4);
     cy.get('.order-list li').first().click();
@@ -59,7 +59,7 @@ describe('Search Test', () => {
   });
 
   it('Clear all filter', () => {
-    cy.get('.clear-filters').click();
+    cy.get('.clear-filters').scrollIntoView().click();
 
     cy.location().should(location => {
       expect(location.pathname).to.eq('/search');
