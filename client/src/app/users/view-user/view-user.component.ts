@@ -45,18 +45,20 @@ export class ViewUserComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.mapbox.accessToken = environment.mapbox.accessToken;
+    if (this.user.location) {
+      this.mapbox.accessToken = environment.mapbox.accessToken;
 
-    // Side map
-    this.mapSide = new mapboxgl.Map({
-      container: this.mapSideEl.nativeElement,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [this.user.location.longitude, this.user.location.latitude],
-      zoom: this.user.location.zoom
-    });
+      // Side map
+      this.mapSide = new mapboxgl.Map({
+        container: this.mapSideEl.nativeElement,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [this.user.location.longitude, this.user.location.latitude],
+        zoom: this.user.location.zoom
+      });
 
-    this.mapSide.addControl(new mapboxgl.NavigationControl());
-    new mapboxgl.Marker().setLngLat([this.user.location.longitude, this.user.location.latitude]).addTo(this.mapSide);
+      this.mapSide.addControl(new mapboxgl.NavigationControl());
+      new mapboxgl.Marker().setLngLat([this.user.location.longitude, this.user.location.latitude]).addTo(this.mapSide);
+    }
   }
 
   updateForSaleItemsCount(count: number) {
@@ -72,7 +74,7 @@ export class ViewUserComponent implements OnInit, AfterViewInit {
   }
 
   loadTabMap(tab: number) {
-    if (tab === 3 && !this.mapTab) {
+    if (tab === 3 && this.user.location && !this.mapTab) {
       setTimeout(() => {
         this.mapTab = new mapboxgl.Map({
           container: this.mapTabEl.nativeElement,

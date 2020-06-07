@@ -71,7 +71,7 @@
             <strong>{{ user.name | truncate: 17 }}</strong>
           </span>
 
-          <nz-rate [ngModel]="userScore.score" nzDisabled></nz-rate>
+          <nz-rate [ngModel]="+userScore.score" nzDisabled></nz-rate>
         </div>
       </div>
     </nz-card>

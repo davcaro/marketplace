@@ -20,6 +20,8 @@ export class ReviewsCatalogComponent implements OnInit {
   editModalVisible: boolean;
   rate: number;
   description: string;
+  formValid: boolean;
+  unkownError: boolean;
 
   @Input() user: User;
   @Input() reviewsStatus: string;
@@ -29,6 +31,7 @@ export class ReviewsCatalogComponent implements OnInit {
     this.reviews = [];
 
     this.loading = true;
+    this.formValid = true;
   }
 
   ngOnInit(): void {
@@ -74,12 +77,31 @@ export class ReviewsCatalogComponent implements OnInit {
   }
 
   updateReview(): void {
-    this.reviewsService
-      .updateReview(this.selectedReview.id, { score: this.rate, description: this.description })
-      .subscribe(() => {
+    this.formValid = true;
+    this.unkownError = false;
+
+    if (!this.rate && !this.description) {
+      this.formValid = false;
+      return;
+    }
+
+    const data: { score?: number; description?: string } = {};
+    if (this.rate) {
+      data.score = this.rate;
+    }
+    if (this.description) {
+      data.description = this.description;
+    }
+
+    this.reviewsService.updateReview(this.selectedReview.id, data).subscribe(
+      res => {
         this.reviews.splice(this.reviews.indexOf(this.selectedReview), 1);
 
         this.closeEditModal();
-      });
+      },
+      err => {
+        this.unkownError = true;
+      }
+    );
   }
 }

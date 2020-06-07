@@ -17,7 +17,7 @@
     </nz-tabset>
     <ng-template #extraTpl>
       <div class="user-rate">
-        <nz-rate [ngModel]="userScore.score" nzDisabled></nz-rate>
+        <nz-rate [ngModel]="+userScore.score" nzDisabled></nz-rate>
         <span class="rate-reviews">({{ userScore.reviews }} valoraciones)</span>
       </div>
     </ng-template>

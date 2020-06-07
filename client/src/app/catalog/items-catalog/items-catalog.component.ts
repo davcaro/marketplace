@@ -109,11 +109,19 @@ export class ItemsCatalogComponent implements OnInit {
   }
 
   onMarkAsSold(item: Item, review: boolean) {
-    const data: { status: string; review?: { user: number; score: number; description: string } } = {
+    const data: { status: string; review?: { user: number; score?: number; description?: string } } = {
       status: 'sold'
     };
+
     if (review) {
-      data.review = { user: this.selectedBuyer.id, score: this.rate, description: this.description };
+      data.review = { user: this.selectedBuyer.id };
+
+      if (this.rate) {
+        data.review.score = this.rate;
+      }
+      if (this.description) {
+        data.review.description = this.description;
+      }
     }
 
     this.itemsService.updateItem(item.id, data).subscribe(() => {

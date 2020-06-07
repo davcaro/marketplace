@@ -181,7 +181,7 @@
           <nz-empty [nzNotFoundContent]="'No se encontraron usuarios'"></nz-empty>
         </ng-template>
 
-        <button nz-button nzType="primary" (click)="onConfirmBuyer()">Continuar</button>
+        <button nz-button nzType="primary" (click)="onConfirmBuyer()" [disabled]="!selectedBuyer">Continuar</button>
       </div>
 
       <nz-divider></nz-divider>

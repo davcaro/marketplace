@@ -28,7 +28,7 @@ const deletePasswordResets = userId =>
 const updateUserPassword = (id, password) =>
   User.update({ password }, { where: { id }, individualHooks: true });
 
-const count = email => User.count({ where: { email } });
+const count = email => User.count({ where: { email }, paranoid: false });
 
 const findByEmail = email => User.scope('public').findOne({ where: { email } });
 

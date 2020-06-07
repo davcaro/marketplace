@@ -55,12 +55,6 @@ export class ChatService {
     socket.emit('message sent', { chatId, message });
   }
 
-  sendQuickMessage(chatId: number, message: string): Observable<any> {
-    return this.http
-      .post<any>(`${this.apiUrl}/api/chats/${chatId}`, { message })
-      .pipe(catchError(this.handleError));
-  }
-
   markMessagesAsRead(chatId: number): void {
     const socket = this.socketioService.getSocket();
 

@@ -142,13 +142,12 @@ export class ViewItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendQuickMessage(): void {
     if (this.user) {
-      const message = this.messageForm.value.message;
-
       if (this.messageForm.valid) {
+        const message = this.messageForm.value.message;
+
         this.chatService.findChat(this.item.id).subscribe(chat => {
-          this.chatService.sendQuickMessage(chat.id, message).subscribe(() => {
-            this.router.navigate(['/', 'chat', chat.id]);
-          });
+          this.chatService.sendMessage(chat.id, message);
+          this.router.navigate(['/', 'chat', chat.id]);
         });
       }
     } else {

@@ -33,7 +33,7 @@
       </div>
 
       <ng-container *ngIf="reviewsStatus !== 'pending'">
-        <nz-rate [ngModel]="review.score" nzDisabled *ngIf="review.score"></nz-rate>
+        <nz-rate [ngModel]="+review.score" nzDisabled *ngIf="review.score"></nz-rate>
         <span *ngIf="review.description">{{ review.description }}</span>
       </ng-container>
 
@@ -65,6 +65,16 @@
     </div>
 
     <div class="modal-review">
+      <nz-alert
+        nzType="error"
+        nzMessage="Ha ocurrido un error inesperado. Vuelva a intentarlo más tarde."
+        nzShowIcon
+        *ngIf="unkownError"
+      >
+      </nz-alert>
+      <nz-alert nzType="error" nzMessage="Debes rellenar almenos 1 de los campos." nzShowIcon *ngIf="!formValid">
+      </nz-alert>
+
       <span nz-text>Puntuación:</span>
       <nz-rate [(ngModel)]="rate" nzAllowHalf></nz-rate>
       <textarea

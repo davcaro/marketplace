@@ -88,12 +88,6 @@ export class StatisticsComponent implements OnInit {
     stats: { [dateISO: string]: string; count: string }[],
     date: Date
   ): { [dateISO: string]: string; count: string } {
-    return stats.find(statistic => {
-      const dateKey = Object.keys(statistic).find(key => key.startsWith('DATE'));
-      const dateISO = statistic[dateKey];
-      const parsedDate = parseISO(dateISO);
-
-      return isSameDay(date, parsedDate);
-    });
+    return stats.find(statistic => isSameDay(date, parseISO(statistic.date)));
   }
 }

@@ -208,38 +208,18 @@ const getQuery = params => {
   let include;
   let order = null;
 
+  where.status = {
+    [Op.not]: 'sold'
+  };
+
   if (params.keywords) {
     where[Op.or] = [
-      {
-        title: {
-          [Op.iLike]: `%${params.keywords}`
-        }
-      },
-      {
-        title: {
-          [Op.iLike]: `%${params.keywords}%`
-        }
-      },
-      {
-        title: {
-          [Op.iLike]: `${params.keywords}%`
-        }
-      },
-      {
-        description: {
-          [Op.iLike]: `%${params.keywords}`
-        }
-      },
-      {
-        description: {
-          [Op.iLike]: `%${params.keywords}%`
-        }
-      },
-      {
-        description: {
-          [Op.iLike]: `${params.keywords}%`
-        }
-      }
+      { title: { [Op.iLike]: `%${params.keywords}` } },
+      { title: { [Op.iLike]: `%${params.keywords}%` } },
+      { title: { [Op.iLike]: `${params.keywords}%` } },
+      { description: { [Op.iLike]: `%${params.keywords}` } },
+      { description: { [Op.iLike]: `%${params.keywords}%` } },
+      { description: { [Op.iLike]: `${params.keywords}%` } }
     ];
   }
   if (params.category && params.category !== '-1') {
