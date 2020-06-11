@@ -83,6 +83,7 @@ const findReviews = async (userId, pending) => {
   return Review.findAll({
     where,
     include: [
+      { model: User.scope('public'), as: 'fromUser' },
       { model: User.scope('public'), as: 'toUser' },
       {
         model: Item,

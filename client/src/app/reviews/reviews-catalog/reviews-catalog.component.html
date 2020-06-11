@@ -6,12 +6,18 @@
 
 <ul class="reviews" *ngIf="reviews.length">
   <li class="review" *ngFor="let review of reviews; let i = index">
-    <nz-avatar nzIcon="user" [nzSize]="64" [nzSrc]="apiUrl + '/images/avatars/' + review.user.avatar"></nz-avatar>
+    <nz-avatar
+      nzIcon="user"
+      [nzSize]="64"
+      [nzSrc]="
+        apiUrl + '/images/avatars/' + (reviewsStatus === 'pending' ? review.toUser.avatar : review.fromUser.avatar)
+      "
+    ></nz-avatar>
 
     <div class="review-body">
       <div class="user-header">
         <span nz-text>
-          <strong>{{ review.user.name }}</strong>
+          <strong>{{ reviewsStatus === 'pending' ? review.toUser.name : review.fromUser.name }}</strong>
         </span>
 
         <span class="review-date" nz-text>{{ review.date }}</span>
@@ -37,7 +43,7 @@
         <span *ngIf="review.description">{{ review.description }}</span>
       </ng-container>
 
-      <ng-container *ngIf="reviewsStatus == 'pending'">
+      <ng-container *ngIf="reviewsStatus === 'pending'">
         <span>Le {{ review.isAPurchase ? 'compraste' : 'vendiste' }} el artículo "{{ review.item.title }}"</span>
 
         <button class="edit-review-btn" nz-button nzSize="small" (click)="showEditModal(review)">
